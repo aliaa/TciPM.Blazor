@@ -9,6 +9,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TciPM.Blazor.Client", "Clie
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TciPM.Blazor.Shared", "Shared\TciPM.Blazor.Shared.csproj", "{1C47C7BA-FF23-4D49-9D34-AE555B83E7AB}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AliaaCommonStandard", "..\..\AliaaCommon\AliaaCommonStandard\AliaaCommonStandard.csproj", "{07572343-F786-4713-954E-FEE4C712A7AE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TciCommonStandard", "..\TciCommon\TciCommonStandard\TciCommonStandard.csproj", "{4223F7DD-8F20-4731-8B58-E06A25FEC685}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasyMongoNet", "..\..\EasyMongoNet\EasyMongoNet.csproj", "{06F28DB5-DC37-4F72-8326-B89D6FA719B2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +33,18 @@ Global
 		{1C47C7BA-FF23-4D49-9D34-AE555B83E7AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C47C7BA-FF23-4D49-9D34-AE555B83E7AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C47C7BA-FF23-4D49-9D34-AE555B83E7AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07572343-F786-4713-954E-FEE4C712A7AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07572343-F786-4713-954E-FEE4C712A7AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07572343-F786-4713-954E-FEE4C712A7AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07572343-F786-4713-954E-FEE4C712A7AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4223F7DD-8F20-4731-8B58-E06A25FEC685}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4223F7DD-8F20-4731-8B58-E06A25FEC685}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4223F7DD-8F20-4731-8B58-E06A25FEC685}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4223F7DD-8F20-4731-8B58-E06A25FEC685}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06F28DB5-DC37-4F72-8326-B89D6FA719B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06F28DB5-DC37-4F72-8326-B89D6FA719B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06F28DB5-DC37-4F72-8326-B89D6FA719B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06F28DB5-DC37-4F72-8326-B89D6FA719B2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

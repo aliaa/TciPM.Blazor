@@ -5,10 +5,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="EPPlus" Version="5.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="3.2.0" />
+    <PackageReference Include="MongoDB.Driver" Version="2.10.4" />
+    <PackageReference Include="ValueInjecter" Version="3.2.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\AliaaCommon\AliaaCommonStandard\AliaaCommonStandard.csproj" />
+    <ProjectReference Include="..\..\..\EasyMongoNet\EasyMongoNet.csproj" />
+    <ProjectReference Include="..\..\TciCommon\TciCommonStandard\TciCommonStandard.csproj" />
     <ProjectReference Include="..\Client\TciPM.Blazor.Client.csproj" />
     <ProjectReference Include="..\Shared\TciPM.Blazor.Shared.csproj" />
   </ItemGroup>
