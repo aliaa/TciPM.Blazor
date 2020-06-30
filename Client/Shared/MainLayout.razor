@@ -1,4 +1,6 @@
 ﻿@inherits LayoutComponentBase
+@inject AuthenticationStateProvider _auth
+@inject NavigationManager nav
 
 <div class="sidebar">
     <NavMenu />
@@ -6,10 +8,27 @@
 
 <div class="main">
     <div class="top-row px-4">
-        <a href="http://blazor.net" target="_blank" class="ml-md-auto">About</a>
+        <AuthorizeView>
+            <Authorized>
+                <button class="ml-md-auto btn btn-link" @onclick="Logout">Logout</button>
+            </Authorized>
+            <NotAuthorized>
+                <a href="login" class="ml-md-auto">Login</a>
+            </NotAuthorized>
+        </AuthorizeView>
+
     </div>
 
     <div class="content px-4">
         @Body
     </div>
 </div>
+
+@code {
+    private async Task Logout()
+    {
+        var auth = (AuthStateProvider)_auth;
+        await auth.Logout();
+        nav.NavigateTo("/");
+    }
+}

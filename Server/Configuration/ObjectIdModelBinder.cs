@@ -4,7 +4,7 @@ using MongoDB.Bson;
 using System;
 using System.Threading.Tasks;
 
-namespace TciPM.Blazor.Server
+namespace TciPM.Blazor.Server.Configuration
 {
     public class ObjectIdModelBinder : IModelBinder
     {

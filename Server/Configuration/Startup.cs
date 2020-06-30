@@ -12,7 +12,7 @@ using System.Text.Unicode;
 using TciCommon.Models;
 using TciPM.Blazor.Shared;
 
-namespace TciPM.Blazor.Server
+namespace TciPM.Blazor.Server.Configuration
 {
     public class Startup
     {
@@ -51,7 +51,7 @@ namespace TciPM.Blazor.Server
 
             services.AddSingleton<HtmlEncoder>(HtmlEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Arabic));
 
-            var db = services.AddMongDbContext(Configuration);
+            services.AddMongDbContext(Configuration);
             
             services.Configure<IISServerOptions>(options =>
             {

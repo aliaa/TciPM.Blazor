@@ -1,0 +1,44 @@
+﻿@page "/login"
+@inject AuthenticationStateProvider _auth
+@inject NavigationManager nav
+
+<h3>Login</h3>
+
+<div class="row">
+    <div class="col-3">
+        <div class="form-group">
+            نام کاربری
+            <input type="text" @bind-value="username" class="form-control" />
+        </div>
+        <div class="form-group">
+            رمز عبور
+            <input type="password" @bind-value="password" class="form-control" />
+        </div>
+        <div class="form-group">
+            استان
+            <select @bind="province" class="form-control">
+                <option disabled>انتخاب کنید</option>
+                <option value="ea">آذربایجان شرقی</option>
+                <option value="wa">آذربایجان غربی</option>
+            </select>
+        </div>
+        <p>@province</p>
+        <div class="form-group">
+            <button class="btn btn-primary" @onclick="CheckLogin">Login</button>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    private string username, password, province;
+
+    private async Task CheckLogin()
+    {
+        var auth = (AuthStateProvider)_auth;
+        if (await auth.Login(username, password, province))
+        {
+            nav.NavigateTo("/");
+        }
+    }
+}
