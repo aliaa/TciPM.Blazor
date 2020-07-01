@@ -9,9 +9,11 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Omu.ValueInjecter;
 using TciCommon.Models;
 using TciPM.Blazor.Server.Models;
 using TciPM.Blazor.Shared;
+using TciPM.Blazor.Shared.Models;
 using TciPM.Blazor.Shared.ViewModels;
 using TciPM.Classes;
 
@@ -23,29 +25,22 @@ namespace TciPM.Blazor.Server.Controllers
     {
         public AccountController(ProvinceDBs dbs) : base(dbs) { }
 
-        public class LoginData
-        {
-            public string Username { get; set; }
-            public string Password { get; set; }
-            public string Province { get; set; }
-        }
-
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<Dictionary<string, string>>> Login(LoginData loginData)
+        public async Task<ActionResult<ClientAuthUser>> Login(LoginViewModel model)
         {
-            if (loginData == null || !dbs.Keys.Contains(loginData.Province))
+            if (model == null || !dbs.Keys.Contains(model.Province))
                 return Unauthorized();
-            var db = dbs[loginData.Province];
-            var user = AuthUserX.CheckAuthentication(db, loginData.Username, loginData.Password);
+            var db = dbs[model.Province];
+            var user = AuthUserX.CheckAuthentication(db, model.Username, model.Password);
             if (user != null)
             {
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.NameIdentifier, loginData.Username),
+                    new Claim(ClaimTypes.NameIdentifier, model.Username),
                     new Claim(ClaimTypes.Name, user.FirstName),
                     new Claim(ClaimTypes.Surname, user.LastName),
-                    new Claim(nameof(Province), loginData.Province)
+                    new Claim(nameof(Province), model.Province)
                 };
                 if (user.IsAdmin)
                     claims.Add(new Claim("IsAdmin", "true"));
@@ -59,11 +54,14 @@ namespace TciPM.Blazor.Server.Controllers
                 var principal = new ClaimsPrincipal(identity);
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
 
-                return claims.ToDictionary(k => k.Type, v => v.Value);
+                var clientUser = Mapper.Map<ClientAuthUser>(user);
+                clientUser.ProvincePrefix = model.Province;
+                return clientUser;
             }
             return Unauthorized();
         }
 
+        [Authorize]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme,

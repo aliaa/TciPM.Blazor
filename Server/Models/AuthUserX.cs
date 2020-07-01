@@ -12,7 +12,7 @@ namespace TciPM.Blazor.Server.Models
     [CollectionSave(WriteLog = true)]
     [CollectionIndex(Fields: new string[] { nameof(Username) }, Unique = true)]
     [BsonIgnoreExtraElements]
-    public class AuthUserX : VisibleAuthUser, IMongoEntity
+    public class AuthUserX : BaseAuthUser, IMongoEntity
     {
         public string HashedPassword { get; set; }
 

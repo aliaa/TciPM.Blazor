@@ -1,42 +1,56 @@
 ﻿@page "/login"
 @inject AuthenticationStateProvider _auth
 @inject NavigationManager nav
+@inject HttpClient Http
 
-<h3>Login</h3>
+<h3>ورود</h3>
 
-<div class="row">
-    <div class="col-3">
-        <div class="form-group">
-            نام کاربری
-            <input type="text" @bind-value="username" class="form-control" />
-        </div>
-        <div class="form-group">
-            رمز عبور
-            <input type="password" @bind-value="password" class="form-control" />
-        </div>
-        <div class="form-group">
-            استان
-            <select @bind="province" class="form-control">
-                <option disabled>انتخاب کنید</option>
-                <option value="ea">آذربایجان شرقی</option>
-                <option value="wa">آذربایجان غربی</option>
-            </select>
-        </div>
-        <p>@province</p>
-        <div class="form-group">
-            <button class="btn btn-primary" @onclick="CheckLogin">Login</button>
+<EditForm Model="model" OnValidSubmit="CheckLogin">
+    <DataAnnotationsValidator />
+    <div class="row mt-5">
+        <div class="col-3">
+            <div class="form-group">
+                <label for="Username">نام کاربری</label>
+                <InputText type="text" @bind-Value="model.Username" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="Password">رمز عبور</label>
+                <InputText type="password" @bind-Value="model.Password" class="form-control" />
+            </div>
+            @if (provinces != null)
+            {
+                <div class="form-group">
+                    <label for="Province">استان</label>
+                    <InputSelect @bind-Value="model.Province" class="form-control">
+                        <option selected disabled>انتخاب کنید</option>
+                        @foreach (var p in provinces)
+                            {
+                            <option value="@p.Prefix">@p.Name</option>
+                            }
+                    </InputSelect>
+                </div>
+                <div class="form-group">
+                    <input type="submit" class="btn btn-primary" value="ورود" />
+                </div>
+            }
         </div>
     </div>
-</div>
+</EditForm>
 
 
 @code {
-    private string username, password, province;
+    private LoginViewModel model = new LoginViewModel();
+    private List<Province> provinces = null;
 
-    private async Task CheckLogin()
+    protected override async Task OnInitializedAsync()
+    {
+        provinces = await Http.GetFromJsonAsync<List<Province>>("Province/List");
+    }
+
+    private async Task CheckLogin(EditContext editContext)
     {
         var auth = (AuthStateProvider)_auth;
-        if (await auth.Login(username, password, province))
+        if (await auth.Login(model))
         {
             nav.NavigateTo("/");
         }

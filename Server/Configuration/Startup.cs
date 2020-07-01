@@ -1,3 +1,4 @@
+using EasyMongoNet;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -11,6 +12,7 @@ using System.Text.Encodings.Web;
 using System.Text.Unicode;
 using TciCommon.Models;
 using TciPM.Blazor.Shared;
+using Newtonsoft.Json.Serialization;
 
 namespace TciPM.Blazor.Server.Configuration
 {
@@ -46,7 +48,16 @@ namespace TciPM.Blazor.Server.Configuration
                 options.AddPolicy("Admin", policy => policy.RequireClaim("IsAdmin"));
             });
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews()
+                .AddNewtonsoftJson(
+                    options =>
+                    {
+                        options.SerializerSettings.Converters.Add(new ObjectIdJsonConverter());
+                        options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter());
+                        // Maintain property names during serialization. See:
+                        // https://github.com/aspnet/Announcements/issues/194
+                        options.SerializerSettings.ContractResolver = new DefaultContractResolver();
+                    });
             services.AddRazorPages();
 
             services.AddSingleton<HtmlEncoder>(HtmlEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Arabic));

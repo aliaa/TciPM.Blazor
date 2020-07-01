@@ -27,7 +27,7 @@ namespace TciPM.Blazor.Server.Configuration
             var provinceDbInfo = customConnections.Where(c => c.Type == nameof(Province)).FirstOrDefault();
             var provinceDb = new MongoDbContext(provinceDbInfo.DBName, provinceDbInfo.ConnectionSettings);
 
-            var dbs = new ProvinceDBs();
+            var dbs = new ProvinceDBs { CommonDb = provinceDb };
             var dbName = config.GetValue<string>("DBName");
             foreach (var p in provinceDb.FindGetResults<Province>(p => p.Applications.Contains("PM")))
             {

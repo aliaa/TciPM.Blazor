@@ -6,7 +6,7 @@ using System.Text;
 
 namespace TciPM.Blazor.Shared.Models
 {
-    public class VisibleAuthUser
+    public abstract class BaseAuthUser
     {
         public ObjectId Id { get; set; }
 
@@ -33,12 +33,12 @@ namespace TciPM.Blazor.Shared.Models
             get { return FirstName + " " + LastName; }
         }
 
-        public HashSet<Permission> Permissions { get; set; } = new HashSet<Permission>();
-        public HashSet<ObjectId> Cities { get; set; } = new HashSet<ObjectId>();
+        public List<Permission> Permissions { get; set; } = new List<Permission>();
+        public List<ObjectId> Cities { get; set; } = new List<ObjectId>();
         public string RestrictedIP { get; set; }
         public bool IsDailyCenterWorker { get; set; }
-        public HashSet<ObjectId> AllowedDailyCenters { get; set; } = new HashSet<ObjectId>();
-        public HashSet<EquipmentType> AllowedEquipmentTypes { get; set; } = new HashSet<EquipmentType>();
+        public List<ObjectId> AllowedDailyCenters { get; set; } = new List<ObjectId>();
+        public List<EquipmentType> AllowedEquipmentTypes { get; set; } = new List<EquipmentType>();
         public bool IsSuperAdmin { get; set; }
 
         public bool HasPermission(Permission perm)

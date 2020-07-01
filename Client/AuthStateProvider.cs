@@ -1,12 +1,12 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Net.Http.Json;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using TciCommon.Models;
+using TciPM.Blazor.Shared.Models;
+using TciPM.Blazor.Shared.ViewModels;
 
 namespace TciPM.Blazor.Client
 {
@@ -21,12 +21,26 @@ namespace TciPM.Blazor.Client
             this.storage = storage;
         }
 
-        private async Task<ClaimsPrincipal> GetUser()
+        public async Task<ClientAuthUser> GetUser()
+        {
+            return await storage.GetItemAsync<ClientAuthUser>("user");
+        }
+
+        private async Task<ClaimsPrincipal> GetClaims()
         {
             ClaimsIdentity identity;
-            var claims = await storage.GetItemAsync<Dictionary<string, string>>("userClaims");
-            if (claims != null)
-                identity = new ClaimsIdentity(claims.Select(c => new Claim(c.Key, c.Value)), "Cookies");
+            var user = await GetUser();
+            if (user != null)
+            {
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.NameIdentifier, user.Username),
+                    new Claim(ClaimTypes.Name, user.FirstName),
+                    new Claim(ClaimTypes.Surname, user.LastName),
+                    new Claim(nameof(Province), user.ProvincePrefix)
+                };
+                identity = new ClaimsIdentity(claims, "Cookies");
+            }
             else
                 identity = new ClaimsIdentity();
 
@@ -35,16 +49,16 @@ namespace TciPM.Blazor.Client
 
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            return new AuthenticationState(await GetUser());
+            return new AuthenticationState(await GetClaims());
         }
 
-        public async Task<bool> Login(string username, string password, string province)
+        public async Task<bool> Login(LoginViewModel m)
         {
-            var res = await httpClient.PostAsJsonAsync("Account/Login", new { username, password, province });
+            var res = await httpClient.PostAsJsonAsync("Account/Login", m);
             if (res.IsSuccessStatusCode)
             {
-                var claims = await res.Content.ReadFromJsonAsync<Dictionary<string, string>>();
-                await storage.SetItemAsync("userClaims", claims);
+                var user = await res.Content.ReadFromJsonAsync<ClientAuthUser>();
+                await storage.SetItemAsync("user", user);
                 NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
             }
             return res.IsSuccessStatusCode;
@@ -52,7 +66,7 @@ namespace TciPM.Blazor.Client
 
         public async Task Logout()
         {
-            await storage.RemoveItemAsync("userClaims");
+            await storage.RemoveItemAsync("user");
             NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
         }
     }
