@@ -2,20 +2,10 @@
 @inject AuthenticationStateProvider _auth
 @inject NavigationManager nav
 
-<div class="sidebar">
-    <NavMenu />
-</div>
-
+<NavMenu2 />
 <div class="main">
-    <div class="top-row px-4">
-        <AuthorizeView>
-            <Authorized>
-                <button class="ml-md-auto btn btn-link" @onclick="Logout">خروج از حساب کاربری</button>
-            </Authorized>
-            <NotAuthorized>
-                <a href="login" class="ml-md-auto">ورود</a>
-            </NotAuthorized>
-        </AuthorizeView>
+    <div class=" px-4">
+        
 
     </div>
 
@@ -25,10 +15,5 @@
 </div>
 
 @code {
-    private async Task Logout()
-    {
-        var auth = (AuthStateProvider)_auth;
-        await auth.Logout();
-        nav.NavigateTo("/");
-    }
+    
 }

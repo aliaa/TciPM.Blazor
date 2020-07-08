@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30204.135
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TciPM.Blazor.Server", "Server\TciPM.Blazor.Server.csproj", "{463998D0-C0DB-47FF-BEFD-B52C1249738F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TciPM.Blazor.Server", "Server\TciPM.Blazor.Server.csproj", "{463998D0-C0DB-47FF-BEFD-B52C1249738F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TciPM.Blazor.Client", "Client\TciPM.Blazor.Client.csproj", "{C7E7A807-EE23-473F-A206-A10267553A40}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TciPM.Blazor.Client", "Client\TciPM.Blazor.Client.csproj", "{C7E7A807-EE23-473F-A206-A10267553A40}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TciPM.Blazor.Shared", "Shared\TciPM.Blazor.Shared.csproj", "{1C47C7BA-FF23-4D49-9D34-AE555B83E7AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TciPM.Blazor.Shared", "Shared\TciPM.Blazor.Shared.csproj", "{1C47C7BA-FF23-4D49-9D34-AE555B83E7AB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AliaaCommonStandard", "..\..\AliaaCommon\AliaaCommonStandard\AliaaCommonStandard.csproj", "{07572343-F786-4713-954E-FEE4C712A7AE}"
 EndProject
