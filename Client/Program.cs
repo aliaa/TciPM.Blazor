@@ -1,15 +1,12 @@
 using System;
 using System.Net.Http;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Text;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
 using TciPM.Blazor.Shared;
+using BlazorStrap;
 
 namespace TciPM.Blazor.Client
 {
@@ -35,6 +32,7 @@ namespace TciPM.Blazor.Client
                     }));
                 options.AddPolicy("Admin", policy => policy.RequireClaim("IsAdmin", "true"));
             });
+            builder.Services.AddBootstrapCss();
 
             await builder.Build().RunAsync();
         }
