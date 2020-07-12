@@ -1,0 +1,44 @@
+﻿@page "/center/list"
+@attribute [Authorize(nameof(Permission.ShowCenters))]
+@inject HttpClient http
+
+@if (cities == null)
+{
+    <div class="text-center">
+        <div class="spinner-border text-primary" role="status" />
+    </div>
+}
+else
+{
+    <div class="form-inline justify-content-center">
+        <div class="m-3 form-group">
+            <span class="m-2">شهر:</span>
+            <select class="form-control" @onselectionchange="CityChanged">
+                @if (cities != null)
+                {
+                    foreach (var c in cities)
+                    {
+                        <option value="@c.Id.ToString()">@c.Name</option>
+                    }
+                }
+            </select>
+        </div>
+        <div>
+            <a class="btn btn-secondary" href="/center/new">تعریف مرکز جدید</a>
+        </div>
+    </div>
+}
+
+@code {
+    private City[] cities;
+
+    protected override async Task OnInitializedAsync()
+    {
+        cities = await http.GetFromJsonAsync<City[]>("Place/CityList");
+    }
+
+    private void CityChanged()
+    {
+        Console.WriteLine("city changed.");
+    }
+}

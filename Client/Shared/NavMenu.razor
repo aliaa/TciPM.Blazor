@@ -21,12 +21,12 @@
                 </AuthorizeView>
                 <AuthorizeView Policy="@nameof(Permission.ChangeCities)">
                     <li class="nav-item">
-                        <NavLink class="nav-link" href="Cities">شهرها</NavLink>
+                        <NavLink class="nav-link" href="/city/list">شهرها</NavLink>
                     </li>
                 </AuthorizeView>
                 <AuthorizeView Policy="@nameof(Permission.ShowCenters)">
                     <li class="nav-item">
-                        <NavLink class="nav-link" href="Centers">مراکز</NavLink>
+                        <NavLink class="nav-link" href="/center/list">مراکز</NavLink>
                     </li>
                 </AuthorizeView>
                 <AuthorizeView Policy="@nameof(Permission.ShowPMs)">

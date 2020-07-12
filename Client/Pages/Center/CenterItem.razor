@@ -1,0 +1,16 @@
+﻿@page "/center/new"
+@page "/center/edit/{Id}"
+
+@if(Id == null)
+{
+    <h3>تعریف مرکز جدید</h3>
+}
+else
+{
+    <h3>ویرایش مرکز</h3>
+}
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+}
