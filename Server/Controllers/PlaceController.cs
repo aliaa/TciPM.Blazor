@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using TciCommon.Models;
@@ -12,14 +10,15 @@ namespace TciPM.Blazor.Server.Controllers
 {
     [Route("[controller]/[action]")]
     [ApiController]
-    public class ProvinceController : BaseController
+    public class PlaceController : BaseController
     {
-        public ProvinceController(ProvinceDBs dbs) : base(dbs) { }
+        public PlaceController(ProvinceDBs dbs) : base(dbs) { }
 
         [HttpGet]
-        public ActionResult<List<Province>> List()
+        public ActionResult<List<Province>> ProvinceList()
         {
             return dbs.CommonDb.Find<Province>(_ => true).SortBy(p => p.Name).ToList();
         }
+
     }
 }

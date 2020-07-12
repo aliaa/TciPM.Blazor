@@ -219,3 +219,9 @@ app {
 .dropdown-menu {
     text-align: right;
 }
+
+.dropdown-toggle::after {
+    margin-left: 0px;
+    margin-right: 0.255em;
+    vertical-align: unset;
+}

@@ -44,7 +44,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        provinces = await Http.GetFromJsonAsync<List<Province>>("Province/List");
+        provinces = await Http.GetFromJsonAsync<List<Province>>("Place/ProvinceList");
     }
 
     private async Task CheckLogin(EditContext editContext)

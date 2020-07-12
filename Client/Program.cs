@@ -30,6 +30,7 @@ namespace TciPM.Blazor.Client
                         return permClaim != null && permClaim.Value.Contains(perm);
                     }));
                 options.AddPolicy("Admin", policy => policy.RequireClaim("IsAdmin", "true"));
+                options.AddPolicy("SuperAdmin", policy => policy.RequireClaim("IsSuperAdmin", "true"));
             });
 
             await builder.Build().RunAsync();

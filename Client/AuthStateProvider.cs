@@ -1,10 +1,13 @@
 ﻿using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using TciCommon.Models;
+using TciPM.Blazor.Shared;
 using TciPM.Blazor.Shared.Models;
 using TciPM.Blazor.Shared.ViewModels;
 
@@ -39,6 +42,21 @@ namespace TciPM.Blazor.Client
                     new Claim(ClaimTypes.Surname, user.LastName),
                     new Claim(nameof(Province), user.ProvincePrefix)
                 };
+                var perms = new StringBuilder();
+                if(user.IsAdmin)
+                {
+                    foreach (string p in Enum.GetNames(typeof(Permission)))
+                        perms.Append(p).Append(",");
+                    claims.Add(new Claim("IsAdmin", "true"));
+                }
+                else
+                {
+                    foreach (Permission p in user.Permissions)
+                        perms.Append(p).Append(",");
+                }
+                claims.Add(new Claim(nameof(Permission), perms.ToString()));
+                if (user.IsSuperAdmin)
+                    claims.Add(new Claim("IsSuperAdmin", "true"));
                 identity = new ClaimsIdentity(claims, "Cookies");
             }
             else
