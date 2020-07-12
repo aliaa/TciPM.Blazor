@@ -6,7 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
 using TciPM.Blazor.Shared;
-using BlazorStrap;
 
 namespace TciPM.Blazor.Client
 {
@@ -32,7 +31,6 @@ namespace TciPM.Blazor.Client
                     }));
                 options.AddPolicy("Admin", policy => policy.RequireClaim("IsAdmin", "true"));
             });
-            builder.Services.AddBootstrapCss();
 
             await builder.Build().RunAsync();
         }
