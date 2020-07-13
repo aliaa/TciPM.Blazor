@@ -48,7 +48,10 @@ namespace TciPM.Blazor.Server.Configuration
                 options.AddPolicy("Admin", policy => policy.RequireClaim("IsAdmin"));
             });
 
-            services.AddControllersWithViews()
+            services.AddControllersWithViews(config =>
+            {
+                config.ModelBinderProviders.Insert(0, new ObjectIdModelBinderProvider());
+            })
                 .AddNewtonsoftJson(
                     options =>
                     {
@@ -63,7 +66,7 @@ namespace TciPM.Blazor.Server.Configuration
             services.AddSingleton<HtmlEncoder>(HtmlEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Arabic));
 
             services.AddMongDbContext(Configuration);
-            
+
             services.Configure<IISServerOptions>(options =>
             {
                 options.AutomaticAuthentication = false;

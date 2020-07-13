@@ -1,0 +1,182 @@
+﻿using EasyMongoNet;
+using MongoDB.Bson.Serialization.Attributes;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using TciPM.Blazor.Shared.Util;
+
+namespace TciPM.Blazor.Shared.Models
+{
+    [CollectionIndex(new string[] { nameof(SourceId) })]
+    [BsonIgnoreExtraElements]
+    public class BatteryPM : EquipmentPM
+    {
+        public const float MIN_VOLTAGE_2V = 1.9f;
+        public const float NORMAL_VOLTAGE_2V = 1.95f;
+        public const float MAX_VOLTAGE_2V = 2.25f;
+        public const float MIN_VOLTAGE_12V = 11f;
+        public const float NORMAL_VOLTAGE_12V = 12f;
+        public const float MAX_VOLTAGE_12V = 13f;
+        public const float MIN_DENSITY = 1.21f;
+        public const float NORMAL_DENSITY = 1.23f;
+        public const float MAX_DENSITY = 1.26f;
+        
+        public static float GetBatteryMinVoltage(RectifierAndBattery.CellCountEnum cellCount)
+        {
+            switch (cellCount)
+            {
+                case RectifierAndBattery.CellCountEnum._2:
+                case RectifierAndBattery.CellCountEnum._4:
+                    return MIN_VOLTAGE_12V;
+                case RectifierAndBattery.CellCountEnum._8:
+                    return MIN_VOLTAGE_12V / 2;
+                case RectifierAndBattery.CellCountEnum._12:
+                case RectifierAndBattery.CellCountEnum._24:
+                case RectifierAndBattery.CellCountEnum._25:
+                    return MIN_VOLTAGE_2V;
+            }
+            throw new NotImplementedException();
+        }
+
+        public static float GetBatteryMaxVoltage(RectifierAndBattery.CellCountEnum cellCount)
+        {
+            switch (cellCount)
+            {
+                case RectifierAndBattery.CellCountEnum._2:
+                case RectifierAndBattery.CellCountEnum._4:
+                    return MAX_VOLTAGE_12V;
+                case RectifierAndBattery.CellCountEnum._8:
+                    return MAX_VOLTAGE_12V / 2;
+                case RectifierAndBattery.CellCountEnum._12:
+                case RectifierAndBattery.CellCountEnum._24:
+                case RectifierAndBattery.CellCountEnum._25:
+                    return MAX_VOLTAGE_2V;
+            }
+            throw new NotImplementedException();
+        }
+
+        public static float GetBatteryNormalVoltage(RectifierAndBattery.CellCountEnum cellCount)
+        {
+            switch (cellCount)
+            {
+                case RectifierAndBattery.CellCountEnum._2:
+                case RectifierAndBattery.CellCountEnum._4:
+                    return NORMAL_VOLTAGE_12V;
+                case RectifierAndBattery.CellCountEnum._8:
+                    return NORMAL_VOLTAGE_12V / 2;
+                case RectifierAndBattery.CellCountEnum._12:
+                case RectifierAndBattery.CellCountEnum._24:
+                case RectifierAndBattery.CellCountEnum._25:
+                    return NORMAL_VOLTAGE_2V;
+            }
+            throw new NotImplementedException();
+        }
+
+        [BsonIgnoreExtraElements]
+        public class BatterySeriesPM
+        {
+            public BatterySeriesPM(int cellCount)
+            {
+                Voltages = new float[cellCount];
+                Densities = new float[cellCount];
+            }
+            
+            public RectifierAndBattery.CellCountEnum CellCount =>
+                (RectifierAndBattery.CellCountEnum)Enum.Parse(typeof(RectifierAndBattery.CellCountEnum), "_" + Voltages.Length);
+
+            public float[] Voltages { get; set; }
+
+            public float[] Densities { get; set; }
+
+            [DisplayName("آب مقطر اضافه شد")]
+            public bool DistilledWaterAdded { get; set; }
+
+            [DisplayName("درجه دما")]
+            public float Temperature { get; set; }
+
+            [DisplayName("جریان خروجی سری")]
+            public float OutputCurrent { get; set; }
+
+            [DisplayName("تعداد باتری مستعمل")]
+            [HealthParameter(MaxOkRange = 0)]
+            public int OldBatteryCount { get; set; }
+
+            public string Description { get; set; }
+
+            public float MinVoltage => GetBatteryMinVoltage(CellCount);
+
+            public float MaxVoltage => GetBatteryMaxVoltage(CellCount);
+
+            public float NormalVoltage => GetBatteryNormalVoltage(CellCount);
+
+            public double HealthPercentage
+            {
+                get
+                {
+                    int count = 2;
+                    double sum = 0;
+                    if (Temperature > 0 && Temperature <= 27)
+                        sum++;
+                    //TODO: Add also OutputCurrent parameter
+                    if (OldBatteryCount == 0)
+                        sum++;
+                    
+                    foreach (float v in Voltages)
+                    {
+                        if (v >= MinVoltage && v < NormalVoltage)
+                            sum += 0.2;
+                        else if (v >= NormalVoltage && v <= MaxVoltage)
+                            sum += 1;
+                        count++;
+                    }
+                    foreach (float d in Densities)
+                    {
+                        if (d >= MIN_DENSITY && d < NORMAL_DENSITY)
+                            sum += 0.2;
+                        else if (d >= NORMAL_DENSITY && d <= MAX_DENSITY)
+                            sum += 1;
+                        count++;
+                    }
+                    return sum / count;
+                }
+            }
+        }
+
+        public List<BatterySeriesPM> Series { get; set; } = new List<BatterySeriesPM>();
+
+        public BatteryPM(RectifierAndBattery Source) : base(Source) { }
+
+        [DisplayName("درصد سلامتی")]
+        public override double HealthPercentage => Series.Count > 0 ? Series.Sum(bs => bs.HealthPercentage) / Series.Count : 0;
+
+        [DisplayName("تعداد سلولهای دارای ولتاژ مشکل دار")]
+        public int HavingVoltageProblemCellsCount
+        {
+            get
+            {
+                int sum = 0;
+                var source = (RectifierAndBattery)Source;
+                foreach (var serie in Series)
+                    sum += serie.Voltages.Count(v => v > 0 && (v > serie.MaxVoltage || v < serie.MinVoltage));
+                return sum;
+            }
+        }
+
+        [DisplayName("تعداد سلولهای دارای غلظت مشکل دار")]
+        public int HavingDensityProblemCellsCount => Series.Sum(bs => bs.Densities.Count(d => d > 0 && (d > MAX_DENSITY || d < MIN_DENSITY)));
+
+        [DisplayName("میانگین دما")]
+        public float TemperatureAverage => Series.Average(bs => bs.Temperature);
+
+        [DisplayName("تعداد باتری مستعمل")]
+        public int OldBatteriesCount => Series.Sum(s => s.OldBatteryCount);
+
+        [DisplayName("انحراف معیار جریان خروجی سری ها")]
+        public float SeriesOutputCurrentDeviation => UtilsX.CalculateStandardDeviation(Series.Select(s => s.OutputCurrent).ToArray());
+
+        //[DisplayName("انحراف معیار جمع ولتاژ سری ها")]
+        //public float SeriesVoltageSumDeviation => UtilsX.CalculateStandardDeviation(Series.Select(s => s.Voltages))
+    }
+
+}

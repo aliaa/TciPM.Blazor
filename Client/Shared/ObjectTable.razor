@@ -1,0 +1,97 @@
+﻿@using System.Linq.Expressions
+@typeparam T
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            @if (LinkColumns != null)
+            {
+                for (int i = 0; i < LinkColumns.Length; i++)
+                {
+                    <th></th>
+                }
+            }
+            @foreach (var f in FieldNames)
+            {
+                <th>@(UtilsX.DisplayName(typeof(T), f))</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Data)
+        {
+            <tr>
+                @if (LinkColumns != null)
+                {
+                    @foreach (var col in LinkColumns)
+                    {
+
+                        <td><a href="@(col.Link.Replace("{"+col.FieldName+"}", col.Field.GetValue(item).ToString()))">@col.Text</a></td>
+                    }
+                    @foreach (var f in Fields)
+                    {
+                        var val = f.GetValue(item);
+                        if (val is bool)
+                        {
+                            if ((bool)val)
+                            {
+                                <td><input type="checkbox" disabled /></td>
+                            }
+                            else
+                            {
+                                <td><input type="checkbox" disabled checked /></td>
+                            }
+                        }
+                        else
+                        {
+                            <td>@val</td>
+                        }
+                    }
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+
+    public class LinkColumn
+    {
+        public string Text { get; set; }
+        public string Link { get; set; }
+        public string FieldName { get; set; }
+
+        private System.Reflection.PropertyInfo _field = null;
+
+        public System.Reflection.PropertyInfo Field
+        {
+            get
+            {
+                if (_field == null)
+                    _field = typeof(T).GetProperty(FieldName);
+                return _field;
+            }
+        }
+    }
+
+    [Parameter]
+    public IEnumerable<T> Data { get; set; }
+
+    [Parameter]
+    public string[] FieldNames { get; set; }
+
+    [Parameter]
+    public LinkColumn[] LinkColumns { get; set; }
+
+    private List<System.Reflection.PropertyInfo> Fields;
+
+    protected override void OnInitialized()
+    {
+        Fields = new List<System.Reflection.PropertyInfo>();
+        var props = typeof(T).GetProperties();
+        foreach (var f in FieldNames)
+        {
+            Fields.Add(props.First(x => x.Name == f));
+        }
+    }
+}

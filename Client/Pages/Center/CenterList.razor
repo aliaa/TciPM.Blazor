@@ -13,7 +13,7 @@ else
     <div class="form-inline justify-content-center">
         <div class="m-3 form-group">
             <span class="m-2">شهر:</span>
-            <select class="form-control" @onselectionchange="CityChanged">
+            <select class="form-control" @onchange="CityChanged">
                 @if (cities != null)
                 {
                     foreach (var c in cities)
@@ -27,18 +27,46 @@ else
             <a class="btn btn-secondary" href="/center/new">تعریف مرکز جدید</a>
         </div>
     </div>
+    if (centers != null)
+    {
+        <div class="mt-5">
+            <ObjectTable Data="centers" FieldNames="fields" LinkColumns="linkColumns" />
+        </div>
+    }
 }
 
 @code {
     private City[] cities;
+    private CommCenterWithReports[] centers;
+    private static string[] fields = new string[]
+    {
+        nameof(CommCenterWithReports.CityName),
+        nameof(CommCenterWithReports.Name),
+        nameof(CommCenterWithReports.ElapsedDaysOfLastPm),
+        nameof(CommCenterWithReports.DieselsCount),
+        nameof(CommCenterWithReports.BatteryAndRectifiersCount),
+        nameof(CommCenterWithReports.UpsCount),
+        nameof(CommCenterWithReports.CenterCapacity),
+        nameof(CommCenterWithReports.NotesCount),
+        nameof(CommCenterWithReports.EquipmentsPmEnabled),
+        nameof(CommCenterWithReports.DailyPmEnabled),
+        nameof(CommCenterWithReports.SwitchType),
+        nameof(CommCenterWithReports.ImportanceLevel),
+    };
+
+    private static ObjectTable<CommCenterWithReports>.LinkColumn[] linkColumns = new ObjectTable<CommCenterWithReports>.LinkColumn[]
+    {
+        new ObjectTable<CommCenterWithReports>.LinkColumn { Text = "ویرایش", FieldName = nameof(CommCenterWithReports.Id), Link = @"/center/edit/{Id}" }
+    };
 
     protected override async Task OnInitializedAsync()
     {
         cities = await http.GetFromJsonAsync<City[]>("Place/CityList");
+        await CityChanged(new ChangeEventArgs { Value = cities[0].Id.ToString() });
     }
 
-    private void CityChanged()
+    private async Task CityChanged(ChangeEventArgs e)
     {
-        Console.WriteLine("city changed.");
+        centers = await http.GetFromJsonAsync<CommCenterWithReports[]>("CommCenter/CentersWithReports?cityId=" + e.Value);
     }
 }

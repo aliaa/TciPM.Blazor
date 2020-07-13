@@ -23,8 +23,7 @@ namespace TciPM.Blazor.Server.Controllers
         [Authorize(nameof(Permission.ShowCenters))]
         public ActionResult<List<City>> CityList()
         {
-            var province = dbs.CommonDb.FindFirst<Province>(p => p.Prefix == ProvincePrefix);
-            return db.Find<City>(c => c.Province == province.Id).SortBy(c => c.Name).ToList();
+            return db.Find<City>(c => c.Province == Province.Id).SortBy(c => c.Name).ToList();
         }
     }
 }

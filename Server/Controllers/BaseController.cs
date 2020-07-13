@@ -1,11 +1,11 @@
 ﻿using EasyMongoNet;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
+using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using TciCommon.Models;
 using TciPM.Blazor.Server.Models;
 using TciPM.Blazor.Shared;
@@ -23,6 +23,8 @@ namespace TciPM.Blazor.Server.Controllers
         }
 
         protected string ProvincePrefix => HttpContext.User.FindFirst(nameof(Province)).Value;
+
+        protected Province Province => dbs.CommonDb.FindFirst<Province>(p => p.Prefix == ProvincePrefix);
 
         protected IDbContext db => dbs[ProvincePrefix];
 
@@ -56,5 +58,7 @@ namespace TciPM.Blazor.Server.Controllers
                 return db.FindById<AuthUserX>(id.Value);
             return null;
         }
+
+        protected IEnumerable<City> Cities => db.Find<City>(c => c.Province == Province.Id).SortBy(c => c.Name).ToEnumerable();
     }
 }
