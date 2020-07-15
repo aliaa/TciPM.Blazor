@@ -6,7 +6,7 @@ namespace TciPM.Blazor.Shared.Models
     {
         [Display(Name = "شهر")]
         public string CityName { get; set; }
-        [Display(Name = "زمان گذشته از آخرین PM (روز)")]
+        [Display(Name = "روزهای گذشته از آخرین PM")]
         public int? ElapsedDaysOfLastPm { get; set; }
 
         [Display(Name = "تعداد دیزل")]
@@ -18,7 +18,7 @@ namespace TciPM.Blazor.Shared.Models
         [Display(Name = "تعداد UPS")]
         public int UpsCount { get; set; }
 
-        [Display(Name = "تعداد گزارشات")]
+        [Display(Name = "تعداد گزارشات روزانه")]
         public int NotesCount { get; set; }
     }
 }

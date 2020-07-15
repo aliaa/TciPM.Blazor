@@ -27,37 +27,45 @@ else
             <a class="btn btn-secondary" href="/center/new">تعریف مرکز جدید</a>
         </div>
     </div>
-    if (centers != null)
+    if (centers != null && !loading)
     {
-        <div class="mt-5">
-            <ObjectTable Data="centers" FieldNames="fields" LinkColumns="linkColumns" />
+        <div class="mt-4">
+            <ObjectTable Data="centers" FieldNames="fields" LinkColumns="linkColumns" ColumnsBackColor="pmDaysColor" />
         </div>
+    }
+    if (loading)
+    {
+        <Loading />
     }
 }
 
 @code {
     private City[] cities;
     private CommCenterWithReports[] centers;
+    private bool loading = true;
     private static string[] fields = new string[]
-    {
+{
         nameof(CommCenterWithReports.CityName),
         nameof(CommCenterWithReports.Name),
         nameof(CommCenterWithReports.ElapsedDaysOfLastPm),
-        nameof(CommCenterWithReports.DieselsCount),
-        nameof(CommCenterWithReports.BatteryAndRectifiersCount),
-        nameof(CommCenterWithReports.UpsCount),
+        nameof(CommCenterWithReports.ImportanceLevel),
         nameof(CommCenterWithReports.CenterCapacity),
         nameof(CommCenterWithReports.NotesCount),
         nameof(CommCenterWithReports.EquipmentsPmEnabled),
         nameof(CommCenterWithReports.DailyPmEnabled),
         nameof(CommCenterWithReports.SwitchType),
-        nameof(CommCenterWithReports.ImportanceLevel),
+        nameof(CommCenterWithReports.DieselsCount),
+        nameof(CommCenterWithReports.BatteryAndRectifiersCount),
+        nameof(CommCenterWithReports.UpsCount),
     };
 
     private static ObjectTable<CommCenterWithReports>.LinkColumn[] linkColumns = new ObjectTable<CommCenterWithReports>.LinkColumn[]
     {
+        new ObjectTable<CommCenterWithReports>.LinkColumn { Text = "جزئیات", FieldName = nameof(CommCenterWithReports.Id), Link = @"/center/item/{Id}" },
         new ObjectTable<CommCenterWithReports>.LinkColumn { Text = "ویرایش", FieldName = nameof(CommCenterWithReports.Id), Link = @"/center/edit/{Id}" }
     };
+
+    private Dictionary<string, List<string>> pmDaysColor;
 
     protected override async Task OnInitializedAsync()
     {
@@ -67,6 +75,21 @@ else
 
     private async Task CityChanged(ChangeEventArgs e)
     {
+        loading = true;
         centers = await http.GetFromJsonAsync<CommCenterWithReports[]>("CommCenter/CentersWithReports?cityId=" + e.Value);
+
+        var colors = new List<string>(centers.Length);
+        foreach (var c in centers)
+        {
+            if (c.ElapsedDaysOfLastPm >= c.PMPeriodDays)
+                colors.Add("#f77c88");
+            else
+                colors.Add("#7cf7a5");
+        }
+
+        pmDaysColor = new Dictionary<string, List<string>>
+        {{  nameof(CommCenterWithReports.ElapsedDaysOfLastPm) , colors  }};
+
+        loading = false;
     }
 }

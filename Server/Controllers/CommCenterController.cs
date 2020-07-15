@@ -11,12 +11,26 @@ using TciPM.Classes;
 
 namespace TciPM.Blazor.Server.Controllers
 {
-    [Route("[controller]/[action]")]
+    [Route("[controller]/[action]/{id?}")]
     [ApiController]
     [Authorize(nameof(Permission.ShowCenters))]
     public class CommCenterController : BaseController
     {
         public CommCenterController(ProvinceDBs dbs) : base(dbs) { }
+        
+        public ActionResult<List<CommCenterX>> List(ObjectId cityId)
+        {
+            return db.Find<CommCenterX>(cc => cc.City == cityId)
+                .SortByDescending(c => c.ImportanceLevel)
+                .ThenByDescending(c => c.CenterCapacity)
+                .ThenBy(c => c.Name)
+                .ToList();
+        }
+
+        public ActionResult<CommCenterX> Item(ObjectId id)
+        {
+            return db.FindById<CommCenterX>(id);
+        }
 
         public ActionResult<List<CommCenterWithReports>> CentersWithReports(ObjectId cityId)
         {
