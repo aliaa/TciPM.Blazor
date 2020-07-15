@@ -32,7 +32,7 @@ namespace TciPM.Blazor.Server.Controllers
             return db.FindById<CommCenterX>(id);
         }
 
-        public ActionResult<List<CommCenterWithReports>> CentersWithReports(ObjectId cityId)
+        public ActionResult<List<CommCenterWithReports>> ListWithReports(ObjectId cityId)
         {
             var list = db.Find<CommCenterX>(cc => cc.City == cityId)
                 .SortByDescending(c => c.ImportanceLevel)

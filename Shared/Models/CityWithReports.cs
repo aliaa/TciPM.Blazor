@@ -2,14 +2,14 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace TciPM.Blazor.Shared.Util
+namespace TciPM.Blazor.Shared.Models
 {
-    public class CentersAggregatedData
+    public class CityWithReports
     {
         [BsonId]
         public ObjectId Id { get; set; }
 
-        [DisplayName("نام")]
+        [DisplayName("شهر")]
         public string Name { get; set; }
 
         [DisplayName("تعداد کل مراکز")]

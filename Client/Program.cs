@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
 using TciPM.Blazor.Shared;
+using Blazored.Modal;
 
 namespace TciPM.Blazor.Client
 {
@@ -32,6 +33,7 @@ namespace TciPM.Blazor.Client
                 options.AddPolicy("Admin", policy => policy.RequireClaim("IsAdmin", "true"));
                 options.AddPolicy("SuperAdmin", policy => policy.RequireClaim("IsSuperAdmin", "true"));
             });
+            builder.Services.AddBlazoredModal();
 
             await builder.Build().RunAsync();
         }

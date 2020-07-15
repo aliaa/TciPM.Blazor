@@ -1,0 +1,67 @@
+﻿@page "/city/list"
+@attribute [Authorize(nameof(Permission.ShowCenters))]
+@inject HttpClient http
+@inject IModalService modal
+
+@if (cities == null)
+{
+    <Loading />
+}
+else
+{
+    <div class="mt-4 text-center">
+        <button class="btn btn-secondary" @onclick="@(() => modal.Show<EditCity>("شهر جدید"))">تعریف شهر جدید</button>
+    </div>
+
+
+    <div class="mt-4">
+        <ObjectTable Data="cities" FieldNames="fields" LinkColumns="linkColumns" ColumnsBackColor="colorsOfColumns" />
+    </div>
+}
+
+@code {
+    private CityWithReports[] cities;
+    private bool loading = true;
+    private static string[] fields = new string[]
+    {
+        nameof(CityWithReports.Name),
+        nameof(CityWithReports.CentersCount),
+        nameof(CityWithReports.MoreThan5PriorityCentersCount),
+        nameof(CityWithReports.LessThan5PriorityCentersCount),
+        nameof(CityWithReports.CentersOnTimePMPercent),
+        nameof(CityWithReports.MoreThan5PriorityCentersOnTimePM),
+        nameof(CityWithReports.LessThan5PriorityCentersOnTimePM),
+        nameof(CityWithReports.EquipmentPMsCount),
+        nameof(CityWithReports.DailyPMsCount),
+    };
+
+    private Dictionary<string, List<string>> colorsOfColumns;
+
+    private static ObjectTable<CityWithReports>.LinkColumn[] linkColumns = new ObjectTable<CityWithReports>.LinkColumn[]
+    {
+        new ObjectTable<CityWithReports>.LinkColumn { Text = "ویرایش", FieldName = nameof(CityWithReports.Id), Link = @"/city/edit/{Id}" }
+            };
+
+    protected override async Task OnInitializedAsync()
+    {
+        loading = true;
+        cities = await http.GetFromJsonAsync<CityWithReports[]>("City/ListWithReports");
+
+        colorsOfColumns = new Dictionary<string, List<string>>(3);
+        colorsOfColumns.Add(nameof(CityWithReports.CentersOnTimePMPercent),
+            cities.Select(c => CalculatePercentColor(c.CentersOnTimePMPercent)).ToList());
+        colorsOfColumns.Add(nameof(CityWithReports.LessThan5PriorityCentersOnTimePM),
+            cities.Select(c => CalculatePercentColor(c.LessThan5PriorityCentersOnTimePM)).ToList());
+        colorsOfColumns.Add(nameof(CityWithReports.MoreThan5PriorityCentersOnTimePM),
+            cities.Select(c => CalculatePercentColor(c.MoreThan5PriorityCentersOnTimePM)).ToList());
+
+        loading = false;
+    }
+
+    private string CalculatePercentColor(int? p)
+    {
+        if (p == null)
+            return "initial";
+        return new HSLColor(p.Value / 100f * 80f, 240f, 180f).ToHexString();
+    }
+}

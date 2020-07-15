@@ -4,9 +4,7 @@
 
 @if (cities == null)
 {
-    <div class="text-center">
-        <div class="spinner-border text-primary" role="status" />
-    </div>
+    <Loading />
 }
 else
 {
@@ -44,7 +42,7 @@ else
     private CommCenterWithReports[] centers;
     private bool loading = true;
     private static string[] fields = new string[]
-{
+    {
         nameof(CommCenterWithReports.CityName),
         nameof(CommCenterWithReports.Name),
         nameof(CommCenterWithReports.ElapsedDaysOfLastPm),
@@ -76,7 +74,7 @@ else
     private async Task CityChanged(ChangeEventArgs e)
     {
         loading = true;
-        centers = await http.GetFromJsonAsync<CommCenterWithReports[]>("CommCenter/CentersWithReports?cityId=" + e.Value);
+        centers = await http.GetFromJsonAsync<CommCenterWithReports[]>("CommCenter/ListWithReports?cityId=" + e.Value);
 
         var colors = new List<string>(centers.Length);
         foreach (var c in centers)
