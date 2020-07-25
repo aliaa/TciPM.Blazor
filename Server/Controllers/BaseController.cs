@@ -20,6 +20,9 @@ namespace TciPM.Blazor.Server.Controllers
         public BaseController(ProvinceDBs dbs)
         {
             this.dbs = dbs;
+            dbs.CommonDb.GetUserNameFunc = () => Username;
+            foreach (var k in dbs.Keys)
+                dbs[k].GetUserNameFunc = () => Username;
         }
 
         protected string ProvincePrefix => HttpContext.User.FindFirst(nameof(Province)).Value;
@@ -28,11 +31,13 @@ namespace TciPM.Blazor.Server.Controllers
 
         protected IDbContext db => dbs[ProvincePrefix];
 
+        protected string Username => HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
         protected ObjectId? UserId
         {
             get
             {
-                if (ObjectId.TryParse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value, out ObjectId val))
+                if (ObjectId.TryParse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == "Id")?.Value, out ObjectId val))
                     return val;
                 return null;
             }

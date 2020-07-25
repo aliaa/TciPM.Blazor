@@ -18,8 +18,8 @@ namespace TciPM.Blazor.Client
             builder.RootComponents.Add<App>("app");
 
             builder.Services.AddBlazoredLocalStorage();
-
-            builder.Services.AddTransient(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+            var address = new Uri(new Uri(builder.HostEnvironment.BaseAddress), "/api/");
+            builder.Services.AddTransient(sp => new HttpClient { BaseAddress = address });
             builder.Services.AddScoped<AuthenticationStateProvider, AuthStateProvider>();
             builder.Services.AddOptions();
             builder.Services.AddAuthorizationCore(options =>

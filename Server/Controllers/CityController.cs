@@ -13,7 +13,7 @@ using TciPM.Classes;
 
 namespace TciPM.Blazor.Server.Controllers
 {
-    [Route("[controller]/[action]/{id?}")]
+    [Route("api/[controller]/[action]/{id?}")]
     [ApiController]
     [Authorize(nameof(Permission.ShowCenters))]
     public class CityController : BaseController
@@ -28,6 +28,25 @@ namespace TciPM.Blazor.Server.Controllers
         public ActionResult<City> Item(ObjectId id)
         {
             return db.FindById<City>(id);
+        }
+
+        [HttpPost]
+        [Authorize(nameof(Permission.ChangeCities))]
+        public IActionResult Add(City city)
+        {
+            city.Province = Province.Id;
+            db.Save(city);
+            return Ok();
+        }
+
+        [HttpPost]
+        [Authorize(nameof(Permission.ChangeCities))]
+        public IActionResult Edit([FromRoute] ObjectId id, [FromBody] City city)
+        {
+            city.Province = Province.Id;
+            city.Id = id;
+            db.Save(city);
+            return Ok();
         }
 
         class AggResult

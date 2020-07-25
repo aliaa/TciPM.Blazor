@@ -1,0 +1,22 @@
+﻿@page "/city/edit/{Id}"
+@inject NavigationManager nav
+
+<div class="container">
+    <h3>ویرایش شهر</h3>
+    <div class="row mt-5">
+        <div class="col-lg-3">
+            <EditCity Id="@Id" OnSubmitted="Submitted" />
+        </div>
+    </div>
+</div>
+
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    private void Submitted()
+    {
+        nav.NavigateTo("/city/list");
+    }
+}

@@ -40,7 +40,7 @@ else
     private static ObjectTable<CityWithReports>.LinkColumn[] linkColumns = new ObjectTable<CityWithReports>.LinkColumn[]
     {
         new ObjectTable<CityWithReports>.LinkColumn { Text = "ویرایش", FieldName = nameof(CityWithReports.Id), Link = @"/city/edit/{Id}" }
-            };
+    };
 
     protected override async Task OnInitializedAsync()
     {

@@ -11,7 +11,7 @@ using TciPM.Classes;
 
 namespace TciPM.Blazor.Server.Controllers
 {
-    [Route("[controller]/[action]/{id?}")]
+    [Route("api/[controller]/[action]/{id?}")]
     [ApiController]
     [Authorize(nameof(Permission.ShowCenters))]
     public class CommCenterController : BaseController

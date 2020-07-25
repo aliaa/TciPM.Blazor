@@ -1,9 +1,44 @@
-﻿<div class="form-group">
-    <label>استان</label>
-    <input type="text" disabled class="form-control" />
-</div>
+﻿@inject HttpClient http
+
+<EditForm Model="city" OnValidSubmit="Submit">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label for="Name">نام</label>
+        <InputText type="text" class="form-control" @bind-Value="city.Name" />
+    </div>
+    <div>
+        <input type="submit" class="btn btn-primary" value="ذخیره" />
+    </div>
+</EditForm>
 
 
 @code {
 
+    private City city = new City();
+
+    [CascadingParameter]
+    BlazoredModalInstance modal { get; set; }
+
+    [Parameter]
+    public string Id { get; set; }
+
+    [Parameter]
+    public EventCallback OnSubmitted { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id != null)
+            city = await http.GetFromJsonAsync<City>("City/Item/" + Id);
+    }
+
+    private async Task Submit()
+    {
+        if (Id != null)
+            await http.PostAsJsonAsync("City/Edit/" + Id, city);
+        else
+            await http.PostAsJsonAsync("City/Add", city);
+        if (modal != null)
+            await modal.Close();
+        await OnSubmitted.InvokeAsync(null);
+    }
 }

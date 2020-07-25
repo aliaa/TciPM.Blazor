@@ -9,7 +9,7 @@ using TciPM.Classes;
 
 namespace TciPM.Blazor.Server.Controllers
 {
-    [Route("[controller]/[action]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class PlaceController : BaseController
     {

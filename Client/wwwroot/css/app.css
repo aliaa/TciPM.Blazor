@@ -225,3 +225,7 @@ app {
     margin-right: 0.255em;
     vertical-align: unset;
 }
+
+.blazored-modal-close {
+    margin: -1rem -1rem auto -1rem !important;
+}

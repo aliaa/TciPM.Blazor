@@ -20,7 +20,7 @@ using TciPM.Classes;
 namespace TciPM.Blazor.Server.Controllers
 {
     [ApiController]
-    [Route("[controller]/[action]")]
+    [Route("api/[controller]/[action]")]
     public class AccountController : BaseController
     {
         public AccountController(ProvinceDBs dbs) : base(dbs) { }
@@ -37,6 +37,7 @@ namespace TciPM.Blazor.Server.Controllers
             {
                 var claims = new List<Claim>
                 {
+                    new Claim("Id", user.Id.ToString()),
                     new Claim(ClaimTypes.NameIdentifier, model.Username),
                     new Claim(ClaimTypes.Name, user.FirstName),
                     new Claim(ClaimTypes.Surname, user.LastName),
