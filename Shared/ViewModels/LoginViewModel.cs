@@ -7,11 +7,11 @@ namespace TciPM.Blazor.Shared.ViewModels
 {
     public class LoginViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "نام کاربری اجباریست!")]
         public string Username { get; set; }
-        [Required]
+        [Required(ErrorMessage = "رمز عبور اجباریست!")]
         public string Password { get; set; }
-        [Required]
+        [Required(ErrorMessage = "لطفا استان خود را انتخاب نمائید.")]
         public string Province { get; set; }
         public bool RememberMe { get; set; }
     }

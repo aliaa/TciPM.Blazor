@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Components.Authorization;
 using System;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,10 +14,10 @@ namespace TciPM.Blazor.Client
 {
     public class AuthStateProvider : AuthenticationStateProvider
     {
-        private HttpClient httpClient;
+        private HttpClientX httpClient;
         private ILocalStorageService storage;
 
-        public AuthStateProvider(HttpClient httpClient, ILocalStorageService storage) : base()
+        public AuthStateProvider(HttpClientX httpClient, ILocalStorageService storage) : base()
         {
             this.httpClient = httpClient;
             this.storage = storage;
@@ -72,14 +71,19 @@ namespace TciPM.Blazor.Client
 
         public async Task<bool> Login(LoginViewModel m)
         {
-            var res = await httpClient.PostAsJsonAsync("Account/Login", m);
-            if (res.IsSuccessStatusCode)
+            try
             {
-                var user = await res.Content.ReadFromJsonAsync<ClientAuthUser>();
+                var user = await httpClient.PostAsJsonAsync<LoginViewModel, ClientAuthUser>("Account/Login", m);
+                if (user == null)
+                    return false;
                 await storage.SetItemAsync("user", user);
                 NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
+                return true;
             }
-            return res.IsSuccessStatusCode;
+            catch
+            {
+                return false;
+            }
         }
 
         public async Task Logout()

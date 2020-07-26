@@ -1,6 +1,6 @@
 ﻿@page "/center/list"
 @attribute [Authorize(nameof(Permission.ShowCenters))]
-@inject HttpClient http
+@inject HttpClientX http
 
 @if (cities == null)
 {

@@ -17,12 +17,12 @@ namespace TciPM.Blazor.Client
             Options.Converters.Add(new JsonStringEnumConverter());
         }
 
-        public static Task<T> GetFromJsonAsync<T>(this HttpClient client, string? requestUri, CancellationToken cancellationToken = default)
+        public static Task<T> GetFromJsonAsync<T>(this HttpClient client, string requestUri, CancellationToken cancellationToken = default)
         {
             return HttpClientJsonExtensions.GetFromJsonAsync<T>(client, requestUri, Options, cancellationToken);
         }
 
-        public static Task<HttpResponseMessage> PostAsJsonAsync<T>(this HttpClient client, string? requestUri, T value, CancellationToken cancellationToken = default)
+        public static Task<HttpResponseMessage> PostAsJsonAsync<T>(this HttpClient client, string requestUri, T value, CancellationToken cancellationToken = default)
         {
             return HttpClientJsonExtensions.PostAsJsonAsync(client, requestUri, value, Options, cancellationToken);
         }

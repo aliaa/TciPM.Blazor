@@ -7,6 +7,7 @@ using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
 using TciPM.Blazor.Shared;
 using Blazored.Modal;
+using Microsoft.AspNetCore.Components;
 
 namespace TciPM.Blazor.Client
 {
@@ -19,7 +20,7 @@ namespace TciPM.Blazor.Client
 
             builder.Services.AddBlazoredLocalStorage();
             var address = new Uri(new Uri(builder.HostEnvironment.BaseAddress), "/api/");
-            builder.Services.AddTransient(sp => new HttpClient { BaseAddress = address });
+            builder.Services.AddTransient(sp => new HttpClientX(sp.GetService<NavigationManager>()) { BaseAddress = address });
             builder.Services.AddScoped<AuthenticationStateProvider, AuthStateProvider>();
             builder.Services.AddOptions();
             builder.Services.AddAuthorizationCore(options =>

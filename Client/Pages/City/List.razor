@@ -1,6 +1,6 @@
 ﻿@page "/city/list"
 @attribute [Authorize(nameof(Permission.ShowCenters))]
-@inject HttpClient http
+@inject HttpClientX http
 @inject IModalService modal
 
 @if (cities == null)

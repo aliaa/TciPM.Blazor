@@ -13,6 +13,8 @@ using System.Text.Unicode;
 using TciCommon.Models;
 using TciPM.Blazor.Shared;
 using Newtonsoft.Json.Serialization;
+using System.Net;
+using System.Threading.Tasks;
 
 namespace TciPM.Blazor.Server.Configuration
 {
@@ -32,8 +34,11 @@ namespace TciPM.Blazor.Server.Configuration
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).
                 AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
                 {
-                    options.LoginPath = "/Account/Login";
-                    options.LogoutPath = "/Account/Logout";
+                    options.Events.OnRedirectToLogin = ctx =>
+                    {
+                        ctx.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                        return Task.FromResult(0);
+                    };
                 });
 
             string permissionClaimName = nameof(Permission);
