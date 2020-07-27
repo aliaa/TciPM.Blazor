@@ -88,6 +88,7 @@ namespace TciPM.Blazor.Client
 
         public async Task Logout()
         {
+            await httpClient.GetAsync("Account/Logout");
             await storage.RemoveItemAsync("user");
             NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
         }

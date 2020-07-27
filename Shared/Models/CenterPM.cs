@@ -13,6 +13,7 @@ namespace TciPM.Blazor.Shared.Models
     public class CenterPM : MongoEntity
     {
         [JsonConverter(typeof(ObjectIdJsonConverter))]
+        [Display(Name = "مرکز")]
         public ObjectId CenterId { get; set; }
 
         [Display(Name = "تاریخ ثبت الکترونیکی")]

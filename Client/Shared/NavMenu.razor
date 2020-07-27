@@ -34,9 +34,9 @@
                         <a class="nav-link dropdown-toggle" role="button" data-toggle="dropdown">PM تجهیزات مراکز</a>
                         <div class="dropdown-menu">
                             <AuthorizeView Context="a" Policy="@nameof(Permission.WriteEquipmentPM)">
-                                <NavLink class="dropdown-item" href="EditPM">ثبت PM جدید تجهیزات</NavLink>
+                                <NavLink class="dropdown-item" href="/equipmentsPm/new">ثبت PM جدید تجهیزات</NavLink>
                             </AuthorizeView>
-                            <NavLink class="dropdown-item" href="PMList">لیست PM های تجهیزات</NavLink>
+                            <NavLink class="dropdown-item" href="/equipmentsPm/list">لیست PM های تجهیزات</NavLink>
                         </div>
                     </li>
                 </AuthorizeView>

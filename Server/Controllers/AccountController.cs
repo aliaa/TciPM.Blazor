@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver;
 using Omu.ValueInjecter;
 using TciCommon.Models;
 using TciPM.Blazor.Server.Models;
@@ -45,7 +46,7 @@ namespace TciPM.Blazor.Server.Controllers
                 };
                 if (user.IsAdmin)
                     claims.Add(new Claim("IsAdmin", "true"));
-                
+
                 var perms = new StringBuilder();
                 foreach (var perm in user.Permissions)
                     perms.Append(perm).Append(",");
@@ -92,6 +93,20 @@ namespace TciPM.Blazor.Server.Controllers
                     return BadRequest("رمز فعلی اشتباه میباشد.");
             }
             return Unauthorized();
+        }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult<IEnumerable<TextValue>> UsersWithPermission(Permission permission)
+        {
+            var list = new List<TextValue>();
+            var currentUser = GetUser();
+            if (currentUser.HasPermission(permission))
+                list.Add(new TextValue { Value = currentUser.Id.ToString(), Text = currentUser.DisplayName + " (خودم)" });
+            list.AddRange(db.Find<AuthUserX>(u => u.Permissions.Contains(permission) && u.Id != currentUser.Id)
+                .SortBy(u => u.LastName).ThenBy(u => u.FirstName).ToEnumerable()
+                .Select(u => new TextValue { Text = u.DisplayName, Value = u.Id.ToString() }));
+            return list;
         }
     }
 }

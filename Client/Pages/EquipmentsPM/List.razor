@@ -1,0 +1,114 @@
+﻿@page "/equipmentsPm/list"
+@inject HttpClientX http
+
+<div class="container mt-5">
+    <h3>لیست PM های تجهیزات</h3>
+
+    @if (cities == null)
+    {
+        <Loading />
+    }
+    else
+    {
+        <EditForm Model="model">
+            <div class="mt-5 row">
+                <div class="col-lg-3 col-sm-6 form-group">
+                    <Label For="@(() => model.City)" />
+                    <select @onchange="CityChanged" class="form-control">
+                        <option value="">همه</option>
+                        @foreach (var c in cities)
+                        {
+                            <option value="@c.Value">@c.Text</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-lg-3 col-sm-6 form-group">
+                    <Label For="@(() => model.Center)" />
+                    <select @bind="@model.Center" class="form-control">
+                        <option value="">همه</option>
+                        @if (centers != null)
+                        {
+                            @foreach (var c in centers)
+                            {
+                                <option value="@c.Value">@c.Text</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-lg-3 col-sm-6 form-group">
+                    <Label For="@(()=> model.FromDate)" />
+                    <InputText @bind-Value="model.FromDate" class="form-control pdate" />
+                </div>
+                <div class="col-lg-3 col-sm-6 form-group">
+                    <Label For="@(()=> model.ToDate)" />
+                    <InputText @bind-Value="model.ToDate" class="form-control pdate" />
+                </div>
+                <div class="col-lg-3 col-sm-6 form-group">
+                    <Label For="@(() => model.SubmittedUser)" />
+                    <select @bind="model.SubmittedUser" class="form-control">
+                        <option value="">همه</option>
+                        @foreach (var u in users)
+                        {
+                            <option value="@u.Value">@u.Text</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="mt-4">
+                <button class="btn btn-primary mx-3" @onclick="ShowResult">نمایش</button>
+                <button class="btn btn-secondary mx-3" @onclick="ExcelOutput">خروجی اکسل</button>
+            </div>
+        </EditForm>
+        @if (loading)
+        {
+            <Loading />
+        }
+        else if(pms != null)
+        {
+            <div class="mt-4">
+                <ObjectTable Data="pms"  />
+            </div>
+        }
+    }
+</div>
+
+@code {
+    private PmSearchViewModel model = new PmSearchViewModel();
+    private List<TextValue> cities = null;
+    private List<TextValue> centers = null;
+    private List<TextValue> users = null;
+    private List<CenterPM> pms = null;
+    private bool loading = false;
+
+    private static string[] fields = new string[]
+    {
+        //nameof(CenterPM.)
+    };
+
+    protected override async Task OnInitializedAsync()
+    {
+        cities = await http.GetFromJsonAsync<List<TextValue>>("Place/CityList");
+        users = await http.GetFromJsonAsync<List<TextValue>>("Account/UsersWithPermission?permission=" + Permission.WriteEquipmentPM);
+    }
+
+    private async Task CityChanged(ChangeEventArgs e)
+    {
+        model.City = (string)e.Value;
+        if (!string.IsNullOrEmpty(model.City))
+            centers = await http.GetFromJsonAsync<List<TextValue>>("CommCenter/List?cityId=" + model.City);
+        else
+            centers = null;
+    }
+
+    private async Task ShowResult()
+    {
+        loading = true;
+        pms = await http.PostAsJsonAsync<PmSearchViewModel, List<CenterPM>>("EquipmentsPm/List", model);
+        loading = false;
+    }
+
+    private async Task ExcelOutput()
+    {
+
+    }
+}

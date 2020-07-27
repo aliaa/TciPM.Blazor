@@ -8,13 +8,13 @@
     <EditForm Model="model" OnValidSubmit="CheckLogin">
         <DataAnnotationsValidator />
         <div class="row mt-5">
-            <div class="col-3">
+            <div class="col-lg-3 col-sm-6">
                 <div class="form-group">
-                    <label for="Username">نام کاربری</label>
+                    <Label For="@(()=> model.Username)" />
                     <InputText type="text" @bind-Value="model.Username" class="form-control" />
                 </div>
                 <div class="form-group">
-                    <label for="Password">رمز عبور</label>
+                    <Label For="@(() => model.Password)" />
                     <InputText type="password" @bind-Value="model.Password" class="form-control" />
                 </div>
                 @if (provinces == null)
@@ -24,13 +24,13 @@
                 else
                 {
                     <div class="form-group">
-                        <label for="Province">استان</label>
+                        <Label For="@(() => model.Province)" />
                         <InputSelect @bind-Value="model.Province" class="form-control">
                             <option selected disabled>انتخاب کنید</option>
                             @foreach (var p in provinces)
-                                {
-                                <option value="@p.Prefix">@p.Name</option>
-                                }
+                            {
+                                <option value="@p.Value">@p.Text</option>
+                            }
                         </InputSelect>
                     </div>
                     <ValidationSummary />
@@ -45,11 +45,11 @@
 
 @code {
     private LoginViewModel model = new LoginViewModel();
-    private List<Province> provinces = null;
+    private List<TextValue> provinces = null;
 
     protected override async Task OnInitializedAsync()
     {
-        provinces = await http.GetFromJsonAsync<List<Province>>("Place/ProvinceList");
+        provinces = await http.GetFromJsonAsync<List<TextValue>>("Place/ProvinceList");
     }
 
     private async Task CheckLogin(EditContext editContext)

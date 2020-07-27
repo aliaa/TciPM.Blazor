@@ -1,4 +1,5 @@
-﻿@page "/center/list"
+﻿@page "/"
+@page "/center/list"
 @attribute [Authorize(nameof(Permission.ShowCenters))]
 @inject HttpClientX http
 
@@ -16,7 +17,7 @@ else
                 {
                     foreach (var c in cities)
                     {
-                        <option value="@c.Id.ToString()">@c.Name</option>
+                        <option value="@c.Value">@c.Text</option>
                     }
                 }
             </select>
@@ -38,7 +39,7 @@ else
 }
 
 @code {
-    private City[] cities;
+    private List<TextValue> cities;
     private CommCenterWithReports[] centers;
     private bool loading = true;
     private static string[] fields = new string[]
@@ -67,8 +68,8 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        cities = await http.GetFromJsonAsync<City[]>("Place/CityList");
-        await CityChanged(new ChangeEventArgs { Value = cities[0].Id.ToString() });
+        cities = await http.GetFromJsonAsync<List<TextValue>>("Place/CityList");
+        await CityChanged(new ChangeEventArgs { Value = cities[0].Value });
     }
 
     private async Task CityChanged(ChangeEventArgs e)
@@ -86,7 +87,7 @@ else
         }
 
         pmDaysColor = new Dictionary<string, List<string>>
-        {{  nameof(CommCenterWithReports.ElapsedDaysOfLastPm) , colors  }};
+    {{  nameof(CommCenterWithReports.ElapsedDaysOfLastPm) , colors  }};
 
         loading = false;
     }
