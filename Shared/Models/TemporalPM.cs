@@ -9,6 +9,6 @@ namespace TciPM.Blazor.Shared.Models
     {
         public ObjectId User { get; set; }
         public ObjectId Center { get; set; }
-        public CenterPM PM { get; set; }
+        public EquipmentsPM PM { get; set; }
     }
 }

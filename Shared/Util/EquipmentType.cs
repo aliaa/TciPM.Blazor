@@ -32,14 +32,14 @@ namespace TciPM.Blazor.Shared.Util
             }
         }
 
-        public static string GetPmFieldNameInCenterPM(this EquipmentType equipmentType)
+        public static string GetPmFieldName(this EquipmentType equipmentType)
         {
             switch (equipmentType)
             {
-                case EquipmentType.Diesel:      return nameof(CenterPM.DieselsPM);
-                case EquipmentType.Rectifier:   return nameof(CenterPM.RectifiersPM);
-                case EquipmentType.Battery:     return nameof(CenterPM.BatteriesPM);
-                case EquipmentType.UPS:         return nameof(CenterPM.UpsPM);
+                case EquipmentType.Diesel:      return nameof(EquipmentsPM.DieselsPM);
+                case EquipmentType.Rectifier:   return nameof(EquipmentsPM.RectifiersPM);
+                case EquipmentType.Battery:     return nameof(EquipmentsPM.BatteriesPM);
+                case EquipmentType.UPS:         return nameof(EquipmentsPM.UpsPM);
                 default: throw new NotImplementedException();
             }
         }
@@ -56,7 +56,7 @@ namespace TciPM.Blazor.Shared.Util
             }
         }
 
-        public static IEnumerable<EquipmentPM> GetEquipmentPmInCenterPm(this EquipmentType equipmentType, CenterPM pm)
+        public static IEnumerable<EquipmentPM> GetEquipmentPm(this EquipmentType equipmentType, EquipmentsPM pm)
         {
             switch (equipmentType)
             {

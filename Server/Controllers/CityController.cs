@@ -60,7 +60,7 @@ namespace TciPM.Blazor.Server.Controllers
 
         public ActionResult<List<CityWithReports>> ListWithReports()
         {
-            var centerPmsCount = db.Aggregate<CenterPM>()
+            var centerPmsCount = db.Aggregate<EquipmentsPM>()
                 .Group(id => id.CenterId, g => new { Id = g.Key, Count = g.Count() })
                 .Lookup(nameof(CommCenter), "Id", "_id", "Center")
                 .Project("{ Count:1, Center: {$arrayElemAt: [\"$Center\", 0]} }")
@@ -78,7 +78,7 @@ namespace TciPM.Blazor.Server.Controllers
                 .ToEnumerable()
                 .ToDictionary(k => k["_id"].AsObjectId, v => v["Count"].AsInt32);
 
-            var onTimeAgg = db.Aggregate<CenterPM>()
+            var onTimeAgg = db.Aggregate<EquipmentsPM>()
                 .Group("{ _id: \"$CenterId\", LastPmDate: {$last: \"$PmDate\"}}")
                 .Lookup("CommCenter", "_id", "_id", "Center")
                 .Project("{ Center: {$arrayElemAt: [\"$Center\", 0]}, " +

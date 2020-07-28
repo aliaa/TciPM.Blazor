@@ -57,7 +57,7 @@ namespace TciPM.Blazor.Server.Controllers
 
         private int GetDaysLastPM(ObjectId centerId)
         {
-            DateTime lastPmCreateDate = db.Find<CenterPM>(pm => pm.CenterId == centerId)
+            DateTime lastPmCreateDate = db.Find<EquipmentsPM>(pm => pm.CenterId == centerId)
                 .Project(pm => pm.PmDate).SortByDescending(pm => pm.PmDate).FirstOrDefault();
 
             return (int)Math.Min(999, Math.Round((DateTime.Now - lastPmCreateDate).TotalDays));

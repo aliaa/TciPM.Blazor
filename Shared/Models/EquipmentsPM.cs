@@ -10,7 +10,8 @@ namespace TciPM.Blazor.Shared.Models
     [CollectionIndex(new string[] { nameof(CenterId) })]
     [CollectionIndex(new string[] { nameof(ReportingUser) })]
     [CollectionIndex(new string[] { nameof(SubmitDate) })]
-    public class CenterPM : MongoEntity
+    [CollectionOptions(Name = "CenterPM")]
+    public class EquipmentsPM : MongoEntity
     {
         [JsonConverter(typeof(ObjectIdJsonConverter))]
         [Display(Name = "مرکز")]
@@ -75,7 +76,7 @@ namespace TciPM.Blazor.Shared.Models
         public static bool PmExistsForCenterInLastHours(IReadOnlyDbContext db, ObjectId centerId, int hours = 24)
         {
             DateTime lastHours = DateTime.Now.AddHours(-Math.Abs(hours));
-            return db.Any<CenterPM>(pm => pm.CenterId == centerId && pm.SubmitDate >= lastHours);
+            return db.Any<EquipmentsPM>(pm => pm.CenterId == centerId && pm.SubmitDate >= lastHours);
         }
     }
 }

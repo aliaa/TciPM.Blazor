@@ -77,7 +77,7 @@
     private List<TextValue> cities = null;
     private List<TextValue> centers = null;
     private List<TextValue> users = null;
-    private List<CenterPM> pms = null;
+    private List<EquipmentsPM> pms = null;
     private bool loading = false;
 
     private static string[] fields = new string[]
@@ -103,7 +103,7 @@
     private async Task ShowResult()
     {
         loading = true;
-        pms = await http.PostAsJsonAsync<PmSearchVM, List<CenterPM>>("EquipmentsPm/List", model);
+        pms = await http.PostAsJsonAsync<PmSearchVM, List<EquipmentsPM>>("EquipmentsPm/List", model);
         loading = false;
     }
 
