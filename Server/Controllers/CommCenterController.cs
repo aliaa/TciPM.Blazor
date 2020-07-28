@@ -7,6 +7,7 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using TciPM.Blazor.Shared;
 using TciPM.Blazor.Shared.Models;
+using TciPM.Blazor.Shared.ViewModels;
 using TciPM.Classes;
 
 namespace TciPM.Blazor.Server.Controllers
@@ -18,12 +19,13 @@ namespace TciPM.Blazor.Server.Controllers
     {
         public CommCenterController(ProvinceDBs dbs) : base(dbs) { }
         
-        public ActionResult<List<CommCenterX>> List(ObjectId cityId)
+        public ActionResult<List<TextValue>> List(ObjectId cityId)
         {
             return db.Find<CommCenterX>(cc => cc.City == cityId)
                 .SortByDescending(c => c.ImportanceLevel)
                 .ThenByDescending(c => c.CenterCapacity)
                 .ThenBy(c => c.Name)
+                .Project(c => new TextValue { Text = c.Name, Value = c.Id.ToString() })
                 .ToList();
         }
 

@@ -1,15 +1,15 @@
 ﻿@page "/equipmentsPm/list"
 @inject HttpClientX http
 
-<div class="container mt-5">
-    <h3>لیست PM های تجهیزات</h3>
+@if (cities == null)
+{
+    <Loading />
+}
+else
+{
+    <div class="container mt-5">
+        <h3>لیست PM های تجهیزات</h3>
 
-    @if (cities == null)
-    {
-        <Loading />
-    }
-    else
-    {
         <EditForm Model="model">
             <div class="mt-5 row">
                 <div class="col-lg-3 col-sm-6 form-group">
@@ -59,31 +59,42 @@
                 <button class="btn btn-secondary mx-3" @onclick="ExcelOutput">خروجی اکسل</button>
             </div>
         </EditForm>
-        @if (loading)
-        {
-            <Loading />
-        }
-        else if(pms != null)
-        {
-            <div class="mt-4">
-                <ObjectTable Data="pms"  />
-            </div>
-        }
+    </div>
+    @if (loading)
+    {
+        <Loading />
     }
-</div>
+    else if (pms != null)
+    {
+        <div class="container-fluid mt-5">
+            <ObjectTable Data="pms" FieldNames="fields" LinkColumns="linkColumns" />
+        </div>
+    }
+}
 
 @code {
     private PmSearchVM model = new PmSearchVM();
     private List<TextValue> cities = null;
     private List<TextValue> centers = null;
     private List<TextValue> users = null;
-    private List<EquipmentsPM> pms = null;
+    private List<EquipmentsPmListItemVM> pms = null;
     private bool loading = false;
 
     private static string[] fields = new string[]
     {
-        //nameof(CenterPM.)
-    };
+        nameof(EquipmentsPmListItemVM.City),
+        nameof(EquipmentsPmListItemVM.Center),
+        nameof(EquipmentsPmListItemVM.ReportingUser),
+        nameof(EquipmentsPmListItemVM.PmDate),
+        nameof(EquipmentsPmListItemVM.SubmitDate),
+        nameof(EquipmentsPmListItemVM.EditDate),
+        nameof(EquipmentsPmListItemVM.TotalRate),
+            };
+
+    private static ObjectTable<EquipmentsPmListItemVM>.LinkColumn[] linkColumns = new ObjectTable<EquipmentsPmListItemVM>.LinkColumn[]
+    {
+        new ObjectTable<EquipmentsPmListItemVM>.LinkColumn { Text = "مشاهده", FieldName = nameof(EquipmentsPmListItemVM.Id), Link = @"/equipmentsPm/view/{Id}" }
+            };
 
     protected override async Task OnInitializedAsync()
     {
@@ -103,7 +114,7 @@
     private async Task ShowResult()
     {
         loading = true;
-        pms = await http.PostAsJsonAsync<PmSearchVM, List<EquipmentsPM>>("EquipmentsPm/List", model);
+        pms = await http.PostAsJsonAsync<PmSearchVM, List<EquipmentsPmListItemVM>>("EquipmentsPm/List", model);
         loading = false;
     }
 
