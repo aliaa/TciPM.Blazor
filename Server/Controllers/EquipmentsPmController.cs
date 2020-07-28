@@ -25,10 +25,13 @@ namespace TciPM.Blazor.Server.Controllers
         [Authorize(nameof(Permission.ShowPMs))]
         public ActionResult<List<EquipmentsPmListItemVM>> List(PmSearchVM search)
         {
-            var pmList = GetPmList(search).Limit(200).ToList();
+            var query = GetPmList(search);
+            if (query == null)
+                return new List<EquipmentsPmListItemVM>();
+            var pmList = query.Limit(1000).ToList();
             var centers = pmList.GroupBy(pm => pm.CenterId)
                 .Select(g => db.FindById<CommCenterX>(g.Key)).Where(c => c != null).ToDictionary(c => c.Id);
-            var cities = centers.Values.GroupBy(c => c.City).Select(c => db.FindById<City>(c.Key)).ToDictionary(c => c.Id);
+            var cities = centers.Values.GroupBy(c => c.City).Select(c => db.FindById<City>(c.Key)).Where(c => c != null).ToDictionary(c => c.Id);
             var users = pmList.GroupBy(pm => pm.ReportingUser)
                 .Select(g => db.FindById<AuthUserX>(g.Key)).ToDictionary(u => u.Id);
 
@@ -36,7 +39,7 @@ namespace TciPM.Blazor.Server.Controllers
             {
                 Id = pm.Id,
                 Center = centers.ContainsKey(pm.CenterId) ? centers[pm.CenterId].Name : "(مرکز حذف شده)",
-                City = centers.ContainsKey(pm.CenterId) ? cities[centers[pm.CenterId].City].Name : "",
+                City = centers.ContainsKey(pm.CenterId) && cities.ContainsKey(centers[pm.CenterId].City) ? cities[centers[pm.CenterId].City].Name : "",
                 EditDate = PersianDateUtils.GetPersianDateString(pm.EditDate),
                 SubmitDate = PersianDateUtils.GetPersianDateString(pm.SubmitDate),
                 PmDate = PersianDateUtils.GetPersianDateString(pm.PmDate),
@@ -59,7 +62,9 @@ namespace TciPM.Blazor.Server.Controllers
                     var centersFilter = new List<FilterDefinition<EquipmentsPM>>();
                     foreach (var id in db.Find<CommCenterX>(c => c.City == cityId).Project(c => c.Id).ToEnumerable())
                         centersFilter.Add(fb.Eq(pm => pm.CenterId, id));
-                    if (centersFilter.Count == 1)
+                    if (centersFilter.Count == 0)
+                        return null;
+                    else if (centersFilter.Count == 1)
                         filters.Add(centersFilter[0]);
                     else if (centersFilter.Count > 1)
                         filters.Add(fb.Or(centersFilter));

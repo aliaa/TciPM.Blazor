@@ -1,4 +1,5 @@
 ﻿@page "/login"
+@page "/login/{state}"
 @inject AuthenticationStateProvider _auth
 @inject NavigationManager nav
 @inject HttpClientX http
@@ -28,9 +29,9 @@
                         <InputSelect @bind-Value="model.Province" class="form-control">
                             <option selected disabled>انتخاب کنید</option>
                             @foreach (var p in provinces)
-                            {
+                                {
                                 <option value="@p.Value">@p.Text</option>
-                            }
+                                }
                         </InputSelect>
                     </div>
                     <ValidationSummary />
@@ -44,12 +45,19 @@
 </div>
 
 @code {
+    [Parameter]
+    public string state { get; set; }
     private LoginVM model = new LoginVM();
     private List<TextValue> provinces = null;
 
     protected override async Task OnInitializedAsync()
     {
         provinces = await http.GetFromJsonAsync<List<TextValue>>("Place/ProvinceList");
+        if (state == "out")
+        {
+            var auth = (AuthStateProvider)_auth;
+            await auth.Logout();
+        }
     }
 
     private async Task CheckLogin(EditContext editContext)

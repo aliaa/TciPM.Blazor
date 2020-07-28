@@ -1,16 +1,98 @@
 ﻿@page "/center/new"
 @page "/center/edit/{Id}"
+@inject HttpClientX http
+@inject NavigationManager nav
 
-@if(Id == null)
-{
-    <h3>تعریف مرکز جدید</h3>
-}
-else
-{
-    <h3>ویرایش مرکز</h3>
-}
+<div class="container mt-5">
+    @if (Id == null)
+    {
+        <h2>تعریف مرکز جدید</h2>
+    }
+    else
+    {
+        <h2>ویرایش مرکز</h2>
+    }
+    <div class="card mt-5">
+        <div class="card-header">
+            <h5>اطلاعات مرکز</h5>
+        </div>
+        <div class="card-body">
+            <EditForm Model="model" OnValidSubmit="Save">
+                <DataAnnotationsValidator />
+                <div class="row">
+                    <div class="col-lg-3 col-sm-6 form-group">
+                        <Label For="@(() => model.City)" />
+                        <select @bind="model.CityId" class="form-control">
+                            @foreach (var c in cities)
+                            {
+                                <option value="@c.Value">@c.Text</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-lg-3 col-sm-6 form-group">
+                        <Label For="@(() => model.Name)" />
+                        <InputText @bind-Value="model.Name" class="form-control" />
+                    </div>
+                    <div class="col-lg-3 col-sm-6 form-group">
+                        <Label For="@(() => model.ImportanceLevel)" />
+                        <InputNumber @bind-Value="model.ImportanceLevel" class="form-control" />
+                    </div>
+                    <div class="col-lg-3 col-sm-6 form-group">
+                        <Label For="@(() => model.CenterCapacity)" />
+                        <InputNumber @bind-Value="model.CenterCapacity" class="form-control" />
+                    </div>
+                    <div class="col-12 form-group">
+                        <Label For="@(() => model.Address)" />
+                        <InputText @bind-Value="model.Address" class="form-control" />
+                    </div>
+                    <div class="col-lg-3 col-sm-6 form-group">
+                        <Label For="@(() => model.SwitchType)" />
+                        <select @bind="model.SwitchType" class="form-control">
+                            @foreach (CommCenterX.SwitchTypeEnum st in Enum.GetValues(typeof(CommCenterX.SwitchTypeEnum)))
+                            {
+                                <option value="@st">@UtilsX.DisplayName(st)</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-lg-3 col-sm-6 form-group">
+                        <Label For="@(() => model.ResponderName)" />
+                        <InputText @bind-Value="model.ResponderName" class="form-control" />
+                    </div>
+                    <div class="col-lg-3 col-sm-6 form-group">
+                        <Label For="@(() => model.SupervisorMobile)" />
+                        <InputText @bind-Value="model.SupervisorMobile" class="form-control" />
+                    </div>
+                    <div class="col-lg-3 col-sm-6 form-group"></div>
+                    <div class="col-lg-3 col-sm-6 form-group"></div>
+                    <div class="col-lg-3 col-sm-6 form-group"></div>
+                </div>
+                <div class="mt-4">
+                    <input type="submit" value="ذخیره" class="btn btn-primary"/>
+                </div>
+            </EditForm>
+        </div>
+    </div>
+</div>
 
 @code {
-    [Parameter]
-    public string Id { get; set; }
+        [Parameter]
+        public string Id { get; set; }
+
+    private CommCenterVM model;
+    private List<TextValue> cities = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        cities = await http.GetFromJsonAsync<List<TextValue>>("Place/CityList");
+        if (Id != null)
+            model = await http.GetFromJsonAsync<CommCenterVM>("CommCenter/Item/" + Id);
+        else
+            model = new CommCenterVM();
+    }
+
+    private async Task Save(EditContext context)
+    {
+        await http.PostAsJsonAsync<CommCenterX>("CommCenter/Save", model);
+        nav.NavigateTo("/center/list");
+    }
 }

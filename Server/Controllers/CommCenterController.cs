@@ -34,6 +34,14 @@ namespace TciPM.Blazor.Server.Controllers
             return db.FindById<CommCenterX>(id);
         }
 
+        [HttpPost]
+        [Authorize(nameof(Permission.ChangeCenters))]
+        public IActionResult Save(CommCenterX center)
+        {
+            db.Save(center);
+            return Ok();
+        }
+
         public ActionResult<List<CommCenterWithReports>> ListWithReports(ObjectId cityId)
         {
             var list = db.Find<CommCenterX>(cc => cc.City == cityId)

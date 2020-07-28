@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -70,12 +71,15 @@ namespace TciPM.Blazor.Shared.Util
             return member.Name;
         }
 
-        public static string DisplayName<T>(T value)
+        public static string DisplayName<E>(E value) where E : struct, IConvertible
         {
-            if (value == null)
-                return null;
             var fieldInfo = value.GetType().GetField(value.ToString());
             return DisplayName(fieldInfo);
+        }
+
+        public static IEnumerable<E> GetEnumValues<E>() where E : struct, IConvertible
+        {
+            return Enum.GetValues(typeof(E)).Cast<E>();
         }
     }
 }

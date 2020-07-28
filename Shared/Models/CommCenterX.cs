@@ -42,6 +42,7 @@ namespace TciPM.Blazor.Shared.Models
         public SwitchTypeEnum SwitchType { get; set; }
 
         [Display(Name = "درجه اهمیت")]
+        [Range(minimum: 1, maximum:10)]
         public int ImportanceLevel { get; set; } = 1;
     }
 }

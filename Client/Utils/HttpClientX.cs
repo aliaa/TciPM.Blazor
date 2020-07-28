@@ -35,9 +35,11 @@ namespace TciPM.Blazor.Client
                 var resp = await GetAsync(requestUri, cancellationToken);
                 if (resp.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                 {
-                    nav.NavigateTo("/login");
+                    nav.NavigateTo("/login/out");
                     return default(T);
                 }
+                else if ((int)resp.StatusCode >= 400)
+                    throw new Exception("ResponseCode: " + resp.StatusCode);
                 return await resp.Content.ReadFromJsonAsync<T>(jsonOptions);
             }
             catch(Exception ex)
@@ -54,6 +56,8 @@ namespace TciPM.Blazor.Client
                 var resp = await PostAsync(requestUri, content, cancellationToken);
                 if (resp.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                     nav.NavigateTo("/login");
+                else if ((int)resp.StatusCode >= 400)
+                    throw new Exception("ResponseCode: " + resp.StatusCode);
                 return resp;
             }
             catch(Exception ex)
@@ -70,6 +74,8 @@ namespace TciPM.Blazor.Client
                 var resp = await PostAsync(requestUri, content, cancellationToken);
                 if (resp.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                     nav.NavigateTo("/login");
+                else if ((int)resp.StatusCode >= 400)
+                    throw new Exception("ResponseCode: " + resp.StatusCode);
                 return await resp.Content.ReadFromJsonAsync<Res>(jsonOptions);
             }
             catch (Exception ex)

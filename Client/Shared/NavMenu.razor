@@ -1,7 +1,4 @@
-﻿@inject NavigationManager nav
-@inject AuthenticationStateProvider _auth
-
-<nav class="navbar navbar-expand-md navbar-toggleable-lg navbar-dark bg-dark border-bottom">
+﻿<nav class="navbar navbar-expand-md navbar-toggleable-lg navbar-dark bg-dark border-bottom">
     <div class="container-fluid flex-wrap">
         <a class="navbar-brand" href="">سامانه ثبت PM مراکز مخابراتی</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -33,10 +30,10 @@
                     <li Class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" role="button" data-toggle="dropdown">PM تجهیزات مراکز</a>
                         <div class="dropdown-menu">
+                            <NavLink class="dropdown-item" href="/equipmentsPm/list">لیست PM های تجهیزات</NavLink>
                             <AuthorizeView Context="a" Policy="@nameof(Permission.WriteEquipmentPM)">
                                 <NavLink class="dropdown-item" href="/equipmentsPm/new">ثبت PM جدید تجهیزات</NavLink>
                             </AuthorizeView>
-                            <NavLink class="dropdown-item" href="/equipmentsPm/list">لیست PM های تجهیزات</NavLink>
                         </div>
                     </li>
                 </AuthorizeView>
@@ -76,7 +73,7 @@
                 <AuthorizeView>
                     <Authorized>
                         <li class="nav-item mr-auto">
-                            <NavLink class="nav-link" href="login" @onclick="Logout">خروج</NavLink>
+                            <NavLink class="nav-link" href="login/out">خروج</NavLink>
                         </li>
                     </Authorized>
                     <NotAuthorized>
@@ -92,15 +89,4 @@
 
 @code {
 
-    private AuthStateProvider auth;
-    protected override void OnInitialized()
-    {
-        auth = (AuthStateProvider)_auth;
-    }
-
-    private async Task Logout()
-    {
-        await auth.Logout();
-        nav.NavigateTo("login");
-    }
 }
