@@ -69,11 +69,11 @@ namespace TciPM.Blazor.Client
             return new AuthenticationState(await GetClaims());
         }
 
-        public async Task<bool> Login(LoginViewModel m)
+        public async Task<bool> Login(LoginVM m)
         {
             try
             {
-                var user = await httpClient.PostAsJsonAsync<LoginViewModel, ClientAuthUser>("Account/Login", m);
+                var user = await httpClient.PostAsJsonAsync<LoginVM, ClientAuthUser>("Account/Login", m);
                 if (user == null)
                     return false;
                 await storage.SetItemAsync("user", user);

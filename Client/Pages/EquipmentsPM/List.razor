@@ -73,7 +73,7 @@
 </div>
 
 @code {
-    private PmSearchViewModel model = new PmSearchViewModel();
+    private PmSearchVM model = new PmSearchVM();
     private List<TextValue> cities = null;
     private List<TextValue> centers = null;
     private List<TextValue> users = null;
@@ -103,7 +103,7 @@
     private async Task ShowResult()
     {
         loading = true;
-        pms = await http.PostAsJsonAsync<PmSearchViewModel, List<CenterPM>>("EquipmentsPm/List", model);
+        pms = await http.PostAsJsonAsync<PmSearchVM, List<CenterPM>>("EquipmentsPm/List", model);
         loading = false;
     }
 

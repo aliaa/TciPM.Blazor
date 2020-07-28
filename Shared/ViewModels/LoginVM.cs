@@ -5,7 +5,7 @@ using System.Text;
 
 namespace TciPM.Blazor.Shared.ViewModels
 {
-    public class LoginViewModel
+    public class LoginVM
     {
         [Required(ErrorMessage = "نام کاربری اجباریست!")]
         [Display(Name = "نام کاربری")]

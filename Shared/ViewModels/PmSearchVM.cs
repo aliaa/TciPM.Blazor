@@ -6,7 +6,7 @@ using System.Text;
 
 namespace TciPM.Blazor.Shared.ViewModels
 {
-    public class PmSearchViewModel
+    public class PmSearchVM
     {
         [Display(Name = "شهر")]
         public string City { get; set; }

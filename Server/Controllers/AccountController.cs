@@ -28,7 +28,7 @@ namespace TciPM.Blazor.Server.Controllers
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<ActionResult<ClientAuthUser>> Login(LoginViewModel model)
+        public async Task<ActionResult<ClientAuthUser>> Login(LoginVM model)
         {
             if (model == null || !dbs.Keys.Contains(model.Province))
                 return Unauthorized();
@@ -73,7 +73,7 @@ namespace TciPM.Blazor.Server.Controllers
 
         [Authorize]
         [HttpPost]
-        public IActionResult ChangePassword(ChangePasswordViewModel model)
+        public IActionResult ChangePassword(ChangePasswordVM model)
         {
             var user = GetUser();
             if (user != null)

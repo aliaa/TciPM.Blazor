@@ -2,7 +2,7 @@
 
 namespace TciPM.Blazor.Shared.ViewModels
 {
-    public class ChangePasswordViewModel
+    public class ChangePasswordVM
     {
         [Display(Name = "رمز فعلی")]
         public string CurrentPassword { get; set; }
