@@ -23,7 +23,6 @@ namespace TciPM.Blazor.Shared.ViewModels
         [Display(Name = "رمز عبور")]
         public string Password { get; set; }
 
-        [JsonIgnore]
         [Required(ErrorMessage = "تکرار رمز عبور اجباریست!")]
         [Compare(nameof(Password), ErrorMessage = "رمز عبور و تکرار آن بایستی برابر باشند!")]
         [Display(Name = "تکرار رمز عبور")]
