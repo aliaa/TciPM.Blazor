@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using Omu.ValueInjecter;
 using TciPM.Blazor.Shared;
 using TciPM.Blazor.Shared.Models;
 using TciPM.Blazor.Shared.ViewModels;
@@ -29,9 +30,14 @@ namespace TciPM.Blazor.Server.Controllers
                 .ToList();
         }
 
-        public ActionResult<CommCenterX> Item(ObjectId id)
+        public ActionResult<CommCenterVM> Item(ObjectId id)
         {
-            return db.FindById<CommCenterX>(id);
+            var center = Mapper.Map<CommCenterVM>(db.FindById<CommCenterX>(id));
+            center.Diesels = db.FindGetResults<Diesel>(d => d.Center == id).ToList();
+            center.RectifierAndBatteries = db.FindGetResults<RectifierAndBattery>(rb => rb.Center == id).ToList();
+            center.Upses = db.FindGetResults<Ups>(u => u.Center == id).ToList();
+            center.AirConditioners = db.FindGetResults<AirConditioner>(a => a.Center == id).ToList();
+            return center;
         }
 
         [HttpPost]

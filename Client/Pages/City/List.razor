@@ -22,7 +22,7 @@ else
 @code {
     private CityWithReports[] cities;
     private bool loading = true;
-    private static string[] fields = new string[]
+    private static readonly string[] fields = new string[]
     {
         nameof(CityWithReports.Name),
         nameof(CityWithReports.CentersCount),
