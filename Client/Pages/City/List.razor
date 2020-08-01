@@ -9,12 +9,12 @@
 }
 else
 {
-    <div class="mt-4 text-center">
-        <button class="btn btn-secondary" @onclick="@(() => modal.Show<EditCity>("شهر جدید"))">تعریف شهر جدید</button>
+    <div class="mt-5 text-center">
+        <button class="btn btn-info" @onclick="@(() => modal.Show<EditCity>("شهر جدید"))">تعریف شهر جدید</button>
     </div>
 
 
-    <div class="mt-4">
+    <div class="mt-5">
         <ObjectTable Data="cities" FieldNames="fields" LinkColumns="linkColumns" ColumnsBackColor="colorsOfColumns" />
     </div>
 }

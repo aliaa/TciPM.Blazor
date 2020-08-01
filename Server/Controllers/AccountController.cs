@@ -108,5 +108,16 @@ namespace TciPM.Blazor.Server.Controllers
                 .Select(u => new TextValue { Text = u.DisplayName, Value = u.Id.ToString() }));
             return list;
         }
+
+        [Authorize(nameof(Permission.ManageUsers))]
+        [HttpPost]
+        public IActionResult Add(NewUserVM user)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
+            if (db.Any<AuthUserX>(u => u.Username == user.Password))
+                return BadRequest("نام کاربری قبلا موجود است!");
+            return Ok();
+        }
     }
 }

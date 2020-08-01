@@ -1,0 +1,12 @@
+﻿@page "/user/manage"
+@attribute [Authorize(nameof(Permission.ManageUsers))]
+@inject HttpClientX http
+@inject IModalService modal
+
+<div class="mt-5 text-center">
+    <button class="btn btn-info mx-2" @onclick="@(() => modal.Show<NewUser>("کاربر جدید"))">ایجاد کاربر جدید</button>
+</div>
+
+@code {
+
+}
