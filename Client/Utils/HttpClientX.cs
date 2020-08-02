@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
@@ -39,7 +37,7 @@ namespace TciPM.Blazor.Client
                     return default(T);
                 }
                 else if ((int)resp.StatusCode >= 400)
-                    throw new Exception("ResponseCode: " + resp.StatusCode);
+                    throw new HttpResponseException(await resp.Content.ReadAsStringAsync(), (int)resp.StatusCode);
                 return await resp.Content.ReadFromJsonAsync<T>(jsonOptions);
             }
             catch(Exception ex)
@@ -57,7 +55,7 @@ namespace TciPM.Blazor.Client
                 if (resp.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                     nav.NavigateTo("/login");
                 else if ((int)resp.StatusCode >= 400)
-                    throw new Exception("ResponseCode: " + resp.StatusCode);
+                    throw new HttpResponseException(await resp.Content.ReadAsStringAsync(), (int)resp.StatusCode);
                 return resp;
             }
             catch(Exception ex)
@@ -75,13 +73,25 @@ namespace TciPM.Blazor.Client
                 if (resp.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                     nav.NavigateTo("/login");
                 else if ((int)resp.StatusCode >= 400)
-                    throw new Exception("ResponseCode: " + resp.StatusCode);
+                    throw new HttpResponseException(await resp.Content.ReadAsStringAsync(), (int)resp.StatusCode);
                 return await resp.Content.ReadFromJsonAsync<Res>(jsonOptions);
             }
             catch (Exception ex)
             {
                 throw new Exception("Errr on POST 2", ex);
             }
+        }
+
+        [Serializable]
+        public class HttpResponseException : Exception
+        {
+            public int StatusCode { get; private set; } = -1;
+            public HttpResponseException(string message, int StatusCode) : base(message) 
+            {
+                this.StatusCode = StatusCode;
+            }
+
+            public HttpResponseException(string message, Exception inner) : base(message, inner) { }
         }
     }
 }

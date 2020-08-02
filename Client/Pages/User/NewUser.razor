@@ -24,6 +24,7 @@
         <InputText type="password" class="form-control" @bind-Value="user.RetypePassword" />
     </div>
     <ValidationSummary />
+    <ServerSideValidator @ref="serverSideValidator" />
     <div>
         <input type="submit" class="btn btn-primary" value="ذخیره" />
     </div>
@@ -38,9 +39,20 @@
     [Parameter]
     public EventCallback OnSubmitted { get; set; }
 
+    private ServerSideValidator serverSideValidator;
+
     private async Task Submit()
     {
-        var resp = await http.PostAsJsonAsync("Account/Add", user);
+        try
+        {
+            await http.PostAsJsonAsync("Account/Add", user);
+        }
+        catch(HttpClientX.HttpResponseException ex)
+        {
+            if(ex.StatusCode == 400)
+                serverSideValidator.DisplayErrors(new Dictionary<string, List<string>> { { nameof(NewUserVM.Username), new List<string> { ex.Message } } });
+            return;
+        }
         if (modal != null)
             await modal.Close();
         await OnSubmitted.InvokeAsync(null);
