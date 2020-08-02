@@ -49,8 +49,10 @@
         }
         catch(HttpClientX.HttpResponseException ex)
         {
-            if(ex.StatusCode == 400)
-                serverSideValidator.DisplayErrors(new Dictionary<string, List<string>> { { nameof(NewUserVM.Username), new List<string> { ex.Message } } });
+            if (ex.Errors != null)
+                serverSideValidator.DisplayErrors(ex.Errors);
+            else
+                serverSideValidator.DisplayError(nameof(NewUserVM.Username), ex.Message);
             return;
         }
         if (modal != null)

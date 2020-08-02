@@ -116,7 +116,7 @@ namespace TciPM.Blazor.Server.Controllers
             if (!ModelState.IsValid)
                 return BadRequest();
             if (db.Any<AuthUserX>(u => u.Username == user.Username))
-                return BadRequest("نام کاربری قبلا موجود است!");
+                return BadRequest(new Dictionary<string, List<string>> { { nameof(NewUserVM.Username), new List<string> { "نام کاربری قبلا موجود است!" } } });
             return Ok();
         }
     }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text.Json;
@@ -43,8 +44,23 @@ namespace TciPM.Blazor.Client
                 return default;
             }
             else if ((int)resp.StatusCode >= 400)
-                throw new HttpResponseException(await resp.Content.ReadAsStringAsync(), (int)resp.StatusCode);
+                throw await CreateHttpResponseException(resp);
             return await resp.Content.ReadFromJsonAsync<T>(jsonOptions);
+        }
+
+        private async Task<HttpResponseException> CreateHttpResponseException(HttpResponseMessage resp)
+        {
+            var content = await resp.Content.ReadAsStringAsync();
+            Dictionary<string, List<string>> errors;
+            try
+            {
+                errors = JsonSerializer.Deserialize<Dictionary<string, List<string>>>(content, jsonOptions);
+            }
+            catch
+            {
+                return new HttpResponseException((int)resp.StatusCode, null, content);
+            }
+            return new HttpResponseException((int)resp.StatusCode, errors, content);
         }
 
         public async Task<HttpResponseMessage> PostAsJsonAsync<T>(string requestUri, T value, CancellationToken cancellationToken = default)
@@ -62,7 +78,7 @@ namespace TciPM.Blazor.Client
             if (resp.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                 nav.NavigateTo("/login");
             else if ((int)resp.StatusCode >= 400)
-                throw new HttpResponseException(await resp.Content.ReadAsStringAsync(), (int)resp.StatusCode);
+                throw await CreateHttpResponseException(resp);
             return resp;
         }
 
@@ -85,7 +101,7 @@ namespace TciPM.Blazor.Client
                 return default;
             }
             else if ((int)resp.StatusCode >= 400)
-                throw new HttpResponseException(await resp.Content.ReadAsStringAsync(), (int)resp.StatusCode);
+                throw await CreateHttpResponseException(resp);
             return await resp.Content.ReadFromJsonAsync<Res>(jsonOptions);
         }
 
@@ -93,16 +109,12 @@ namespace TciPM.Blazor.Client
         public class HttpResponseException : Exception
         {
             public int StatusCode { get; private set; } = -1;
-            public HttpResponseException(string message, int StatusCode) : base(message)
+            public Dictionary<string, List<string>> Errors { get; private set; }
+            public HttpResponseException(int StatusCode, Dictionary<string, List<string>> Errors, string Message = null) : base(Message)
             {
                 this.StatusCode = StatusCode;
+                this.Errors = Errors;
             }
-
-            public HttpResponseException(string message, Exception inner) : base(message, inner) { }
-
-            public HttpResponseException() : base() { }
-
-            public HttpResponseException(string message) : base(message) { }
         }
     }
 }
