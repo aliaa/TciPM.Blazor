@@ -26,9 +26,9 @@ namespace TciPM.Blazor.Shared.ViewModels
             }
         }
 
-        public List<Diesel> Diesels { get; set; }
-        public List<RectifierAndBattery> RectifierAndBatteries { get; set; }
-        public List<Ups> Upses { get; set; }
-        public List<AirConditioner> AirConditioners { get; set; }
+        public List<Diesel> Diesels { get; set; } = new List<Diesel>();
+        public List<RectifierAndBattery> RectifierAndBatteries { get; set; } = new List<RectifierAndBattery>();
+        public List<Ups> Upses { get; set; } = new List<Ups>();
+        public List<AirConditioner> AirConditioners { get; set; } = new List<AirConditioner>();
     }
 }
