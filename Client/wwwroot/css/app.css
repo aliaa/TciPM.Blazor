@@ -102,3 +102,29 @@ app {
 .blazored-modal-close {
     margin: -1rem -1rem auto -1rem !important;
 }
+
+.blazored-toast-heading {
+    display: none;
+}
+
+.blazored-toast-header::before {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 0.7rem;
+}
+
+.blazored-toast-success .blazored-toast-header::before {
+    content: 'عملیات موفق';
+}
+
+.blazored-toast-error .blazored-toast-header::before {
+    content: 'خطا';
+}
+
+.blazored-toast-info .blazored-toast-header::before {
+    content: 'توجه';
+}
+
+.blazored-toast-warning .blazored-toast-header::before {
+    content: 'هشدار';
+}
