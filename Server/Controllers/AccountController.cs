@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using Omu.ValueInjecter;
-using TciCommon.Models;
 using TciPM.Blazor.Server.Models;
 using TciPM.Blazor.Shared;
 using TciPM.Blazor.Shared.Models;
@@ -118,6 +117,14 @@ namespace TciPM.Blazor.Server.Controllers
             if (db.Any<AuthUserX>(u => u.Username == user.Username))
                 return BadRequest(new Dictionary<string, List<string>> { { nameof(NewUserVM.Username), new List<string> { "نام کاربری قبلا موجود است!" } } });
             return Ok();
+        }
+
+        [Authorize(nameof(Permission.ManageUsers))]
+        public ActionResult<List<ClientAuthUser>> List()
+        {
+            return db.Find<AuthUserX>(_ => true).SortBy(u => u.LastName).ThenBy(u => u.FirstName)
+                .Project(Builders<AuthUserX>.Projection.Exclude(u => u.HashedPassword)).As<AuthUserX>()
+                .ToEnumerable().Select(u => Mapper.Map<ClientAuthUser>(u)).ToList();
         }
     }
 }

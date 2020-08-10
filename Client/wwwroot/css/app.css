@@ -55,7 +55,7 @@ app {
 }
 
 .content {
-    padding-top: 3rem;
+    padding-top: 2rem;
 }
 
 .valid.modified:not([type=checkbox]) {

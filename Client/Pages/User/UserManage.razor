@@ -3,10 +3,85 @@
 @inject HttpClientX http
 @inject IModalService modal
 
-<div class="text-center">
-    <button class="btn btn-info mx-2" @onclick="@(() => modal.Show<NewUser>("کاربر جدید"))">ایجاد کاربر جدید</button>
-</div>
+@if (users == null)
+{
+    <Loading />
+}
+else
+{
+    <div class="form-inline justify-content-center">
+        <div class="form-group">
+            <span class="m-2">کاربر:</span>
+            <select class="form-control" @onchange="UserChanged">
+                @foreach (var user in users)
+                {
+                    <option value="@user.Id.ToString()">@user.DisplayName</option>
+                }
+            </select>
+        </div>
+        <button class="btn btn-info mr-3" @onclick="@(() => modal.Show<NewUser>("کاربر جدید"))">ایجاد کاربر جدید</button>
+    </div>
+    @if (selectedUser != null)
+    {
+        <div class="container mt-5">
+            <h3>جزئیات کاربر</h3>
+            <EditForm Model="selectedUser" OnValidSubmit="Save">
+                <div class="row mt-4">
+                    <div class="col-lg-3 col-sm-6 form-group">
+                        <Label For="@(() => selectedUser.FirstName)"></Label>
+                        <InputText @bind-Value="selectedUser.FirstName" class="form-control" />
+                    </div>
+                    <div class="col-lg-3 col-sm-6 form-group">
+                        <Label For="@(() => selectedUser.LastName)"></Label>
+                        <InputText @bind-Value="selectedUser.LastName" class="form-control" />
+                    </div>
+                    <div class="col-lg-3 col-sm-6 form-group">
+                        <Label For="@(() => selectedUser.Username)"></Label>
+                        <label class="form-control">@selectedUser.Username</label>
+                    </div>
+                    <div class="col-lg-3 col-sm-6 form-group">
+                        <Label For="@(() => selectedUser.RestrictedIP)"></Label>
+                        <InputText @bind-Value="selectedUser.RestrictedIP" class="form-control" />
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="form-check">
+                            <Label For="@(() => selectedUser.Disabled)">
+                                <InputCheckbox @bind-Value="selectedUser.Disabled" />
+                            </Label>
+                        </div>
+                        <div class="form-check">
+                            <InputCheckbox @bind-Value="selectedUser.IsDailyCenterWorker" />
+                            <Label For="@(() => selectedUser.IsDailyCenterWorker)" />
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <label>لیست اجازه های داده شده</label>
+                        
+                    </div>
+                </div>
+            </EditForm>
+        </div>
+    }
+}
 
 @code {
+    private List<ClientAuthUser> users;
+    private ClientAuthUser selectedUser;
 
+    protected override async Task OnInitializedAsync()
+    {
+        users = await http.GetFromJsonAsync<List<ClientAuthUser>>("Account/List");
+        UserChanged(new ChangeEventArgs { Value = users[0].Id.ToString() });
+    }
+
+
+    private void UserChanged(ChangeEventArgs e)
+    {
+        selectedUser = users.First(u => u.Id == ObjectId.Parse((string)e.Value));
+    }
+
+    private async Task Save(EditContext context)
+    {
+
+    }
 }

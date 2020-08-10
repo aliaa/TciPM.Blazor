@@ -10,7 +10,7 @@
 else
 {
     <div class="form-inline justify-content-center">
-        <div class="m-3 form-group">
+        <div class="form-group">
             <span class="m-2">شهر:</span>
             <select class="form-control" @onchange="CityChanged">
                 @if (cities != null)
@@ -23,7 +23,7 @@ else
             </select>
         </div>
         <div>
-            <a class="btn btn-secondary" href="/center/new">تعریف مرکز جدید</a>
+            <a class="btn btn-info mr-4" href="/center/new">تعریف مرکز جدید</a>
         </div>
     </div>
     if (centers != null && !loading)

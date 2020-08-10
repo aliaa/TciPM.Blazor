@@ -35,8 +35,13 @@ namespace TciPM.Blazor.Shared.Models
 
         public List<Permission> Permissions { get; set; } = new List<Permission>();
         public List<ObjectId> Cities { get; set; } = new List<ObjectId>();
+        
+        [Display(Name = "IP محدود شده")]
         public string RestrictedIP { get; set; }
+
+        [Display(Name = "کارگزار مراکز کم ظرفیت است؟")]
         public bool IsDailyCenterWorker { get; set; }
+
         public List<ObjectId> AllowedDailyCenters { get; set; } = new List<ObjectId>();
         public List<EquipmentType> AllowedEquipmentTypes { get; set; } = new List<EquipmentType>();
         public bool IsSuperAdmin { get; set; }
