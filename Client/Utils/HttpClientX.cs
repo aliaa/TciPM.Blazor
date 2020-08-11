@@ -48,21 +48,6 @@ namespace TciPM.Blazor.Client
             return await resp.Content.ReadFromJsonAsync<T>(jsonOptions);
         }
 
-        private async Task<HttpResponseException> CreateHttpResponseException(HttpResponseMessage resp)
-        {
-            var content = await resp.Content.ReadAsStringAsync();
-            Dictionary<string, List<string>> errors;
-            try
-            {
-                errors = JsonSerializer.Deserialize<Dictionary<string, List<string>>>(content, jsonOptions);
-            }
-            catch
-            {
-                return new HttpResponseException((int)resp.StatusCode, null, content);
-            }
-            return new HttpResponseException((int)resp.StatusCode, errors, content);
-        }
-
         public async Task<HttpResponseMessage> PostAsJsonAsync<T>(string requestUri, T value, CancellationToken cancellationToken = default)
         {
             JsonContent content = JsonContent.Create(value, mediaType: null, jsonOptions);
@@ -103,6 +88,21 @@ namespace TciPM.Blazor.Client
             else if ((int)resp.StatusCode >= 400)
                 throw await CreateHttpResponseException(resp);
             return await resp.Content.ReadFromJsonAsync<Res>(jsonOptions);
+        }
+
+        private async Task<HttpResponseException> CreateHttpResponseException(HttpResponseMessage resp)
+        {
+            var content = await resp.Content.ReadAsStringAsync();
+            Dictionary<string, List<string>> errors;
+            try
+            {
+                errors = JsonSerializer.Deserialize<Dictionary<string, List<string>>>(content, jsonOptions);
+            }
+            catch
+            {
+                return new HttpResponseException((int)resp.StatusCode, null, content);
+            }
+            return new HttpResponseException((int)resp.StatusCode, errors, content);
         }
 
         [Serializable]

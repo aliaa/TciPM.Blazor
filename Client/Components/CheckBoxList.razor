@@ -1,0 +1,63 @@
+﻿@typeparam T
+<ul class="list-unstyled px-3" style="columns:@ColumnsCount">
+    @if (Data != null)
+    {
+        foreach (var item in Data)
+        {
+            var Text = TextField?.Invoke(item);
+            var Value = ValueField?.Invoke(item).ToString();
+            bool Checked = false;
+            if (SelectedValues.Contains(Value))
+            {
+                Checked = true;
+            }
+            <li>
+                <label class="d-block">
+                    <input type="checkbox" checked=@Checked @onchange="e => { CheckboxClicked(Value, e.Value); }" />
+                    @Text
+                </label>
+            </li>
+        }
+    }
+    @ChildContent
+</ul>
+
+@code {
+
+    [Parameter]
+    public IEnumerable<T> Data { get; set; }
+
+    [Parameter]
+    public Func<T, string> TextField { get; set; }
+
+    [Parameter]
+    public Func<T, object> ValueField { get; set; }
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public List<string> SelectedValues { get; set; }
+
+    [Parameter]
+    public int ColumnsCount { get; set; } = 1;
+
+    public void CheckboxClicked(string aSelectedId, object aChecked)
+    {
+        if ((bool)aChecked)
+        {
+            if (!SelectedValues.Contains(aSelectedId))
+            {
+                SelectedValues.Add(aSelectedId);
+            }
+        }
+        else
+        {
+            if (SelectedValues.Contains(aSelectedId))
+            {
+                SelectedValues.Remove(aSelectedId);
+            }
+        }
+        StateHasChanged();
+    }
+}  

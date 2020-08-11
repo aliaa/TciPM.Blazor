@@ -1,7 +1,8 @@
 ﻿using MongoDB.Bson;
 using System.ComponentModel.DataAnnotations;
+using TciPM.Blazor.Shared.Models;
 
-namespace TciPM.Blazor.Shared.Util
+namespace TciPM.Blazor.Shared.ViewModels
 {
     public class EquipmentProblem
     {

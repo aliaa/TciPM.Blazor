@@ -1,10 +1,14 @@
 ﻿@using System.Reflection
 @using System.Linq.Expressions;
 
-<label for="@memberName">@displayName</label>
+<label for="@memberName">@displayName @ChildContent</label>
 
 @code {
-    [Parameter] public Expression<Func<object>> For { get; set; }
+    [Parameter]
+    public Expression<Func<object>> For { get; set; }
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
 
     private string displayName;
     private string memberName;

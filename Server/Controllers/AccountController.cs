@@ -126,5 +126,19 @@ namespace TciPM.Blazor.Server.Controllers
                 .Project(Builders<AuthUserX>.Projection.Exclude(u => u.HashedPassword)).As<AuthUserX>()
                 .ToEnumerable().Select(u => Mapper.Map<ClientAuthUser>(u)).ToList();
         }
+
+        [Authorize(nameof(Permission.ManageUsers))]
+        [HttpPost]
+        public IActionResult Save(ClientAuthUser user)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest("اطلاعات کاربری نامعتبر است!");
+            var existing = db.FindById<AuthUserX>(user.Id);
+            if (existing == null)
+                return BadRequest("کاربر یافت نشد!");
+            existing.InjectFrom(user);
+            db.Save(existing);
+            return Ok();
+        }
     }
 }

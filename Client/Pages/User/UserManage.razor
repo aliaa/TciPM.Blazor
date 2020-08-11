@@ -2,6 +2,7 @@
 @attribute [Authorize(nameof(Permission.ManageUsers))]
 @inject HttpClientX http
 @inject IModalService modal
+@inject IToastService toast
 
 @if (users == null)
 {
@@ -13,6 +14,7 @@ else
         <div class="form-group">
             <span class="m-2">کاربر:</span>
             <select class="form-control" @onchange="UserChanged">
+                <option disabled>انتخاب کنید...</option>
                 @foreach (var user in users)
                 {
                     <option value="@user.Id.ToString()">@user.DisplayName</option>
@@ -26,6 +28,7 @@ else
         <div class="container mt-5">
             <h3>جزئیات کاربر</h3>
             <EditForm Model="selectedUser" OnValidSubmit="Save">
+                <DataAnnotationsValidator />
                 <div class="row mt-4">
                     <div class="col-lg-3 col-sm-6 form-group">
                         <Label For="@(() => selectedUser.FirstName)"></Label>
@@ -44,19 +47,45 @@ else
                         <InputText @bind-Value="selectedUser.RestrictedIP" class="form-control" />
                     </div>
                     <div class="col-lg-3 col-sm-6">
-                        <div class="form-check">
-                            <Label For="@(() => selectedUser.Disabled)">
-                                <InputCheckbox @bind-Value="selectedUser.Disabled" />
-                            </Label>
+                        <label class="font-weight-bold">اجازه های داده شده</label>
+                        <div class="border rounded pt-3">
+                            <CheckBoxList Data="AllPermissions" TextField="@(item => item.Text)" ValueField="@(item => item.Value)"
+                                          SelectedValues="selectedPermissions" />
                         </div>
-                        <div class="form-check">
-                            <InputCheckbox @bind-Value="selectedUser.IsDailyCenterWorker" />
-                            <Label For="@(() => selectedUser.IsDailyCenterWorker)" />
+                    </div>
+                    @if (cities != null)
+                    {
+                        <div class="col-lg-3 col-sm-6">
+                            <label class="font-weight-bold">شهر های قابل ثبت PM</label>
+                            <div class="border rounded pt-3">
+                                <CheckBoxList Data="cities" TextField="@(item => item.Text)" ValueField="@(item => item.Value)"
+                                              SelectedValues="SelectedCities" ColumnsCount="2" />
+                            </div>
+                        </div>
+                    }
+                    <div class="col-lg-3 col-sm-6">
+                        <label class="font-weight-bold">تجهیزات قابل PM</label>
+                        <div class="border rounded pt-3">
+                            <CheckBoxList Data="AllEquipmentTypes" TextField="@(item => item.Text)" ValueField="@(item => item.Value)"
+                                          SelectedValues="SelectedEquipmentTypes" />
                         </div>
                     </div>
                     <div class="col-lg-3 col-sm-6">
-                        <label>لیست اجازه های داده شده</label>
-                        
+                        <div class="form-check">
+                            <label>
+                                <InputCheckbox @bind-Value="selectedUser.Disabled" />
+                                @(UtilsX.DisplayName<ClientAuthUser>(u => u.Disabled))
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <label>
+                                <InputCheckbox @bind-Value="selectedUser.IsDailyCenterWorker" />
+                                @(UtilsX.DisplayName<ClientAuthUser>(u => u.IsDailyCenterWorker))
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <input type="submit" class="btn btn-primary mt-4" value="ذخیره" />
                     </div>
                 </div>
             </EditForm>
@@ -67,21 +96,59 @@ else
 @code {
     private List<ClientAuthUser> users;
     private ClientAuthUser selectedUser;
+    private IEnumerable<TextValue> cities;
+
+    private static readonly List<TextValue> AllPermissions =
+        UtilsX.GetEnumValues<Permission>()
+        .Select(p => new TextValue { Value = p.ToString(), Text = UtilsX.DisplayName(p) })
+        .ToList();
+
+    private List<string> selectedPermissions;
+    private List<string> SelectedCities;
+    private List<string> SelectedEquipmentTypes;
+
+    private static readonly List<TextValue> AllEquipmentTypes =
+    UtilsX.GetEnumValues<EquipmentType>()
+        .Select(t => new TextValue { Value = t.ToString(), Text = UtilsX.DisplayName(t) })
+        .ToList();
+
 
     protected override async Task OnInitializedAsync()
     {
         users = await http.GetFromJsonAsync<List<ClientAuthUser>>("Account/List");
-        UserChanged(new ChangeEventArgs { Value = users[0].Id.ToString() });
+        cities = (await http.GetFromJsonAsync<List<City>>("City/List")).Select(c => new TextValue { Text = c.Name, Value = c.Id.ToString() });
     }
 
 
     private void UserChanged(ChangeEventArgs e)
     {
         selectedUser = users.First(u => u.Id == ObjectId.Parse((string)e.Value));
+        selectedPermissions = selectedUser.Permissions.Select(p => p.ToString()).ToList();
+        SelectedCities = selectedUser.Cities.Select(i => i.ToString()).ToList();
+        SelectedEquipmentTypes = selectedUser.AllowedEquipmentTypes.Select(t => t.ToString()).ToList();
     }
 
     private async Task Save(EditContext context)
     {
+        selectedUser.Permissions.Clear();
+        selectedUser.AllowedEquipmentTypes.Clear();
+        selectedUser.Cities.Clear();
 
+        foreach (var item in selectedPermissions)
+            selectedUser.Permissions.Add(Enum.Parse<Permission>(item));
+        foreach (var item in SelectedCities)
+            selectedUser.Cities.Add(ObjectId.Parse(item));
+        foreach (var item in SelectedEquipmentTypes)
+            selectedUser.AllowedEquipmentTypes.Add(Enum.Parse<EquipmentType>(item));
+
+        try
+        {
+            await http.PostAsJsonAsync<ClientAuthUser>("Account/Save", selectedUser);
+            toast.ShowSuccess("کاربر ذخیره شد.");
+        }
+        catch (HttpClientX.HttpResponseException ex)
+        {
+            toast.ShowError(ex.Message);
+        }
     }
 }
