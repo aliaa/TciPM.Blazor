@@ -38,7 +38,7 @@
     BlazoredModalInstance modal { get; set; }
 
     [Parameter]
-    public EventCallback OnSubmitted { get; set; }
+    public EventCallback<NewUserVM> OnSubmitted { get; set; }
 
     private ServerSideValidator serverSideValidator;
 
@@ -57,8 +57,8 @@
             return;
         }
         if (modal != null)
-            await modal.Close();
+            await modal.Close(ModalResult.Ok(user));
         toast.ShowSuccess("کاربر جدید ذخیره شد.");
-        await OnSubmitted.InvokeAsync(null);
+        await OnSubmitted.InvokeAsync(user);
     }
 }

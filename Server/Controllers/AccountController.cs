@@ -116,6 +116,8 @@ namespace TciPM.Blazor.Server.Controllers
                 return BadRequest();
             if (db.Any<AuthUserX>(u => u.Username == user.Username))
                 return BadRequest(new Dictionary<string, List<string>> { { nameof(NewUserVM.Username), new List<string> { "نام کاربری قبلا موجود است!" } } });
+            var authUser = Mapper.Map<AuthUserX>(user);
+            db.Save(authUser);
             return Ok();
         }
 

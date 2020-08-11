@@ -17,11 +17,11 @@ else
                 <option disabled>انتخاب کنید...</option>
                 @foreach (var user in users)
                 {
-                    <option value="@user.Id.ToString()">@user.DisplayName</option>
+                    <option value="@user.Id.ToString()" selected="@(user.Id == selectedUser?.Id)">@user.DisplayName</option>
                 }
             </select>
         </div>
-        <button class="btn btn-info mr-3" @onclick="@(() => modal.Show<NewUser>("کاربر جدید"))">ایجاد کاربر جدید</button>
+        <button class="btn btn-info mr-3" @onclick="ShowNewUserModal">ایجاد کاربر جدید</button>
     </div>
     @if (selectedUser != null)
     {
@@ -124,10 +124,31 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        users = await http.GetFromJsonAsync<List<ClientAuthUser>>("Account/List");
+        await LoadUsers();
         cities = (await http.GetFromJsonAsync<List<City>>("City/List")).Select(c => new TextValue { Text = c.Name, Value = c.Id.ToString() });
     }
 
+    private async Task LoadUsers()
+    {
+        users = await http.GetFromJsonAsync<List<ClientAuthUser>>("Account/List");
+    }
+
+    private async Task ShowNewUserModal()
+    {
+        var modalShow = modal.Show<NewUser>("کاربر جدید");
+        var result = await modalShow.Result;
+        if (!result.Cancelled)
+        {
+            var user = (NewUserVM)result.Data;
+            await LoadUsers();
+            selectedUser = users.FirstOrDefault(u => u.Username == user.Username);
+            selectedCities = new List<string>();
+            selectedDailyPmCenters = new List<string>();
+            selectedEquipmentTypes = new List<string>();
+            selectedPermissions = new List<string>();
+            dailyPmCenters = new List<TextValue>();
+        }
+    }
 
     private async Task UserChanged(ChangeEventArgs e)
     {
