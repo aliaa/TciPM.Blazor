@@ -78,5 +78,12 @@ namespace TciPM.Blazor.Server.Controllers
 
             return (int)Math.Min(999, Math.Round((DateTime.Now - lastPmCreateDate).TotalDays));
         }
+
+        public ActionResult<List<TextValue>> DailyCentersList(ObjectId cityId)
+        {
+            return db.Find<CommCenterX>(c => c.DailyPmEnabled && c.City == cityId)
+                .Project(c => new TextValue { Text = c.Name, Value = c.Id.ToString() })
+                .ToList();
+        }
     }
 }

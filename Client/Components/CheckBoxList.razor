@@ -6,11 +6,7 @@
         {
             var Text = TextField?.Invoke(item);
             var Value = ValueField?.Invoke(item).ToString();
-            bool Checked = false;
-            if (SelectedValues.Contains(Value))
-            {
-                Checked = true;
-            }
+            bool Checked = SelectedValues.Contains(Value);
             <li>
                 <label class="d-block">
                     <input type="checkbox" checked=@Checked @onchange="e => { CheckboxClicked(Value, e.Value); }" />
@@ -42,22 +38,22 @@
     [Parameter]
     public int ColumnsCount { get; set; } = 1;
 
-    public void CheckboxClicked(string aSelectedId, object aChecked)
+    [Parameter]
+    public EventCallback<List<string>> ChecksChanged { get; set; }
+
+    public void CheckboxClicked(string value, object isChecked)
     {
-        if ((bool)aChecked)
+        if ((bool)isChecked)
         {
-            if (!SelectedValues.Contains(aSelectedId))
-            {
-                SelectedValues.Add(aSelectedId);
-            }
+            if (!SelectedValues.Contains(value))
+                SelectedValues.Add(value);
         }
         else
         {
-            if (SelectedValues.Contains(aSelectedId))
-            {
-                SelectedValues.Remove(aSelectedId);
-            }
+            if (SelectedValues.Contains(value))
+                SelectedValues.Remove(value);
         }
         StateHasChanged();
+        ChecksChanged.InvokeAsync(SelectedValues);
     }
 }  

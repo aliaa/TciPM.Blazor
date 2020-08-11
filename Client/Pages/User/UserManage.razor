@@ -59,7 +59,7 @@ else
                             <label class="font-weight-bold">شهر های قابل ثبت PM</label>
                             <div class="border rounded pt-3">
                                 <CheckBoxList Data="cities" TextField="@(item => item.Text)" ValueField="@(item => item.Value)"
-                                              SelectedValues="SelectedCities" ColumnsCount="2" />
+                                              SelectedValues="selectedCities" ColumnsCount="2" ChecksChanged="CitiesCheckChanged" />
                             </div>
                         </div>
                     }
@@ -67,7 +67,7 @@ else
                         <label class="font-weight-bold">تجهیزات قابل PM</label>
                         <div class="border rounded pt-3">
                             <CheckBoxList Data="AllEquipmentTypes" TextField="@(item => item.Text)" ValueField="@(item => item.Value)"
-                                          SelectedValues="SelectedEquipmentTypes" />
+                                          SelectedValues="selectedEquipmentTypes" />
                         </div>
                     </div>
                     <div class="col-lg-3 col-sm-6">
@@ -84,9 +84,16 @@ else
                             </label>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-sm-6">
-                        <input type="submit" class="btn btn-primary mt-4" value="ذخیره" />
+                    <div class="col-lg-12">
+                        <label class="font-weight-bold">مراکز کم ظرفیت</label>
+                        <div class="border rounded pt-3">
+                            <CheckBoxList Data="dailyPmCenters" TextField="@(item => item.Text)" ValueField="@(item => item.Value)"
+                                          SelectedValues="selectedDailyPmCenters" ColumnsCount="6"/>
+                        </div>
                     </div>
+                </div>
+                <div class="mt-4">
+                    <input type="submit" class="btn btn-primary" value="ذخیره" />
                 </div>
             </EditForm>
         </div>
@@ -97,6 +104,7 @@ else
     private List<ClientAuthUser> users;
     private ClientAuthUser selectedUser;
     private IEnumerable<TextValue> cities;
+    private List<TextValue> dailyPmCenters = new List<TextValue>();
 
     private static readonly List<TextValue> AllPermissions =
         UtilsX.GetEnumValues<Permission>()
@@ -104,8 +112,9 @@ else
         .ToList();
 
     private List<string> selectedPermissions;
-    private List<string> SelectedCities;
-    private List<string> SelectedEquipmentTypes;
+    private List<string> selectedCities;
+    private List<string> selectedEquipmentTypes;
+    private List<string> selectedDailyPmCenters;
 
     private static readonly List<TextValue> AllEquipmentTypes =
     UtilsX.GetEnumValues<EquipmentType>()
@@ -120,12 +129,33 @@ else
     }
 
 
-    private void UserChanged(ChangeEventArgs e)
+    private async Task UserChanged(ChangeEventArgs e)
     {
         selectedUser = users.First(u => u.Id == ObjectId.Parse((string)e.Value));
         selectedPermissions = selectedUser.Permissions.Select(p => p.ToString()).ToList();
-        SelectedCities = selectedUser.Cities.Select(i => i.ToString()).ToList();
-        SelectedEquipmentTypes = selectedUser.AllowedEquipmentTypes.Select(t => t.ToString()).ToList();
+        selectedCities = selectedUser.Cities.Select(i => i.ToString()).ToList();
+        selectedEquipmentTypes = selectedUser.AllowedEquipmentTypes.Select(t => t.ToString()).ToList();
+        selectedDailyPmCenters = selectedUser.AllowedDailyCenters.Select(i => i.ToString()).ToList();
+        await CitiesCheckChanged(selectedCities);
+    }
+
+    private async Task CitiesCheckChanged(List<string> selectedCities)
+    {
+        dailyPmCenters = new List<TextValue>();
+        foreach (var city in selectedCities)
+        {
+            var cityName = cities.First(c => c.Value == city).Text;
+            var centers = await http.GetFromJsonAsync<List<TextValue>>("CommCenter/DailyCentersList?cityId=" + city);
+            foreach (var center in centers)
+                center.Text = cityName + " - " + center.Text;
+            dailyPmCenters.AddRange(centers);
+        }
+        if (selectedDailyPmCenters != null)
+        {
+            foreach (var item in selectedDailyPmCenters.Where(c => !dailyPmCenters.Any(cc => cc.Value == c)).ToList())
+                selectedDailyPmCenters.Remove(item);
+        }
+        StateHasChanged();
     }
 
     private async Task Save(EditContext context)
@@ -133,13 +163,16 @@ else
         selectedUser.Permissions.Clear();
         selectedUser.AllowedEquipmentTypes.Clear();
         selectedUser.Cities.Clear();
+        selectedUser.AllowedDailyCenters.Clear();
 
         foreach (var item in selectedPermissions)
             selectedUser.Permissions.Add(Enum.Parse<Permission>(item));
-        foreach (var item in SelectedCities)
+        foreach (var item in selectedCities)
             selectedUser.Cities.Add(ObjectId.Parse(item));
-        foreach (var item in SelectedEquipmentTypes)
+        foreach (var item in selectedEquipmentTypes)
             selectedUser.AllowedEquipmentTypes.Add(Enum.Parse<EquipmentType>(item));
+        foreach (var item in selectedDailyPmCenters)
+            selectedUser.AllowedDailyCenters.Add(ObjectId.Parse(item));
 
         try
         {
