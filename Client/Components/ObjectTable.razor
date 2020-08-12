@@ -11,9 +11,9 @@
                     <th></th>
                 }
             }
-            @foreach (var f in FieldNames)
+            @foreach (var f in Fields)
             {
-                <th>@(UtilsX.DisplayName(typeof(T), f))</th>
+                <th>@(UtilsX.DisplayName(f))</th>
             }
         </tr>
     </thead>
@@ -27,30 +27,30 @@
                     @foreach (var col in LinkColumns)
                     {
 
-                        <td><a href="@(col.Link.Replace("{"+col.FieldName+"}", col.Field.GetValue(item).ToString()))">@col.Text</a></td>
+                        <td><a href="@(col.Link.Replace("{" + col.FieldName + "}", col.Field.GetValue(item).ToString()))">@col.Text</a></td>
                     }
-                    @foreach (var f in Fields)
-                    {
-                        var val = f.GetValue(item);
-                        <td @attributes="CellAttrs(f.Name, j)">
-                            @if (val is bool)
-                            {
-                                <input type="checkbox" disabled checked="@((bool)val)" />
-                            }
-                            else if(val is DateTime && ShortDates)
-                            {
-                                @(((DateTime)val).ToShortDateString())
-                            }
-                            else if(f.PropertyType.IsEnum)
-                            {
-                                @UtilsX.DisplayName(f.PropertyType, val.ToString());
-                            }
-                            else
-                            {
-                                @val
-                            }
-                        </td>
-                    }
+                }
+                @foreach (var f in Fields)
+                {
+                    var val = f.GetValue(item);
+                    <td @attributes="CellAttrs(f.Name, j)">
+                        @if (val is bool)
+                        {
+                            <input type="checkbox" disabled checked="@((bool)val)" />
+                        }
+                        else if (val is DateTime && ShortDates)
+                        {
+                            @(((DateTime)val).ToShortDateString())
+                        }
+                        else if (f.PropertyType.IsEnum)
+                        {
+                            @UtilsX.DisplayName(f.PropertyType, val.ToString());
+                        }
+                        else
+                        {
+                            @val
+                        }
+                    </td>
                 }
             </tr>
             j++;
@@ -86,6 +86,9 @@
     public string[] FieldNames { get; set; }
 
     [Parameter]
+    public string[] ExcludeFieldNames { get; set; }
+
+    [Parameter]
     public LinkColumn[] LinkColumns { get; set; }
 
     [Parameter]
@@ -96,13 +99,27 @@
 
     private List<System.Reflection.PropertyInfo> Fields;
 
+    private static readonly Type[] AllowedTypes = new Type[]
+    {
+        typeof(int), typeof(string), typeof(float), typeof(long), typeof(int?)
+    };
+
     protected override void OnInitialized()
     {
         Fields = new List<System.Reflection.PropertyInfo>();
         var props = typeof(T).GetProperties();
-        foreach (var f in FieldNames)
+        if (FieldNames != null)
         {
-            Fields.Add(props.First(x => x.Name == f));
+            foreach (var f in FieldNames)
+                Fields.Add(props.First(x => x.Name == f));
+        }
+        else
+        {
+            foreach (var p in props)
+            {
+                if (AllowedTypes.Contains(p.PropertyType) && (ExcludeFieldNames == null || !ExcludeFieldNames.Contains(p.Name)))
+                    Fields.Add(p);
+            }
         }
     }
 

@@ -42,6 +42,7 @@ else
     private List<TextValue> cities;
     private CommCenterWithReports[] centers;
     private bool loading = true;
+
     private static string[] fields = new string[]
     {
         nameof(CommCenterWithReports.CityName),
@@ -87,7 +88,7 @@ else
         }
 
         pmDaysColor = new Dictionary<string, List<string>>
-    {{  nameof(CommCenterWithReports.ElapsedDaysOfLastPm) , colors  }};
+            {{  nameof(CommCenterWithReports.ElapsedDaysOfLastPm) , colors  }};
 
         loading = false;
     }

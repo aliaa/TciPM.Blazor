@@ -51,6 +51,7 @@ namespace TciPM.Blazor.Server.Configuration
                         return permClaim != null && permClaim.Value.Contains(perm);
                     }));
                 options.AddPolicy("Admin", policy => policy.RequireClaim("IsAdmin"));
+                options.AddPolicy("SuperAdmin", policy => policy.RequireClaim("IsSuperAdmin"));
             });
 
             services.AddControllersWithViews(config =>

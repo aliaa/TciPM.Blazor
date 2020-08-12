@@ -1,0 +1,35 @@
+﻿@page "/country/usageStatus"
+@attribute [Authorize("SuperAdmin")]
+@inject HttpClientX http
+
+<div class="container">
+    <h3>گزارش کارکرد همکاران استانها</h3>
+</div>
+@if (stats == null)
+{
+    <Loading />
+}
+else
+{
+    <div class="mt-4">
+        <ObjectTable Data="stats" ColumnsBackColor="colorsOfColumns" />
+    </div>
+}
+
+
+@code {
+    private ProvinceStatus[] stats;
+    private Dictionary<string, List<string>> colorsOfColumns;
+
+    protected override async Task OnInitializedAsync()
+    {
+        stats = await http.GetFromJsonAsync<ProvinceStatus[]>("Dashboard/UsageStatus");
+        colorsOfColumns = new Dictionary<string, List<string>>(3);
+        colorsOfColumns.Add(nameof(ProvinceStatus.CentersOnTimePMPercent),
+            stats.Select(c => ColorUtils.GetColorOfPercent(c.CentersOnTimePMPercent)).ToList());
+        colorsOfColumns.Add(nameof(ProvinceStatus.MoreThan5PriorityCentersOnTimePM),
+            stats.Select(c => ColorUtils.GetColorOfPercent(c.MoreThan5PriorityCentersOnTimePM)).ToList());
+        colorsOfColumns.Add(nameof(ProvinceStatus.LessThan5PriorityCentersOnTimePM),
+            stats.Select(c => ColorUtils.GetColorOfPercent(c.LessThan5PriorityCentersOnTimePM)).ToList());
+    }
+}

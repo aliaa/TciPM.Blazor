@@ -1,0 +1,26 @@
+﻿@page "/country/equipmentsStatus"
+@attribute [Authorize("SuperAdmin")]
+@inject HttpClientX http
+
+<div class="container">
+    <h3>گزارش تجهیزات استانها</h3>
+    @if (stats == null)
+    {
+        <Loading />
+    }
+    else
+    {
+        <div class="mt-4">
+            <ObjectTable Data="stats" />
+        </div>
+    }
+</div>
+
+@code {
+    private ProvinceEquipmentsStatus[] stats;
+
+    protected override async Task OnInitializedAsync()
+    {
+        stats = await http.GetFromJsonAsync<ProvinceEquipmentsStatus[]>("Dashboard/EquipmentsStatus");
+    }
+}

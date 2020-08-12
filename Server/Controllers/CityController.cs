@@ -58,7 +58,7 @@ namespace TciPM.Blazor.Server.Controllers
             public bool IsImportant { get; set; }
         }
 
-        public ActionResult<List<CityWithReports>> ListWithReports()
+        public ActionResult<List<CentersAggregatedData>> ListWithReports()
         {
             var centerPmsCount = db.Aggregate<EquipmentsPM>()
                 .Group(id => id.CenterId, g => new { Id = g.Key, Count = g.Count() })
@@ -100,13 +100,13 @@ namespace TciPM.Blazor.Server.Controllers
                 .Where(x => group.ContainsKey(x.City))
                 .ToList();
 
-            var list = new List<CityWithReports>();
+            var list = new List<CentersAggregatedData>();
             foreach (City city in Cities)
             {
                 int importantCentersCount = centersCount.Where(x => x.City == city.Id && x.IsImportant).Select(x => x.Count).FirstOrDefault();
                 int unimportantCentersCount = centersCount.Where(x => x.City == city.Id && !x.IsImportant).Select(x => x.Count).FirstOrDefault();
 
-                list.Add(new CityWithReports
+                list.Add(new CentersAggregatedData
                 {
                     Id = city.Id,
                     Name = city.Name,

@@ -67,7 +67,7 @@ else
     else if (pms != null)
     {
         <div class="container-fluid mt-5">
-            <ObjectTable Data="pms" FieldNames="fields" LinkColumns="linkColumns" />
+            <ObjectTable Data="pms" LinkColumns="linkColumns" />
         </div>
     }
 }
@@ -79,17 +79,6 @@ else
     private List<TextValue> users = null;
     private List<EquipmentsPmListItemVM> pms = null;
     private bool loading = false;
-
-    private static string[] fields = new string[]
-    {
-        nameof(EquipmentsPmListItemVM.City),
-        nameof(EquipmentsPmListItemVM.Center),
-        nameof(EquipmentsPmListItemVM.ReportingUser),
-        nameof(EquipmentsPmListItemVM.PmDate),
-        nameof(EquipmentsPmListItemVM.SubmitDate),
-        nameof(EquipmentsPmListItemVM.EditDate),
-        nameof(EquipmentsPmListItemVM.TotalRate),
-    };
 
     private static ObjectTable<EquipmentsPmListItemVM>.LinkColumn[] linkColumns = new ObjectTable<EquipmentsPmListItemVM>.LinkColumn[]
     {

@@ -15,53 +15,30 @@ else
 
 
     <div class="mt-4">
-        <ObjectTable Data="cities" FieldNames="fields" LinkColumns="linkColumns" ColumnsBackColor="colorsOfColumns" />
+        <ObjectTable Data="cities" LinkColumns="linkColumns" ColumnsBackColor="colorsOfColumns" />
     </div>
 }
 
 @code {
-    private CityWithReports[] cities;
-    private bool loading = true;
-    private static readonly string[] fields = new string[]
-    {
-        nameof(CityWithReports.Name),
-        nameof(CityWithReports.CentersCount),
-        nameof(CityWithReports.MoreThan5PriorityCentersCount),
-        nameof(CityWithReports.LessThan5PriorityCentersCount),
-        nameof(CityWithReports.CentersOnTimePMPercent),
-        nameof(CityWithReports.MoreThan5PriorityCentersOnTimePM),
-        nameof(CityWithReports.LessThan5PriorityCentersOnTimePM),
-        nameof(CityWithReports.EquipmentPMsCount),
-        nameof(CityWithReports.DailyPMsCount),
-    };
-
+    private CentersAggregatedData[] cities;
     private Dictionary<string, List<string>> colorsOfColumns;
 
-    private static ObjectTable<CityWithReports>.LinkColumn[] linkColumns = new ObjectTable<CityWithReports>.LinkColumn[]
+    private static ObjectTable<CentersAggregatedData>.LinkColumn[] linkColumns = new ObjectTable<CentersAggregatedData>.LinkColumn[]
     {
-        new ObjectTable<CityWithReports>.LinkColumn { Text = "ویرایش", FieldName = nameof(CityWithReports.Id), Link = @"/city/edit/{Id}" }
+        new ObjectTable<CentersAggregatedData>.LinkColumn { Text = "ویرایش", FieldName = nameof(CentersAggregatedData.Id), Link = @"/city/edit/{Id}" }
     };
 
     protected override async Task OnInitializedAsync()
     {
-        loading = true;
-        cities = await http.GetFromJsonAsync<CityWithReports[]>("City/ListWithReports");
+        cities = await http.GetFromJsonAsync<CentersAggregatedData[]>("City/ListWithReports");
 
         colorsOfColumns = new Dictionary<string, List<string>>(3);
-        colorsOfColumns.Add(nameof(CityWithReports.CentersOnTimePMPercent),
-            cities.Select(c => CalculatePercentColor(c.CentersOnTimePMPercent)).ToList());
-        colorsOfColumns.Add(nameof(CityWithReports.LessThan5PriorityCentersOnTimePM),
-            cities.Select(c => CalculatePercentColor(c.LessThan5PriorityCentersOnTimePM)).ToList());
-        colorsOfColumns.Add(nameof(CityWithReports.MoreThan5PriorityCentersOnTimePM),
-            cities.Select(c => CalculatePercentColor(c.MoreThan5PriorityCentersOnTimePM)).ToList());
-
-        loading = false;
+        colorsOfColumns.Add(nameof(CentersAggregatedData.CentersOnTimePMPercent),
+            cities.Select(c => ColorUtils.GetColorOfPercent(c.CentersOnTimePMPercent)).ToList());
+        colorsOfColumns.Add(nameof(CentersAggregatedData.LessThan5PriorityCentersOnTimePM),
+            cities.Select(c => ColorUtils.GetColorOfPercent(c.LessThan5PriorityCentersOnTimePM)).ToList());
+        colorsOfColumns.Add(nameof(CentersAggregatedData.MoreThan5PriorityCentersOnTimePM),
+            cities.Select(c => ColorUtils.GetColorOfPercent(c.MoreThan5PriorityCentersOnTimePM)).ToList());
     }
 
-    private string CalculatePercentColor(int? p)
-    {
-        if (p == null)
-            return "initial";
-        return new HSLColor(p.Value / 100f * 80f, 240f, 180f).ToHexString();
-    }
 }

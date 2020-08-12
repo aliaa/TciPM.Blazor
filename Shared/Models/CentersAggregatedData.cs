@@ -4,12 +4,12 @@ using MongoDB.Bson.Serialization.Attributes;
 
 namespace TciPM.Blazor.Shared.Models
 {
-    public class CityWithReports
+    public class CentersAggregatedData
     {
         [BsonId]
         public ObjectId Id { get; set; }
 
-        [DisplayName("شهر")]
+        [DisplayName("نام")]
         public string Name { get; set; }
 
         [DisplayName("تعداد کل مراکز")]
@@ -30,7 +30,7 @@ namespace TciPM.Blazor.Shared.Models
         [DisplayName("درصد PM به موقع مراکز با اهمیت 5 و پایینتر")]
         public int? LessThan5PriorityCentersOnTimePM { get; set; }
 
-        [DisplayName("تعداد PM تحهیزات انجام یافته")]
+        [DisplayName("تعداد PM تجهیزات انجام یافته")]
         public int EquipmentPMsCount { get; set; }
 
         [DisplayName("تعداد PM روزانه انجام یافته")]

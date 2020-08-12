@@ -45,6 +45,8 @@ namespace TciPM.Blazor.Server.Controllers
                 };
                 if (user.IsAdmin)
                     claims.Add(new Claim("IsAdmin", "true"));
+                if(user.IsSuperAdmin)
+                    claims.Add(new Claim("IsSuperAdmin", "true"));
 
                 var perms = new StringBuilder();
                 foreach (var perm in user.Permissions)
