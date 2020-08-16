@@ -18,21 +18,21 @@
                 </AuthorizeView>
                 <AuthorizeView Policy="@nameof(Permission.ShowCenters)">
                     <li class="nav-item">
-                        <NavLink class="nav-link" href="/city/list">شهرها</NavLink>
+                        <NavLink class="nav-link" href="city/list">شهرها</NavLink>
                     </li>
                 </AuthorizeView>
                 <AuthorizeView Policy="@nameof(Permission.ShowCenters)">
                     <li class="nav-item">
-                        <NavLink class="nav-link" href="/center/list">مراکز</NavLink>
+                        <NavLink class="nav-link" href="center/list">مراکز</NavLink>
                     </li>
                 </AuthorizeView>
                 <AuthorizeView Policy="@nameof(Permission.ShowPMs)">
                     <li Class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" role="button" data-toggle="dropdown">PM تجهیزات مراکز</a>
                         <div class="dropdown-menu">
-                            <NavLink class="dropdown-item" href="/equipmentsPm/list">لیست PM های تجهیزات</NavLink>
+                            <NavLink class="dropdown-item" href="equipmentsPm/list">لیست PM های تجهیزات</NavLink>
                             <AuthorizeView Context="a" Policy="@nameof(Permission.WriteEquipmentPM)">
-                                <NavLink class="dropdown-item" href="/equipmentsPm/new">ثبت PM جدید تجهیزات</NavLink>
+                                <NavLink class="dropdown-item" href="equipmentsPm/new">ثبت PM جدید تجهیزات</NavLink>
                             </AuthorizeView>
                         </div>
                     </li>
@@ -42,11 +42,11 @@
                         <a class="nav-link dropdown-toggle" role="button" data-toggle="dropdown">PM روزانه مراکز کم ظرفیت</a>
                         <div class="dropdown-menu">
                             <AuthorizeView Context="a" Policy="@nameof(Permission.WriteDailyPM)">
-                                <NavLink class="dropdown-item" href="SubmitDailyPM">ثبت PM جدید روزانه</NavLink>
+                                <NavLink class="dropdown-item" href="dailyPm/new">ثبت PM جدید روزانه</NavLink>
                             </AuthorizeView>
                             <AuthorizeView Context="b" Policy="@nameof(Permission.ShowPMs)">
-                                <NavLink class="dropdown-item" href="DailyPMList">لیست PM های روزانه</NavLink>
-                                <NavLink class="dropdown-item" href="CompareDailyPM">مقایسه و بررسی</NavLink>
+                                <NavLink class="dropdown-item" href="dailyPm/list">لیست PM های روزانه</NavLink>
+                                <NavLink class="dropdown-item" href="dailyPm/compare">مقایسه و بررسی</NavLink>
                             </AuthorizeView>
                         </div>
                     </li>
@@ -55,19 +55,19 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" role="button" data-toggle="dropdown">گزارش ها</a>
                         <div class="dropdown-menu">
-                            <NavLink class="dropdown-item" href="Reports/CentersHealth">درصد سلامت مراکز</NavLink>
-                            <NavLink class="dropdown-item" href="Reports/UnrepairedEquipments">ایرادات رفع نشده</NavLink>
-                            <NavLink class="dropdown-item" href="Reports/EquipmentsPotency">توان تجهیزات (Rating)</NavLink>
-                            <NavLink class="dropdown-item" href="Reports/EquipmentsFeatures">شاخصهای کمی تجهیزات</NavLink>
-                            <NavLink class="dropdown-item" href="Reports/CenterEquipments">آمار مراکز</NavLink>
-                            <NavLink class="dropdown-item" href="Reports/EquipmentsFilter">آمار تجهیزات</NavLink>
-                            <NavLink class="dropdown-item" href="Reports/Logs">لاگ کاربران</NavLink>
+                            <NavLink class="dropdown-item" href="reports/centersHealth">درصد سلامت مراکز</NavLink>
+                            <NavLink class="dropdown-item" href="reports/unrepairedEquipments">ایرادات رفع نشده</NavLink>
+                            <NavLink class="dropdown-item" href="reports/equipmentsPotency">توان تجهیزات (Rating)</NavLink>
+                            <NavLink class="dropdown-item" href="reports/equipmentsFeatures">شاخصهای کمی تجهیزات</NavLink>
+                            <NavLink class="dropdown-item" href="reports/centerEquipments">آمار مراکز</NavLink>
+                            <NavLink class="dropdown-item" href="reports/equipmentsFilter">آمار تجهیزات</NavLink>
+                            <NavLink class="dropdown-item" href="reports/logs">لاگ کاربران</NavLink>
                         </div>
                     </li>
                 </AuthorizeView>
                 <AuthorizeView Policy="@nameof(Permission.ManageUsers)">
                     <li class="nav-item">
-                        <NavLink class="nav-link" href="/user/manage">مدیریت کاربران</NavLink>
+                        <NavLink class="nav-link" href="user/manage">مدیریت کاربران</NavLink>
                     </li>
                 </AuthorizeView>
                 <AuthorizeView>

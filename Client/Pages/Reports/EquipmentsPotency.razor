@@ -1,0 +1,24 @@
+﻿@page "/reports/equipmentsPotency"
+
+<h3>گزارش توان تجهیزات (Rating)</h3>
+
+<div class="container mt-4">
+    @if(data != null)
+    {
+        <BarChart Data="data" />
+    }
+</div>
+
+@code {
+    private List<BarChart.ChartItem> data;
+
+    protected override void OnInitialized()
+    {
+        data = new List<BarChart.ChartItem>
+        {
+            new BarChart.ChartItem { Text = "A", Value = 5, Color = ColorUtils.GetColorOfPercent(50) },
+            new BarChart.ChartItem { Text = "B", Value = 3, Color = ColorUtils.GetColorOfPercent(30) },
+            new BarChart.ChartItem { Text = "C", Value = 8, Color = ColorUtils.GetColorOfPercent(80) },
+        };
+    }
+}
