@@ -14,11 +14,15 @@
 
     protected override void OnInitialized()
     {
-        data = new List<BarChart.ChartItem>
+        data = new List<BarChart.ChartItem>();
+        for (int i = 1; i <= 10; i++)
         {
-            new BarChart.ChartItem { Text = "A", Value = 5, Color = ColorUtils.GetColorOfPercent(50) },
-            new BarChart.ChartItem { Text = "B", Value = 3, Color = ColorUtils.GetColorOfPercent(30) },
-            new BarChart.ChartItem { Text = "C", Value = 8, Color = ColorUtils.GetColorOfPercent(80) },
-        };
+            data.Add(new BarChart.ChartItem 
+            { 
+                Text = i.ToString(), Value = i, 
+                Color = ColorUtils.GetColorOfPercent(i),
+                ClickLink = "/equipmentsPm/view/"+i
+            });
+        }
     }
 }

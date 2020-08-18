@@ -7,15 +7,14 @@
 @using ChartJs.Blazor.Charts
 @using ChartJs.Blazor.ChartJS.Common.Handlers.OnClickHandler
 
-<ChartJsBarChart @ref="chart" Config="@config" Width="@Width" Height="@Height" />
+@inject NavigationManager nav
+
+<ChartJsBarChart @ref="chart" Config="@config" Width="800" Height="@height" />
 
 @code {
     [Parameter]
-    public int Width { get; set; } = 600;
-    [Parameter]
-    public int Height { get; set; } = 300;
-    [Parameter]
     public List<ChartItem> Data { get; set; }
+    private int height = 400;
 
     public class ChartItem
     {
@@ -36,7 +35,7 @@
             Options = new BarOptions
             {
                 Responsive = true,
-                //OnClick = new DotNetInstanceClickHandler(OnClickHandler),
+                OnClick = new DotNetInstanceClickHandler(OnClickHandler),
                 Scales = new BarScales
                 {
                     XAxes = new List<CartesianAxis>
@@ -67,13 +66,17 @@
         };
         dataset.AddRange(Data.Select(i => i.Value).Wrap());
         config.Data.Datasets.Add(dataset);
+
+        height = Math.Max(400, Data.Count * 15);
     }
 
-    @*[JSInvokable]
+    [JSInvokable]
     public void OnClickHandler(object sender, object args)
     {
-        EventArgs += JsonConvert.SerializeObject(JsonConvert.DeserializeObject($"{Environment.NewLine}{args}"), Formatting.Indented);
-        Rows = Math.Max(3, EventArgs.Split(new[] { Environment.NewLine }, StringSplitOptions.None).Length + 1);
-        StateHasChanged();
-    }*@
+        var clickData = (System.Text.Json.JsonElement)args;
+        int index = clickData.EnumerateArray().First().GetProperty("_index").GetInt32();
+        var link = Data[index].ClickLink;
+        if (link != null)
+            nav.NavigateTo(link);
+    }
 }
