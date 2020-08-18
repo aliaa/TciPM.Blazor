@@ -6,6 +6,7 @@
 @using ChartJs.Blazor.ChartJS.Common.Wrappers
 @using ChartJs.Blazor.Charts
 @using ChartJs.Blazor.ChartJS.Common.Handlers.OnClickHandler
+@using ChartJs.Blazor.ChartJS.Common.Handlers 
 
 @inject NavigationManager nav
 
@@ -54,6 +55,10 @@
                 {
                     AnimateRotate = true,
                     AnimateScale = true
+                },
+                Legend = new Legend
+                {
+                    Display = false
                 }
             }
         };

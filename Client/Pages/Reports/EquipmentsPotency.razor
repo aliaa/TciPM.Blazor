@@ -1,15 +1,67 @@
 ﻿@page "/reports/equipmentsPotency"
+@inject HttpClientX http
 
-<h3>گزارش توان تجهیزات (Rating)</h3>
-
-<div class="container mt-4">
-    @if(data != null)
-    {
-        <BarChart Data="data" />
-    }
+<div>
+    <h3>گزارش توان تجهیزات (Rating)</h3>
+    <div class="row mt-5">
+        <div class="col-md-3">
+            <div class="form-group">
+                <Label For="@(() => model.Type)" />
+                <select class="form-control" @bind="model.Type">
+                    @foreach (var item in UtilsX.GetEnumValues<EquipmentsPotencyReport.ReportType>())
+                    {
+                        <option value="@item">@UtilsX.DisplayName(item)</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <Label For="@(() => model.SourceType)" />
+                <select class="form-control" @bind="model.SourceType">
+                    @foreach (var item in UtilsX.GetEnumValues<EquipmentsPotencyReport.ReportSource>())
+                    {
+                        <option value="@item">@UtilsX.DisplayName(item)</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label>ظرفیت مرکز</label>
+                <div class="form-group row">
+                    <div class="col">
+                        <select class="form-control" @bind="model.CenterCapacityLessGreater">
+                            @foreach (var item in UtilsX.GetEnumValues<EquipmentsPotencyReport.LessGreater>())
+                            {
+                                <option value="@item">@UtilsX.DisplayName(item)</option>
+                            }
+                        </select>
+                    </div>
+                    @if (model.CenterCapacityLessGreater != EquipmentsPotencyReport.LessGreater.All)
+                    {
+                        <div class="col">
+                            <input type="number" class="form-control" @bind-value="model.CenterCapacityThreshold" min="0" max="1000000"/>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="form-group">
+                <Label For="@(() => model.CenterImportance)" />
+                <input type="number" class="form-control" @bind-value="model.CenterImportance" min="1" max="10" />
+            </div>
+            <div class="form-group mt-4">
+                <button class="btn btn-primary" @onclick="Refresh">تائید</button>
+            </div>
+        </div>
+        <div class="col-md-9">
+            @if (data != null)
+            {
+                <BarChart Data="data" />
+            }
+        </div>
+    </div>
 </div>
 
 @code {
+
+    private EquipmentsPotencyReport model = new EquipmentsPotencyReport();
     private List<BarChart.ChartItem> data;
 
     protected override void OnInitialized()
@@ -17,12 +69,18 @@
         data = new List<BarChart.ChartItem>();
         for (int i = 1; i <= 10; i++)
         {
-            data.Add(new BarChart.ChartItem 
-            { 
-                Text = i.ToString(), Value = i, 
+            data.Add(new BarChart.ChartItem
+            {
+                Text = i.ToString(),
+                Value = i,
                 Color = ColorUtils.GetColorOfPercent(i),
-                ClickLink = "/equipmentsPm/view/"+i
+                ClickLink = "/equipmentsPm/view/" + i
             });
         }
+    }
+
+    private async Task Refresh()
+    {
+
     }
 }
