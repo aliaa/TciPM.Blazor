@@ -11,9 +11,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TciPM.Blazor.Shared", "Shar
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AliaaCommonStandard", "..\..\AliaaCommon\AliaaCommonStandard\AliaaCommonStandard.csproj", "{07572343-F786-4713-954E-FEE4C712A7AE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TciCommonStandard", "..\TciCommon\TciCommonStandard\TciCommonStandard.csproj", "{4223F7DD-8F20-4731-8B58-E06A25FEC685}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasyMongoNet.Definitions", "..\..\EasyMongoNet\Definitions\EasyMongoNet.Definitions.csproj", "{512B0970-C547-4ED7-8557-B9459AECE765}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasyMongoNet", "..\..\EasyMongoNet\EasyMongoNet.csproj", "{06F28DB5-DC37-4F72-8326-B89D6FA719B2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasyMongoNet.Driver", "..\..\EasyMongoNet\Driver\EasyMongoNet.Driver.csproj", "{FBA72415-A335-4B33-8FDD-8DB581536B6D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TciCommon.Models", "..\TciCommon\TciCommon.Models\TciCommon.Models.csproj", "{6B34AA23-D0BB-4121-989A-26B72F318C1A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TciCommon.ServerUtils", "..\TciCommon\TciCommon.ServerUtils\TciCommon.ServerUtils.csproj", "{A3BD88B4-B36F-49E2-895B-2E36FABC58A4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,14 +41,22 @@ Global
 		{07572343-F786-4713-954E-FEE4C712A7AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07572343-F786-4713-954E-FEE4C712A7AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07572343-F786-4713-954E-FEE4C712A7AE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4223F7DD-8F20-4731-8B58-E06A25FEC685}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4223F7DD-8F20-4731-8B58-E06A25FEC685}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4223F7DD-8F20-4731-8B58-E06A25FEC685}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4223F7DD-8F20-4731-8B58-E06A25FEC685}.Release|Any CPU.Build.0 = Release|Any CPU
-		{06F28DB5-DC37-4F72-8326-B89D6FA719B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{06F28DB5-DC37-4F72-8326-B89D6FA719B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{06F28DB5-DC37-4F72-8326-B89D6FA719B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{06F28DB5-DC37-4F72-8326-B89D6FA719B2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{512B0970-C547-4ED7-8557-B9459AECE765}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{512B0970-C547-4ED7-8557-B9459AECE765}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{512B0970-C547-4ED7-8557-B9459AECE765}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{512B0970-C547-4ED7-8557-B9459AECE765}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBA72415-A335-4B33-8FDD-8DB581536B6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBA72415-A335-4B33-8FDD-8DB581536B6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBA72415-A335-4B33-8FDD-8DB581536B6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBA72415-A335-4B33-8FDD-8DB581536B6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B34AA23-D0BB-4121-989A-26B72F318C1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B34AA23-D0BB-4121-989A-26B72F318C1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B34AA23-D0BB-4121-989A-26B72F318C1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B34AA23-D0BB-4121-989A-26B72F318C1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3BD88B4-B36F-49E2-895B-2E36FABC58A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3BD88B4-B36F-49E2-895B-2E36FABC58A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3BD88B4-B36F-49E2-895B-2E36FABC58A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3BD88B4-B36F-49E2-895B-2E36FABC58A4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

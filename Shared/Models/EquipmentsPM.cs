@@ -73,10 +73,10 @@ namespace TciPM.Blazor.Shared.Models
             }
         }
 
-        public static bool PmExistsForCenterInLastHours(IReadOnlyDbContext db, ObjectId centerId, int hours = 24)
-        {
-            DateTime lastHours = DateTime.Now.AddHours(-Math.Abs(hours));
-            return db.Any<EquipmentsPM>(pm => pm.CenterId == centerId && pm.SubmitDate >= lastHours);
-        }
+        //public static bool PmExistsForCenterInLastHours(IReadOnlyDbContext db, ObjectId centerId, int hours = 24)
+        //{
+        //    DateTime lastHours = DateTime.Now.AddHours(-Math.Abs(hours));
+        //    return db.Any<EquipmentsPM>(pm => pm.CenterId == centerId && pm.SubmitDate >= lastHours);
+        //}
     }
 }

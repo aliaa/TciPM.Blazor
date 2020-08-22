@@ -170,22 +170,22 @@ namespace TciPM.Blazor.Shared.Models
         [DisplayName("فرکانس خروجی")]
         public float OutputFrequency { get; set; }
 
-        public Diesel GetSourceObj(IReadOnlyDbContext db)
-        {
-            if (Source == null)
-                Source = db.FindById<Diesel>(SourceId);
-            return (Diesel)Source;
-        }
+        //public Diesel GetSourceObj(IReadOnlyDbContext db)
+        //{
+        //    if (Source == null)
+        //        Source = db.FindById<Diesel>(SourceId);
+        //    return (Diesel)Source;
+        //}
     
 
         private const int V = 380;
         private static readonly float RADICAL3 = (float)Math.Sqrt(3);
 
         [DisplayName("درصد توان مصرفی دیزل به قدرت مجاز")]
-        public float GetPowerConsumptionPercent(IReadOnlyDbContext db)
+        public float GetPowerConsumptionPercent(Diesel diesel)
         {
             float usagePower = Math.Max(Math.Max(OutAmperR, OutAmperS), OutAmperT) * V * RADICAL3;
-            return 100 * usagePower / (GetSourceObj(db).PermissivePower * 1000);
+            return 100 * usagePower / (diesel.PermissivePower * 1000);
         }
     }
 }

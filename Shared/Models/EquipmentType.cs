@@ -44,17 +44,17 @@ namespace TciPM.Blazor.Shared.Models
             }
         }
 
-        public static IEnumerable<Equipment> GetEquipments(this EquipmentType equipmentType, IReadOnlyDbContext db)
-        {
-            switch (equipmentType)
-            {
-                case EquipmentType.Diesel:      return db.All<Diesel>();
-                case EquipmentType.Rectifier: 
-                case EquipmentType.Battery:     return db.All<RectifierAndBattery>();
-                case EquipmentType.UPS:         return db.All<Ups>();
-                default: throw new NotImplementedException();
-            }
-        }
+        //public static IEnumerable<Equipment> GetEquipments(this EquipmentType equipmentType, IReadOnlyDbContext db)
+        //{
+        //    switch (equipmentType)
+        //    {
+        //        case EquipmentType.Diesel:      return db.All<Diesel>();
+        //        case EquipmentType.Rectifier: 
+        //        case EquipmentType.Battery:     return db.All<RectifierAndBattery>();
+        //        case EquipmentType.UPS:         return db.All<Ups>();
+        //        default: throw new NotImplementedException();
+        //    }
+        //}
 
         public static IEnumerable<EquipmentPM> GetEquipmentPm(this EquipmentType equipmentType, EquipmentsPM pm)
         {

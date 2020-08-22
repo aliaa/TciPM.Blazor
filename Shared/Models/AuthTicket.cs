@@ -4,7 +4,7 @@ using System;
 
 namespace TciPM.Blazor.Shared.Models
 {
-    [Serializable]
+    //[Serializable]
     [CollectionIndex(new string[] { nameof(Ticket) })]
     [CollectionIndex(new string[] { nameof(Time)}, ExpireAfterSeconds = 7200)]
     public class AuthTicket : MongoEntity

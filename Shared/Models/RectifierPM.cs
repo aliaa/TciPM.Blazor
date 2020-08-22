@@ -73,30 +73,27 @@ namespace TciPM.Blazor.Shared.Models
 
         [DisplayName("مصرف AC [T]")]
         public float AcUsageT { get; set; }
-        
-        public RectifierAndBattery GetSourceObj(IReadOnlyDbContext db)
-        {
-            if (Source == null)
-                Source = db.FindById<RectifierAndBattery>(SourceId);
-            return (RectifierAndBattery)Source;
-        }
+
+        //public RectifierAndBattery GetSourceObj(IReadOnlyDbContext db)
+        //{
+        //    if (Source == null)
+        //        Source = db.FindById<RectifierAndBattery>(SourceId);
+        //    return (RectifierAndBattery)Source;
+        //}
 
         [DisplayName("درصد جریان مصرفی مرکز به ظرفیت یکسوساز")]
-        public float GetPowerConsumptionPercent(IReadOnlyDbContext db)
+        public float GetPowerConsumptionPercent(RectifierAndBattery source)
         {
-            int totalCapacity = GetSourceObj(db).RectifierCount * GetSourceObj(db).EachRectifierCapacity;
+            int totalCapacity = source.RectifierCount * source.EachRectifierCapacity;
             return 100 * CenterMaxCurrentUsage / totalCapacity;
         }
 
         [DisplayName("درصد جریان نهایی دشارژ به ظرفیت باتری")]
-        public float GetFinalDechargePercent(IReadOnlyDbContext db)
+        public float GetFinalDechargePercent(RectifierAndBattery source)
         {
-            var source = GetSourceObj(db);
             var capacitySum = source.Batteries.Sum(s => s.Capacity);
             if(capacitySum == 0)
             {
-                Source = null;
-                source = GetSourceObj(db);
                 capacitySum = source.Batteries.Sum(s => s.Capacity);
             }
             return 100 * FinalDechargeCurrent / capacitySum;

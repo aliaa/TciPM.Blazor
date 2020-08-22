@@ -16,8 +16,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\AliaaCommon\AliaaCommonStandard\AliaaCommonStandard.csproj" />
-    <ProjectReference Include="..\..\..\EasyMongoNet\EasyMongoNet.csproj" />
-    <ProjectReference Include="..\..\TciCommon\TciCommonStandard\TciCommonStandard.csproj" />
+    <ProjectReference Include="..\..\..\EasyMongoNet\Definitions\EasyMongoNet.Definitions.csproj" />
+    <ProjectReference Include="..\..\..\EasyMongoNet\Driver\EasyMongoNet.Driver.csproj" />
+    <ProjectReference Include="..\..\TciCommon\TciCommon.Models\TciCommon.Models.csproj" />
+    <ProjectReference Include="..\..\TciCommon\TciCommon.ServerUtils\TciCommon.ServerUtils.csproj" />
     <ProjectReference Include="..\Client\TciPM.Blazor.Client.csproj" />
     <ProjectReference Include="..\Shared\TciPM.Blazor.Shared.csproj" />
   </ItemGroup>
