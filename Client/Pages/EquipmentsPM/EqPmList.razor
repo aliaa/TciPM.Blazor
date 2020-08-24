@@ -1,5 +1,6 @@
 ﻿@page "/equipmentsPm/list"
 @inject HttpClientX http
+@inject IJSRuntime js
 
 @if (cities == null)
 {
@@ -110,6 +111,6 @@ else
 
     private async Task ExcelOutput()
     {
-
+        await js.InvokeVoidAsync("downloadFile", new object[] { "EquipmentsPm/ListAsExcelFile" });
     }
 }

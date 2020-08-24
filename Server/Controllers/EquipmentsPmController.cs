@@ -11,6 +11,10 @@ using TciPM.Blazor.Shared;
 using TciPM.Blazor.Shared.Models;
 using TciPM.Blazor.Shared.ViewModels;
 using TciCommon.ServerUtils;
+using System.Reflection;
+using System.IO;
+using System;
+using OfficeOpenXml;
 
 namespace TciPM.Blazor.Server.Controllers
 {
@@ -100,6 +104,194 @@ namespace TciPM.Blazor.Server.Controllers
                             .Include(pm => pm.ReportingUser)
                             .Include(pm => pm.TotalRate))
                 .SortByDescending(pm => pm.SubmitDate);
+        }
+
+        public IActionResult ListAsExcelFile(PmSearchVM search)
+        {
+            if (search == null)
+                search = new PmSearchVM();
+            var pms = GetPmList(search)?.ToList();
+            if (pms == null)
+                return Ok();
+            var fileStream = CreateExcelFile(pms);
+            return File(fileStream, "application/octet-stream");
+        }
+
+        private Stream CreateExcelFile(List<EquipmentsPM> pms)
+        {
+            var memStream = new MemoryStream();
+            using (ExcelPackage package = new ExcelPackage(memStream))
+            {
+                Dictionary<ObjectId, City> citiesDic = Cities.ToDictionary(i => i.Id);
+                Dictionary<ObjectId, CommCenterX> centers = db.All<CommCenterX>().ToDictionary(i => i.Id);
+                Dictionary<ObjectId, string> usersName = GetUsersName();
+
+                // diesels sheet
+                ExcelWorksheet sheet = package.Workbook.Worksheets.Add("دیزل ها");
+                sheet.View.RightToLeft = true;
+                sheet.DefaultColWidth = 20;
+                int col = 1;
+                sheet.SetValue(1, col++, "شهر");
+                sheet.SetValue(1, col++, "مرکز");
+                sheet.SetValue(1, col++, "کاربر ثبت کننده");
+                sheet.SetValue(1, col++, "تاریخ ثبت");
+                sheet.SetValue(1, col++, "تاریخ تغییر");
+                Dictionary<PropertyInfo, int> columns = new Dictionary<PropertyInfo, int>();
+                PropertyInfo[] props = typeof(DieselPM).GetProperties();
+                for (int i = 0; i < 3; i++)
+                {
+                    foreach (PropertyInfo p in props)
+                    {
+                        if (!columns.ContainsKey(p))
+                            columns.Add(p, col);
+                        string dispName = Utils.DisplayName(p);
+                        sheet.SetValue(1, col++, (i + 1) + "-" + dispName);
+                    }
+                }
+
+                sheet.Row(1).Style.Font.Bold = true;
+                int row = 2;
+                foreach (var pm in pms)
+                {
+                    if (centers.ContainsKey(pm.CenterId))
+                    {
+                        if (citiesDic.ContainsKey(centers[pm.CenterId].City))
+                            sheet.SetValue(row, 1, citiesDic[centers[pm.CenterId].City].Name);
+                        sheet.SetValue(row, 2, centers[pm.CenterId].Name);
+                    }
+                    if (usersName.ContainsKey(pm.ReportingUser))
+                        sheet.SetValue(row, 3, usersName[pm.ReportingUser]);
+                    sheet.SetValue(row, 4, PersianDateUtils.GetPersianDateString(pm.SubmitDate));
+                    sheet.SetValue(row, 5, PersianDateUtils.GetPersianDateString(pm.EditDate));
+
+                    for (int i = 0; i < pm.DieselsPM.Count; i++)
+                    {
+                        int colOffset = i * (props.Length + 1);
+                        foreach (PropertyInfo prop in props)
+                        {
+                            object value = prop.GetValue(pm.DieselsPM[i]);
+                            if (value != null)
+                                sheet.SetValue(row, columns[prop] + colOffset, value.ToString());
+                        }
+                    }
+                    row++;
+                }
+
+
+                // rectifiers sheet
+                sheet = package.Workbook.Worksheets.Add("یکسوسازها");
+                sheet.View.RightToLeft = true;
+                sheet.DefaultColWidth = 20;
+                col = 1;
+                sheet.SetValue(1, col++, "شهر");
+                sheet.SetValue(1, col++, "مرکز");
+                sheet.SetValue(1, col++, "کاربر ثبت کننده");
+                sheet.SetValue(1, col++, "تاریخ ثبت");
+                sheet.SetValue(1, col++, "تاریخ تغییر");
+                columns = new Dictionary<PropertyInfo, int>();
+                props = typeof(RectifierPM).GetProperties();
+                for (int i = 0; i < 3; i++)
+                {
+                    foreach (PropertyInfo p in props)
+                    {
+                        if (!columns.ContainsKey(p))
+                            columns.Add(p, col);
+                        string dispName = Utils.DisplayName(p);
+                        sheet.SetValue(1, col++, (i + 1) + "-" + dispName);
+                    }
+                }
+
+                sheet.Row(1).Style.Font.Bold = true;
+                row = 2;
+                foreach (var pm in pms)
+                {
+                    if (centers.ContainsKey(pm.CenterId))
+                    {
+                        if (citiesDic.ContainsKey(centers[pm.CenterId].City))
+                            sheet.SetValue(row, 1, citiesDic[centers[pm.CenterId].City].Name);
+                        sheet.SetValue(row, 2, centers[pm.CenterId].Name);
+                    }
+                    if (usersName.ContainsKey(pm.ReportingUser))
+                        sheet.SetValue(row, 3, usersName[pm.ReportingUser]);
+                    sheet.SetValue(row, 4, PersianDateUtils.GetPersianDateString(pm.SubmitDate));
+                    sheet.SetValue(row, 5, PersianDateUtils.GetPersianDateString(pm.EditDate));
+
+                    for (int i = 0; i < pm.RectifiersPM.Count; i++)
+                    {
+                        int colOffset = i * (props.Length + 1);
+                        foreach (PropertyInfo prop in props)
+                        {
+                            object value = prop.GetValue(pm.RectifiersPM[i]);
+                            if (value != null)
+                                sheet.SetValue(row, columns[prop] + colOffset, value.ToString());
+                        }
+                    }
+                    row++;
+                }
+
+                // batteries sheet
+                sheet = package.Workbook.Worksheets.Add("باتریها");
+                sheet.View.RightToLeft = true;
+                sheet.DefaultColWidth = 20;
+                col = 1;
+                sheet.SetValue(1, col++, "شهر");
+                sheet.SetValue(1, col++, "مرکز");
+                sheet.SetValue(1, col++, "کاربر ثبت کننده");
+                sheet.SetValue(1, col++, "تاریخ ثبت");
+                sheet.SetValue(1, col++, "تاریخ تغییر");
+                for (int i = 0; i < 4; i++)
+                {
+                    sheet.SetValue(1, col++, (i + 1) + "-" + Utils.DisplayName<BatteryPM.BatterySeriesPM>(bs => bs.DistilledWaterAdded));
+                    sheet.SetValue(1, col++, (i + 1) + "-" + Utils.DisplayName<BatteryPM.BatterySeriesPM>(bs => bs.Temperature));
+                    sheet.SetValue(1, col++, (i + 1) + "-" + Utils.DisplayName<BatteryPM.BatterySeriesPM>(bs => bs.OutputCurrent));
+                    sheet.SetValue(1, col++, (i + 1) + "-" + Utils.DisplayName<BatteryPM.BatterySeriesPM>(bs => bs.Description));
+                    for (int j = 1; j <= 25; j++)
+                        sheet.SetValue(1, col++, "سری " + (i + 1) + " -ولتاژ سلول " + j);
+                    for (int j = 1; j <= 25; j++)
+                        sheet.SetValue(1, col++, "سری " + (i + 1) + " -غلظت سلول " + j);
+                }
+                sheet.Row(1).Style.Font.Bold = true;
+
+                row = 2;
+                foreach (var pm in pms)
+                {
+                    if (centers.ContainsKey(pm.CenterId))
+                    {
+                        if (citiesDic.ContainsKey(centers[pm.CenterId].City))
+                            sheet.SetValue(row, 1, citiesDic[centers[pm.CenterId].City].Name);
+                        sheet.SetValue(row, 2, centers[pm.CenterId].Name);
+                    }
+                    if (usersName.ContainsKey(pm.ReportingUser))
+                        sheet.SetValue(row, 3, usersName[pm.ReportingUser]);
+                    sheet.SetValue(row, 4, PersianDateUtils.GetPersianDateString(pm.SubmitDate));
+                    sheet.SetValue(row, 5, PersianDateUtils.GetPersianDateString(pm.EditDate));
+                    col = 6;
+                    for (int i = 0; i < pm.BatteriesPM.Count; i++)
+                    {
+                        for (int j = 0; j < pm.BatteriesPM[i].Series.Count; j++)
+                        {
+                            sheet.SetValue(row, col++, pm.BatteriesPM[i].Series[j].DistilledWaterAdded);
+                            sheet.SetValue(row, col++, pm.BatteriesPM[i].Series[j].Temperature);
+                            sheet.SetValue(row, col++, pm.BatteriesPM[i].Series[j].OutputCurrent);
+                            sheet.SetValue(row, col++, pm.BatteriesPM[i].Series[j].Description);
+                            for (int k = 0; k < pm.BatteriesPM[i].Series[j].Voltages.Length; k++)
+                                sheet.SetValue(row, col++, pm.BatteriesPM[i].Series[j].Voltages[k]);
+                            for (int k = 0; k < pm.BatteriesPM[i].Series[j].Densities.Length; k++)
+                                sheet.SetValue(row, col++, pm.BatteriesPM[i].Series[j].Densities[k]);
+                        }
+                    }
+                    row++;
+                }
+                package.Save();
+            }
+            return memStream;
+        }
+
+        private Dictionary<ObjectId, string> GetUsersName()
+        {
+            return db.Find<AuthUserX>(_ => true)
+                .Project(u => new AuthUserX { Id = u.Id, FirstName = u.FirstName, LastName = u.LastName })
+                .ToEnumerable().ToDictionary(u => u.Id, u => u.DisplayName);
         }
     }
 }
