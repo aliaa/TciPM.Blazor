@@ -1,22 +1,24 @@
 ﻿@typeparam T
-<ul class="list-unstyled px-3" style="columns:@ColumnsCount">
-    @if (Data != null)
-    {
-        foreach (var item in Data)
+<div class="d-flex border rounded pt-3">
+    <ul class="list-unstyled px-3" >
+        @if (Data != null)
         {
-            var Text = TextField?.Invoke(item);
-            var Value = ValueField?.Invoke(item).ToString();
-            bool Checked = SelectedValues.Contains(Value);
-            <li>
-                <label class="d-block">
-                    <input type="checkbox" checked=@Checked @onchange="e => { CheckboxClicked(Value, e.Value); }" />
-                    @Text
-                </label>
-            </li>
+            foreach (var item in Data)
+            {
+                var Text = TextField?.Invoke(item);
+                var Value = ValueField?.Invoke(item).ToString();
+                bool Checked = SelectedValues.Contains(Value);
+                <li style="float:right; width:@(ItemWidth)em;">
+                    <label class="d-block">
+                        <input type="checkbox" checked=@Checked @onchange="e => { CheckboxClicked(Value, e.Value); }" />
+                        @Text
+                    </label>
+                </li>
+            }
         }
-    }
-    @ChildContent
-</ul>
+        @ChildContent
+    </ul>
+</div>
 
 @code {
 
@@ -36,7 +38,7 @@
     public List<string> SelectedValues { get; set; }
 
     [Parameter]
-    public int ColumnsCount { get; set; } = 1;
+    public float ItemWidth { get; set; } = 8;
 
     [Parameter]
     public EventCallback<List<string>> ChecksChanged { get; set; }

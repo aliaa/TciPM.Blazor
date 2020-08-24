@@ -48,33 +48,27 @@ else
                     </div>
                     <div class="col-lg-3 col-sm-6">
                         <label class="font-weight-bold">اجازه های داده شده</label>
-                        <div class="border rounded pt-3">
-                            <CheckBoxList Data="AllPermissions" TextField="@(item => item.Text)" ValueField="@(item => item.Value)"
-                                          SelectedValues="selectedPermissions" />
-                        </div>
+                        <CheckBoxList Data="AllPermissions" TextField="@(item => item.Text)" ValueField="@(item => item.Value)"
+                                      SelectedValues="selectedPermissions" ItemWidth="10" />
                     </div>
                     @if (cities != null)
                     {
                         <div class="col-lg-3 col-sm-6">
                             <label class="font-weight-bold">شهر های قابل ثبت PM</label>
-                            <div class="border rounded pt-3">
-                                <CheckBoxList Data="cities" TextField="@(item => item.Text)" ValueField="@(item => item.Value)"
-                                              SelectedValues="selectedCities" ColumnsCount="2" ChecksChanged="CitiesCheckChanged" />
-                            </div>
+                            <CheckBoxList Data="cities" TextField="@(item => item.Text)" ValueField="@(item => item.Value)"
+                                          SelectedValues="selectedCities" ChecksChanged="CitiesCheckChanged" ItemWidth="6" />
                         </div>
                     }
                     <div class="col-lg-3 col-sm-6">
                         <label class="font-weight-bold">تجهیزات قابل PM</label>
-                        <div class="border rounded pt-3">
-                            <CheckBoxList Data="AllEquipmentTypes" TextField="@(item => item.Text)" ValueField="@(item => item.Value)"
-                                          SelectedValues="selectedEquipmentTypes" />
-                        </div>
+                        <CheckBoxList Data="AllEquipmentTypes" TextField="@(item => item.Text)" ValueField="@(item => item.Value)"
+                                      SelectedValues="selectedEquipmentTypes" />
                     </div>
                     <div class="col-lg-3 col-sm-6">
                         <div class="form-check">
                             <label>
                                 <InputCheckbox @bind-Value="selectedUser.Disabled" />
-                                @(UtilsX.DisplayName<ClientAuthUser>(u => u.Disabled))
+                                    @(UtilsX.DisplayName<ClientAuthUser>(u => u.Disabled))
                             </label>
                         </div>
                         <div class="form-check">
@@ -86,10 +80,8 @@ else
                     </div>
                     <div class="col-lg-12">
                         <label class="font-weight-bold">مراکز کم ظرفیت</label>
-                        <div class="border rounded pt-3">
-                            <CheckBoxList Data="dailyPmCenters" TextField="@(item => item.Text)" ValueField="@(item => item.Value)"
-                                          SelectedValues="selectedDailyPmCenters" ColumnsCount="6"/>
-                        </div>
+                        <CheckBoxList Data="dailyPmCenters" TextField="@(item => item.Text)" ValueField="@(item => item.Value)"
+                                      SelectedValues="selectedDailyPmCenters" ItemWidth="12" />
                     </div>
                 </div>
                 <div class="mt-4">
