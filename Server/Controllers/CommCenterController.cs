@@ -10,6 +10,7 @@ using TciPM.Blazor.Shared;
 using TciPM.Blazor.Shared.Models;
 using TciPM.Blazor.Shared.ViewModels;
 using TciCommon.ServerUtils;
+using TciPM.Blazor.Server.Services;
 
 namespace TciPM.Blazor.Server.Controllers
 {
@@ -18,7 +19,12 @@ namespace TciPM.Blazor.Server.Controllers
     [Authorize(nameof(Permission.ShowCenters))]
     public class CommCenterController : BaseController
     {
-        public CommCenterController(ProvinceDBs dbs) : base(dbs) { }
+        private readonly DataExporter dataExporter;
+
+        public CommCenterController(ProvinceDBs dbs, DataExporter dataExporter) : base(dbs) 
+        {
+            this.dataExporter = dataExporter;
+        }
         
         public ActionResult<List<TextValue>> List(ObjectId cityId)
         {
@@ -84,6 +90,12 @@ namespace TciPM.Blazor.Server.Controllers
             return db.Find<CommCenterX>(c => c.DailyPmEnabled && c.City == cityId)
                 .Project(c => new TextValue { Text = c.Name, Value = c.Id.ToString() })
                 .ToList();
+        }
+
+        public IActionResult ListAsExcelFile()
+        {
+            var file = dataExporter.ExportProvinceEquipmentsToExcel(Province);
+            return File(file, "application/octet-stream", "Equipments.xlsx");
         }
     }
 }

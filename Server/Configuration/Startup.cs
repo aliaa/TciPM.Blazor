@@ -5,16 +5,17 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using MongoDB.Bson;
 using System;
 using System.Linq;
 using System.Text.Encodings.Web;
 using System.Text.Unicode;
-using TciCommon.Models;
 using TciPM.Blazor.Shared;
 using Newtonsoft.Json.Serialization;
 using System.Net;
 using System.Threading.Tasks;
+using AliaaCommon;
+using TciPM.Blazor.Server.Services;
+using TciCommon.ServerUtils;
 
 namespace TciPM.Blazor.Server.Configuration
 {
@@ -68,10 +69,11 @@ namespace TciPM.Blazor.Server.Configuration
                         options.SerializerSettings.ContractResolver = new DefaultContractResolver();
                     });
             services.AddRazorPages();
-
+            
             services.AddSingleton<HtmlEncoder>(HtmlEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Arabic));
-
             services.AddMongDbContext(Configuration);
+            services.AddSingleton(sp => new DataTableFactory(sp.GetService<IReadOnlyDbContext>()));
+            services.AddSingleton(sp => new DataExporter(sp.GetService<ProvinceDBs>(), sp.GetService<DataTableFactory>()));
 
             services.Configure<IISServerOptions>(options =>
             {

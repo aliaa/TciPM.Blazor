@@ -24,6 +24,7 @@ else
         </div>
         <div>
             <a class="btn btn-info mr-4" href="/center/new">تعریف مرکز جدید</a>
+            <button class="btn btn-secondary mr-3" @onclick="ExcelOutput">خروجی اکسل تجهیزات مراکز</button>
         </div>
     </div>
     if (centers != null && !loading)
@@ -91,5 +92,10 @@ else
             {{  nameof(CommCenterWithReports.ElapsedDaysOfLastPm) , colors  }};
 
         loading = false;
+    }
+
+    private async Task ExcelOutput()
+    {
+        await http.DownloadFile("CommCenter/ListAsExcelFile");
     }
 }
