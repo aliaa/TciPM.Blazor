@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -20,11 +21,13 @@ namespace TciPM.Blazor.Client
             jsonOptions.Converters.Add(new JsonStringEnumConverter());
         }
 
-        private NavigationManager nav;
+        private readonly NavigationManager nav;
+        private readonly IJSRuntime js;
 
-        public HttpClientX(NavigationManager nav)
+        public HttpClientX(NavigationManager nav, IJSRuntime js)
         {
             this.nav = nav;
+            this.js = js;
         }
 
         public async Task<T> GetFromJsonAsync<T>(string requestUri, CancellationToken cancellationToken = default)
@@ -88,6 +91,11 @@ namespace TciPM.Blazor.Client
             else if ((int)resp.StatusCode >= 400)
                 throw await CreateHttpResponseException(resp);
             return await resp.Content.ReadFromJsonAsync<Res>(jsonOptions);
+        }
+
+        public async Task DownloadFile(string url)
+        {
+            await js.InvokeVoidAsync("downloadFile", url);
         }
 
         private async Task<HttpResponseException> CreateHttpResponseException(HttpResponseMessage resp)

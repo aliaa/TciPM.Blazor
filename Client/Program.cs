@@ -8,6 +8,7 @@ using TciPM.Blazor.Shared;
 using Blazored.Modal;
 using Microsoft.AspNetCore.Components;
 using Blazored.Toast;
+using Microsoft.JSInterop;
 
 namespace TciPM.Blazor.Client
 {
@@ -22,7 +23,8 @@ namespace TciPM.Blazor.Client
             builder.Services.AddBlazoredToast();
 
             var address = new Uri(new Uri(builder.HostEnvironment.BaseAddress), "/api/");
-            builder.Services.AddTransient(sp => new HttpClientX(sp.GetService<NavigationManager>()) { BaseAddress = address });
+            builder.Services.AddTransient(sp => new HttpClientX(sp.GetService<NavigationManager>(), sp.GetService<IJSRuntime>()) 
+                    { BaseAddress = address });
             builder.Services.AddScoped<AuthenticationStateProvider, AuthStateProvider>();
             builder.Services.AddOptions();
             builder.Services.AddAuthorizationCore(options =>

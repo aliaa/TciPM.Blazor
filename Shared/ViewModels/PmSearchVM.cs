@@ -22,5 +22,18 @@ namespace TciPM.Blazor.Shared.ViewModels
 
         [Display(Name = "کاربر ثبت کننده")]
         public string SubmittedUser { get; set; }
+
+        public override int GetHashCode()
+        {
+            return StringHashCode(City) ^ StringHashCode(Center) ^ StringHashCode(FromDate) 
+                ^ StringHashCode(ToDate) ^ StringHashCode(SubmittedUser);
+        }
+
+        private static int StringHashCode(string str)
+        {
+            if (str == null)
+                return 0;
+            return str.GetHashCode();
+        }
     }
 }

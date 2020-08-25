@@ -1,6 +1,5 @@
 ﻿@page "/equipmentsPm/list"
 @inject HttpClientX http
-@inject IJSRuntime js
 
 @if (cities == null)
 {
@@ -84,7 +83,7 @@ else
     private static ObjectTable<EquipmentsPmListItemVM>.LinkColumn[] linkColumns = new ObjectTable<EquipmentsPmListItemVM>.LinkColumn[]
     {
         new ObjectTable<EquipmentsPmListItemVM>.LinkColumn { Text = "مشاهده", FieldName = nameof(EquipmentsPmListItemVM.Id), Link = @"/equipmentsPm/view/{Id}" }
-    };
+        };
 
     protected override async Task OnInitializedAsync()
     {
@@ -111,6 +110,7 @@ else
 
     private async Task ExcelOutput()
     {
-        await js.InvokeVoidAsync("downloadFile", new object[] { "EquipmentsPm/ListAsExcelFile" });
+        int hash = await http.PostAsJsonAsync<PmSearchVM, int>("EquipmentsPm/RegisterSearch", model);
+        await http.DownloadFile("EquipmentsPm/ListAsExcelFile?hash=" + hash);
     }
 }
