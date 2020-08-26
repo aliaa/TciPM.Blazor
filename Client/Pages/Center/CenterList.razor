@@ -27,15 +27,16 @@ else
             <button class="btn btn-secondary mr-3" @onclick="ExcelOutput">خروجی اکسل تجهیزات مراکز</button>
         </div>
     </div>
+
+    if (loading)
+    {
+        <Loading />
+    }
     if (centers != null && !loading)
     {
         <div class="mt-4">
             <ObjectTable Data="centers" FieldNames="fields" LinkColumns="linkColumns" ColumnsBackColor="pmDaysColor" />
         </div>
-    }
-    if (loading)
-    {
-        <Loading />
     }
 }
 
@@ -58,13 +59,13 @@ else
         nameof(CommCenterWithReports.DieselsCount),
         nameof(CommCenterWithReports.BatteryAndRectifiersCount),
         nameof(CommCenterWithReports.UpsCount),
-    };
+        };
 
     private static ObjectTable<CommCenterWithReports>.LinkColumn[] linkColumns = new ObjectTable<CommCenterWithReports>.LinkColumn[]
     {
         new ObjectTable<CommCenterWithReports>.LinkColumn { Text = "جزئیات", FieldName = nameof(CommCenterWithReports.Id), Link = @"/center/item/{Id}" },
         new ObjectTable<CommCenterWithReports>.LinkColumn { Text = "ویرایش", FieldName = nameof(CommCenterWithReports.Id), Link = @"/center/edit/{Id}" }
-    };
+        };
 
     private Dictionary<string, List<string>> pmDaysColor;
 
@@ -89,7 +90,7 @@ else
         }
 
         pmDaysColor = new Dictionary<string, List<string>>
-            {{  nameof(CommCenterWithReports.ElapsedDaysOfLastPm) , colors  }};
+        {{  nameof(CommCenterWithReports.ElapsedDaysOfLastPm) , colors  }};
 
         loading = false;
     }

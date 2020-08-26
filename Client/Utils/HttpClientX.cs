@@ -95,7 +95,9 @@ namespace TciPM.Blazor.Client
 
         public async Task DownloadFile(string url)
         {
+            var currentUri = nav.Uri;
             await js.InvokeVoidAsync("downloadFile", url);
+            nav.NavigateTo(currentUri);
         }
 
         private async Task<HttpResponseException> CreateHttpResponseException(HttpResponseMessage resp)
