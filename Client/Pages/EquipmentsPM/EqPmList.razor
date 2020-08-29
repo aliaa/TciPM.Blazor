@@ -87,8 +87,15 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        cities = await http.GetFromJsonAsync<List<TextValue>>("Place/CityList");
-        users = await http.GetFromJsonAsync<List<TextValue>>("Account/UsersWithPermission?permission=" + Permission.WriteEquipmentPM);
+        var citiesTask = Task.Run(async () =>
+        {
+            cities = await http.GetFromJsonAsync<List<TextValue>>("Place/CityList");
+        });
+        var usersTask = Task.Run(async () =>
+        {
+            users = await http.GetFromJsonAsync<List<TextValue>>("Account/UsersWithPermission?permission=" + Permission.WriteEquipmentPM);
+        });
+        await Task.WhenAll(citiesTask, usersTask);
     }
 
     private async Task CityChanged(ChangeEventArgs e)

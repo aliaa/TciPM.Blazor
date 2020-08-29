@@ -116,8 +116,13 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        await LoadUsers();
-        cities = (await http.GetFromJsonAsync<List<City>>("City/List")).Select(c => new TextValue { Text = c.Name, Value = c.Id.ToString() });
+        var userLoadTask = LoadUsers();
+        var cityLoadTask = Task.Run(async () =>
+        {
+            var res = await http.GetFromJsonAsync<List<City>>("City/List");
+            cities = res.Select(c => new TextValue { Text = c.Name, Value = c.Id.ToString() });
+        });
+        await Task.WhenAll(userLoadTask, cityLoadTask);
     }
 
     private async Task LoadUsers()
