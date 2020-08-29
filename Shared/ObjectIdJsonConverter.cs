@@ -1,12 +1,9 @@
 ﻿using MongoDB.Bson;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 
-namespace TciPM.Blazor.Client
+namespace TciPM.Blazor.Shared
 {
     public class ObjectIdJsonConverter : JsonConverter<ObjectId>
     {

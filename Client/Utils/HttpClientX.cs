@@ -8,6 +8,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
+using TciPM.Blazor.Shared;
 
 namespace TciPM.Blazor.Client
 {
@@ -19,6 +20,7 @@ namespace TciPM.Blazor.Client
             jsonOptions = new JsonSerializerOptions();
             jsonOptions.Converters.Add(new ObjectIdJsonConverter());
             jsonOptions.Converters.Add(new JsonStringEnumConverter());
+            jsonOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
         }
 
         private readonly NavigationManager nav;
@@ -125,6 +127,13 @@ namespace TciPM.Blazor.Client
                 this.StatusCode = StatusCode;
                 this.Errors = Errors;
             }
+
+            public HttpResponseException() { }
+            public HttpResponseException(string message) : base(message) { }
+            public HttpResponseException(string message, Exception innerException) : base(message, innerException) { }
+
+            protected HttpResponseException(System.Runtime.Serialization.SerializationInfo serializationInfo, System.Runtime.Serialization.StreamingContext streamingContext) 
+                : base(serializationInfo, streamingContext) { }
         }
     }
 }
