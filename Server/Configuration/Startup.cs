@@ -62,7 +62,7 @@ namespace TciPM.Blazor.Server.Configuration
                 
             mvcBuilder.AddJsonOptions(options =>
             {
-                options.JsonSerializerOptions.Converters.Add(new Shared.ObjectIdJsonConverter());
+                options.JsonSerializerOptions.Converters.Add(new Shared.Utils.ObjectIdJsonConverter());
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
 

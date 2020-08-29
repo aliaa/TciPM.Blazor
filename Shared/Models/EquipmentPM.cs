@@ -1,16 +1,13 @@
-﻿using EasyMongoNet;
-using MongoDB.Bson;
-using Newtonsoft.Json;
+﻿using MongoDB.Bson;
 using System;
 using System.ComponentModel;
 using System.Reflection;
-using TciPM.Blazor.Shared.Util;
+using TciPM.Blazor.Shared.Utils;
 
 namespace TciPM.Blazor.Shared.Models
 {
     public abstract class EquipmentPM
     {
-        [JsonConverter(typeof(ObjectIdJsonConverter))]
         public ObjectId SourceId { get; set; }
 
         public Equipment Source { get; set; }

@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reflection;
 
-namespace TciPM.Blazor.Shared.Util
+namespace TciPM.Blazor.Shared.Utils
 {
     [System.AttributeUsage(AttributeTargets.Property, Inherited = true, AllowMultiple = false)]
     sealed class HealthParameterAttribute : Attribute

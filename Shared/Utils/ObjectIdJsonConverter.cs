@@ -3,7 +3,7 @@ using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace TciPM.Blazor.Shared
+namespace TciPM.Blazor.Shared.Utils
 {
     public class ObjectIdJsonConverter : JsonConverter<ObjectId>
     {

@@ -8,7 +8,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
-using TciPM.Blazor.Shared;
+using TciPM.Blazor.Shared.Utils;
 
 namespace TciPM.Blazor.Client
 {

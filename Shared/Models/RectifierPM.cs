@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.ComponentModel;
 using System.Linq;
-using TciPM.Blazor.Shared.Util;
+using TciPM.Blazor.Shared.Utils;
 
 namespace TciPM.Blazor.Shared.Models
 {

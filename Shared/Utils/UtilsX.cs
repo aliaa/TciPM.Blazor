@@ -6,7 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace TciPM.Blazor.Shared.Util
+namespace TciPM.Blazor.Shared.Utils
 {
     public class UtilsX
     {
