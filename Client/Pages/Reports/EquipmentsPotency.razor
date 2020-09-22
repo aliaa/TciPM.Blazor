@@ -1,4 +1,6 @@
 ﻿@page "/reports/equipmentsPotency"
+@attribute [Authorize(nameof(Permission.ViewReports))]
+
 @inject HttpClientX http
 
 <div>
@@ -37,7 +39,7 @@
                     @if (model.CenterCapacityLessGreater != EquipmentsPotencyReport.LessGreater.All)
                     {
                         <div class="col">
-                            <input type="number" class="form-control" @bind-value="model.CenterCapacityThreshold" min="0" max="1000000"/>
+                            <input type="number" class="form-control" @bind-value="model.CenterCapacityThreshold" min="0" max="1000000" />
                         </div>
                     }
                 </div>

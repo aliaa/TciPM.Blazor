@@ -1,5 +1,6 @@
 ﻿@page "/user/manage"
 @attribute [Authorize(nameof(Permission.ManageUsers))]
+
 @inject HttpClientX http
 @inject IModalService modal
 @inject IToastService toast

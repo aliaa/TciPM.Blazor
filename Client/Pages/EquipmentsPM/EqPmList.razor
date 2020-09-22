@@ -1,4 +1,6 @@
 ﻿@page "/equipmentsPm/list"
+@attribute [Authorize(nameof(Permission.ShowPMs))]
+
 @inject HttpClientX http
 
 @if (cities == null)
@@ -83,7 +85,7 @@ else
     private static ObjectTable<EquipmentsPmListItemVM>.LinkColumn[] linkColumns = new ObjectTable<EquipmentsPmListItemVM>.LinkColumn[]
     {
         new ObjectTable<EquipmentsPmListItemVM>.LinkColumn { Text = "مشاهده", FieldName = nameof(EquipmentsPmListItemVM.Id), Link = @"/equipmentsPm/view/{Id}" }
-        };
+            };
 
     protected override async Task OnInitializedAsync()
     {

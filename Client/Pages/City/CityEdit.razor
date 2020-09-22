@@ -1,4 +1,6 @@
 ﻿@page "/city/edit/{Id}"
+@attribute [Authorize(nameof(Permission.ChangeCities))]
+
 @inject NavigationManager nav
 
 <div class="container">
