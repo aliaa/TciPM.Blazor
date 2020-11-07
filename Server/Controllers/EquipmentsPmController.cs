@@ -178,7 +178,7 @@ namespace TciPM.Blazor.Server.Controllers
                         {
                             if (!columns.ContainsKey(p))
                                 columns.Add(p, col);
-                            string dispName = Utils.DisplayName(p);
+                            string dispName = DisplayUtils.DisplayName(p);
                             sheet.SetValue(1, col++, (i + 1) + "-" + dispName);
                         }
                     }
@@ -230,7 +230,7 @@ namespace TciPM.Blazor.Server.Controllers
                         {
                             if (!columns.ContainsKey(p))
                                 columns.Add(p, col);
-                            string dispName = Utils.DisplayName(p);
+                            string dispName = DisplayUtils.DisplayName(p);
                             sheet.SetValue(1, col++, (i + 1) + "-" + dispName);
                         }
                     }
@@ -275,10 +275,10 @@ namespace TciPM.Blazor.Server.Controllers
                     sheet.SetValue(1, col++, "تاریخ تغییر");
                     for (int i = 0; i < 4; i++)
                     {
-                        sheet.SetValue(1, col++, (i + 1) + "-" + Utils.DisplayName<BatteryPM.BatterySeriesPM>(bs => bs.DistilledWaterAdded));
-                        sheet.SetValue(1, col++, (i + 1) + "-" + Utils.DisplayName<BatteryPM.BatterySeriesPM>(bs => bs.Temperature));
-                        sheet.SetValue(1, col++, (i + 1) + "-" + Utils.DisplayName<BatteryPM.BatterySeriesPM>(bs => bs.OutputCurrent));
-                        sheet.SetValue(1, col++, (i + 1) + "-" + Utils.DisplayName<BatteryPM.BatterySeriesPM>(bs => bs.Description));
+                        sheet.SetValue(1, col++, (i + 1) + "-" + DisplayUtils.DisplayName<BatteryPM.BatterySeriesPM>(bs => bs.DistilledWaterAdded));
+                        sheet.SetValue(1, col++, (i + 1) + "-" + DisplayUtils.DisplayName<BatteryPM.BatterySeriesPM>(bs => bs.Temperature));
+                        sheet.SetValue(1, col++, (i + 1) + "-" + DisplayUtils.DisplayName<BatteryPM.BatterySeriesPM>(bs => bs.OutputCurrent));
+                        sheet.SetValue(1, col++, (i + 1) + "-" + DisplayUtils.DisplayName<BatteryPM.BatterySeriesPM>(bs => bs.Description));
                         for (int j = 1; j <= 25; j++)
                             sheet.SetValue(1, col++, "سری " + (i + 1) + " -ولتاژ سلول " + j);
                         for (int j = 1; j <= 25; j++)
