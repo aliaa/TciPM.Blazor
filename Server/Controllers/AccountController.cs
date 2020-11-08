@@ -15,7 +15,7 @@ using TciPM.Blazor.Server.Models;
 using TciPM.Blazor.Shared;
 using TciPM.Blazor.Shared.Models;
 using TciPM.Blazor.Shared.ViewModels;
-using TciCommon.ServerUtils;
+using TciCommon.Server;
 
 namespace TciPM.Blazor.Server.Controllers
 {

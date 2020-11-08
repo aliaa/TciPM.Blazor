@@ -9,7 +9,7 @@ using System.Security.Claims;
 using TciCommon.Models;
 using TciPM.Blazor.Server.Models;
 using TciPM.Blazor.Shared;
-using TciCommon.ServerUtils;
+using TciCommon.Server;
 
 namespace TciPM.Blazor.Server.Controllers
 {

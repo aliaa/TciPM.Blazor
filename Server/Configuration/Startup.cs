@@ -14,7 +14,7 @@ using System.Net;
 using System.Threading.Tasks;
 using AliaaCommon;
 using TciPM.Blazor.Server.Services;
-using TciCommon.ServerUtils;
+using TciCommon.Server;
 using System.Text.Json.Serialization;
 
 namespace TciPM.Blazor.Server.Configuration

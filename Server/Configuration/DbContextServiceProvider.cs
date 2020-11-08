@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using TciCommon.Models;
-using TciCommon.ServerUtils;
+using TciCommon.Server;
 
 namespace TciPM.Blazor.Server.Configuration
 {

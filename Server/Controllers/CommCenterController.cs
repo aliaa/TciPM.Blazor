@@ -9,7 +9,7 @@ using Omu.ValueInjecter;
 using TciPM.Blazor.Shared;
 using TciPM.Blazor.Shared.Models;
 using TciPM.Blazor.Shared.ViewModels;
-using TciCommon.ServerUtils;
+using TciCommon.Server;
 using TciPM.Blazor.Server.Services;
 
 namespace TciPM.Blazor.Server.Controllers
