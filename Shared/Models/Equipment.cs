@@ -18,7 +18,8 @@ namespace TciPM.Blazor.Shared.Models
         public string Name { get; set; }
 
         [Display(Name="مرکز")]
-        public ObjectId Center { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Center { get; set; }
 
         [DisplayName("تاریخ تولید")]
         public DateTime ProductionDate { get; set; }

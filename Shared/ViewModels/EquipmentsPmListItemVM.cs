@@ -8,7 +8,7 @@ namespace TciPM.Blazor.Shared.ViewModels
 {
     public class EquipmentsPmListItemVM
     {
-        public ObjectId Id { get; set; }
+        public string Id { get; set; }
 
         [Display(Name = "شهر")]
         public string City { get; set; }

@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -6,7 +7,8 @@ namespace TciPM.Blazor.Shared.Models
 {
     public abstract class BaseAuthUser
     {
-        public ObjectId Id { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; }
 
         [Required]
         [Display(Name = "نام کاربری")]
@@ -32,7 +34,9 @@ namespace TciPM.Blazor.Shared.Models
         }
 
         public List<Permission> Permissions { get; set; } = new List<Permission>();
-        public List<ObjectId> Cities { get; set; } = new List<ObjectId>();
+
+        [BsonRepresentation(BsonType.ObjectId)]
+        public List<string> Cities { get; set; } = new List<string>();
         
         [Display(Name = "IP محدود شده")]
         public string RestrictedIP { get; set; }
@@ -40,7 +44,8 @@ namespace TciPM.Blazor.Shared.Models
         [Display(Name = "کارگزار مراکز کم ظرفیت است؟")]
         public bool IsDailyCenterWorker { get; set; }
 
-        public List<ObjectId> AllowedDailyCenters { get; set; } = new List<ObjectId>();
+        [BsonRepresentation(BsonType.ObjectId)]
+        public List<string> AllowedDailyCenters { get; set; } = new List<string>();
         public List<EquipmentType> AllowedEquipmentTypes { get; set; } = new List<EquipmentType>();
         public bool IsSuperAdmin { get; set; }
 

@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using System.ComponentModel.DataAnnotations;
 
 namespace TciPM.Blazor.Shared.ViewModels
@@ -57,6 +58,7 @@ namespace TciPM.Blazor.Shared.ViewModels
         public int CenterImportance { get; set; } = 1;
 
         [Display(Name = "مرکز")]
-        public ObjectId Center { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Center { get; set; }
     }
 }

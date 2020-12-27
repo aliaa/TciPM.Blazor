@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using EasyMongoNet;
 using System.ComponentModel.DataAnnotations;
 using TciPM.Blazor.Shared.Utils;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace TciPM.Blazor.Shared.Models
 {
@@ -25,11 +26,14 @@ namespace TciPM.Blazor.Shared.Models
         }
 
         [Display(Name="مرکز")]
-        public ObjectId CenterId { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string CenterId { get; set; }
         [Display(Name="تاریخ")]
         public DateTime Date { get; set; } = DateTime.Now;
+        
         [Display(Name="کاربر")]
-        public ObjectId UserId { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string UserId { get; set; }
         [Display(Name="از طرف کارگزار")]
         public bool IsFromCenterWorker { get; set; }
 
@@ -43,7 +47,7 @@ namespace TciPM.Blazor.Shared.Models
         [Display(Name="فهرست بازدیدکنندگان از مرکز در آن روز")]
         public List<Visitor> Visitors { get; set; }
 
-        public Dictionary<ObjectId, GoodBad> AirConditionersStatus { get; set; } = new Dictionary<ObjectId, GoodBad>();
+        public Dictionary<string, GoodBad> AirConditionersStatus { get; set; } = new Dictionary<string, GoodBad>();
 
         public class GeneralQuestions
         {

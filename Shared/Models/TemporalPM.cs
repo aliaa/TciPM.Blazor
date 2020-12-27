@@ -1,5 +1,6 @@
 ﻿using EasyMongoNet;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace TciPM.Blazor.Shared.Models
 {
@@ -7,8 +8,11 @@ namespace TciPM.Blazor.Shared.Models
     [CollectionSave(WriteLog = false)]
     public class TemporalPM : MongoEntity
     {
-        public ObjectId User { get; set; }
-        public ObjectId Center { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string User { get; set; }
+
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Center { get; set; }
         public EquipmentsPM PM { get; set; }
     }
 }

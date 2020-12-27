@@ -1,20 +1,20 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <UserSecretsId>e1ee9155-efaf-4737-8fee-f46e5d425ae6</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="EPPlus" Version="5.3.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="3.2.1" />
-    <PackageReference Include="MongoDB.Driver" Version="2.11.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="5.0.1" />
     <PackageReference Include="ValueInjecter" Version="3.2.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\AliaaCommon\AliaaCommon.Models\AliaaCommon.Models.csproj" />
     <ProjectReference Include="..\..\..\AliaaCommon\AliaaCommon.Server\AliaaCommon.Server.csproj" />
+    <ProjectReference Include="..\..\..\AliaaCommon\AliaaCommon\AliaaCommon.csproj" />
     <ProjectReference Include="..\..\..\EasyMongoNet\Definitions\EasyMongoNet.Definitions.csproj" />
     <ProjectReference Include="..\..\..\EasyMongoNet\Driver\EasyMongoNet.Driver.csproj" />
     <ProjectReference Include="..\..\TciCommon\TciCommon.Models\TciCommon.Models.csproj" />

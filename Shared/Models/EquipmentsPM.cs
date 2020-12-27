@@ -1,6 +1,6 @@
 ﻿using EasyMongoNet;
 using MongoDB.Bson;
-using Newtonsoft.Json;
+using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -13,9 +13,9 @@ namespace TciPM.Blazor.Shared.Models
     [CollectionOptions(Name = "CenterPM")]
     public class EquipmentsPM : MongoEntity
     {
-        [JsonConverter(typeof(ObjectIdJsonConverter))]
+        [BsonRepresentation(BsonType.ObjectId)]
         [Display(Name = "مرکز")]
-        public ObjectId CenterId { get; set; }
+        public string CenterId { get; set; }
 
         [Display(Name = "تاریخ ثبت الکترونیکی")]
         public DateTime SubmitDate { get; set; } = DateTime.Now;
@@ -26,9 +26,9 @@ namespace TciPM.Blazor.Shared.Models
         [Display(Name = "تاریخ تغییر")]
         public DateTime EditDate { get; set; } = DateTime.Now;
 
-        [JsonConverter(typeof(ObjectIdJsonConverter))]
+        [BsonRepresentation(BsonType.ObjectId)]
         [Display(Name = "کاربر ثبت کننده")]
-        public ObjectId ReportingUser { get; set; }
+        public string ReportingUser { get; set; }
 
         public List<DieselPM> DieselsPM { get; set; } = new List<DieselPM>();
 

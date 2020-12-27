@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.ComponentModel;
 using System.Reflection;
@@ -8,7 +9,8 @@ namespace TciPM.Blazor.Shared.Models
 {
     public abstract class EquipmentPM
     {
-        public ObjectId SourceId { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string SourceId { get; set; }
 
         public Equipment Source { get; set; }
 

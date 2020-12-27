@@ -150,7 +150,7 @@ else
 
     private async Task UserChanged(ChangeEventArgs e)
     {
-        selectedUser = users.First(u => u.Id == ObjectId.Parse((string)e.Value));
+        selectedUser = users.First(u => u.Id == (string)e.Value);
         selectedPermissions = selectedUser.Permissions.Select(p => p.ToString()).ToList();
         selectedCities = selectedUser.Cities.Select(i => i.ToString()).ToList();
         selectedEquipmentTypes = selectedUser.AllowedEquipmentTypes.Select(t => t.ToString()).ToList();
@@ -187,11 +187,11 @@ else
         foreach (var item in selectedPermissions)
             selectedUser.Permissions.Add(Enum.Parse<Permission>(item));
         foreach (var item in selectedCities)
-            selectedUser.Cities.Add(ObjectId.Parse(item));
+            selectedUser.Cities.Add(item);
         foreach (var item in selectedEquipmentTypes)
             selectedUser.AllowedEquipmentTypes.Add(Enum.Parse<EquipmentType>(item));
         foreach (var item in selectedDailyPmCenters)
-            selectedUser.AllowedDailyCenters.Add(ObjectId.Parse(item));
+            selectedUser.AllowedDailyCenters.Add(item);
 
         try
         {

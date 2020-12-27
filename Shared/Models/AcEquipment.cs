@@ -14,7 +14,8 @@ namespace TciPM.Blazor.Shared.Models
         public string Place { get; set; }
         
         [DisplayName("نوع کابل ورودی")]
-        public ObjectId EntryCable { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string EntryCable { get; set; }
 
         [DisplayName("تعداد کابل")]
         public int EntryCableCount { get; set; }

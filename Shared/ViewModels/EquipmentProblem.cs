@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using System.ComponentModel.DataAnnotations;
 using TciPM.Blazor.Shared.Models;
 
@@ -15,7 +16,8 @@ namespace TciPM.Blazor.Shared.ViewModels
         [Display(Name="نوع دستگاه")]
         public EquipmentType DeviceType { get; set; }
 
-        public ObjectId DeviceId { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string DeviceId { get; set; }
 
         [Display(Name="نام دستگاه")]
         public string DeviceName { get; set; }
