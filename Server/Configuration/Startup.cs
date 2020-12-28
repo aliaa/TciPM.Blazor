@@ -62,13 +62,13 @@ namespace TciPM.Blazor.Server.Configuration
                 
             mvcBuilder.AddJsonOptions(options =>
             {
-                options.JsonSerializerOptions.Converters.Add(new Shared.Utils.ObjectIdJsonConverter());
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
 
+            services.AddSingleton<HtmlEncoder>(HtmlEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Arabic));
+
             services.AddRazorPages();
             
-            services.AddSingleton<HtmlEncoder>(HtmlEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Arabic));
             services.AddMongDbContext(Configuration);
             services.AddSingleton(sp => new DataTableFactory(sp.GetService<IReadOnlyDbContext>()));
             services.AddSingleton(sp => new DataExporter(sp.GetService<ProvinceDBs>(), sp.GetService<DataTableFactory>()));
