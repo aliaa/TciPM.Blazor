@@ -59,14 +59,14 @@ namespace TciPM.Blazor.Server.Controllers
         {
             var filters = new List<FilterDefinition<EquipmentsPM>>();
             var fb = Builders<EquipmentsPM>.Filter;
-            if (ObjectId.TryParse(search.City, out ObjectId cityId))
+            if (search.City != null)
             {
-                if (ObjectId.TryParse(search.Center, out ObjectId centerId))
-                    filters.Add(fb.Eq(pm => pm.CenterId, centerId));
+                if (search.Center != null)
+                    filters.Add(fb.Eq(pm => pm.CenterId, search.Center));
                 else
                 {
                     var centersFilter = new List<FilterDefinition<EquipmentsPM>>();
-                    foreach (var id in db.Find<CommCenterX>(c => c.City == cityId).Project(c => c.Id).ToEnumerable())
+                    foreach (var id in db.Find<CommCenterX>(c => c.City == search.City).Project(c => c.Id).ToEnumerable())
                         centersFilter.Add(fb.Eq(pm => pm.CenterId, id));
                     if (centersFilter.Count == 0)
                         return null;
@@ -86,9 +86,9 @@ namespace TciPM.Blazor.Server.Controllers
                 var toDate = PersianDateUtils.PersianDateTimeToGeorgian(search.ToDate);
                 filters.Add(fb.Lte(pm => pm.SubmitDate, toDate));
             }
-            if (ObjectId.TryParse(search.SubmittedUser, out ObjectId userId))
+            if (search.SubmittedUser != null)
             {
-                filters.Add(fb.Eq(pm => pm.ReportingUser, userId));
+                filters.Add(fb.Eq(pm => pm.ReportingUser, search.SubmittedUser));
             }
 
             var totalFilter = fb.Empty;
@@ -136,13 +136,13 @@ namespace TciPM.Blazor.Server.Controllers
         private string GetFileName(PmSearchVM search)
         {
             string fileName = "";
-            if (ObjectId.TryParse(search.City, out ObjectId cityId))
-                fileName += db.FindById<City>(cityId).Name;
+            if (search.City != null)
+                fileName += db.FindById<City>(search.City).Name;
             else
                 fileName += "همه";
             fileName += "-";
-            if (ObjectId.TryParse(search.Center, out ObjectId centerId))
-                fileName += db.FindById<CommCenterX>(centerId).Name;
+            if (search.Center != null)
+                fileName += db.FindById<CommCenterX>(search.Center).Name;
             else
                 fileName += "همه";
             fileName += ".xlsx";
@@ -156,9 +156,9 @@ namespace TciPM.Blazor.Server.Controllers
                 ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
                 using (ExcelPackage package = new ExcelPackage(memStream))
                 {
-                    Dictionary<ObjectId, City> citiesDic = Cities.ToDictionary(i => i.Id);
-                    Dictionary<ObjectId, CommCenterX> centers = db.All<CommCenterX>().ToDictionary(i => i.Id);
-                    Dictionary<ObjectId, string> usersName = GetUsersName();
+                    var citiesDic = Cities.ToDictionary(i => i.Id);
+                    var centers = db.All<CommCenterX>().ToDictionary(i => i.Id);
+                    var usersName = GetUsersName();
 
                     // diesels sheet
                     ExcelWorksheet sheet = package.Workbook.Worksheets.Add("دیزل ها");
@@ -322,7 +322,7 @@ namespace TciPM.Blazor.Server.Controllers
             }
         }
 
-        private Dictionary<ObjectId, string> GetUsersName()
+        private Dictionary<string, string> GetUsersName()
         {
             return db.Find<AuthUserX>(_ => true)
                 .Project(u => new AuthUserX { Id = u.Id, FirstName = u.FirstName, LastName = u.LastName })

@@ -25,7 +25,7 @@ namespace TciPM.Blazor.Server.Controllers
             return Cities.ToList();
         }
 
-        public ActionResult<City> Item(ObjectId id)
+        public ActionResult<City> Item(string id)
         {
             return db.FindById<City>(id);
         }
@@ -41,7 +41,7 @@ namespace TciPM.Blazor.Server.Controllers
 
         [HttpPost]
         [Authorize(nameof(Permission.ChangeCities))]
-        public IActionResult Edit([FromRoute] ObjectId id, [FromBody] City city)
+        public IActionResult Edit([FromRoute] string id, [FromBody] City city)
         {
             city.Province = Province.Id;
             city.Id = id;
@@ -52,8 +52,8 @@ namespace TciPM.Blazor.Server.Controllers
         class AggResult
         {
             [BsonId]
-            public ObjectId Id { get; set; }
-            public ObjectId City { get; set; }
+            public string Id { get; set; }
+            public string City { get; set; }
             public bool IsOnTime { get; set; }
             public bool IsImportant { get; set; }
         }
@@ -67,7 +67,7 @@ namespace TciPM.Blazor.Server.Controllers
                 .Group("{ _id: \"$Center.City\", Count: {$sum: \"$Count\" } }")
                 .Match("{_id: {$ne: null} }")
                 .ToEnumerable()
-                .ToDictionary(k => k["_id"].AsObjectId, v => v["Count"].AsInt32);
+                .ToDictionary(k => k["_id"].AsString, v => v["Count"].AsInt32);
 
             var dailyPmsCount = db.Aggregate<DailyPM2>()
                 .Group(id => id.CenterId, g => new { Id = g.Key, Count = g.Count() })
@@ -76,7 +76,7 @@ namespace TciPM.Blazor.Server.Controllers
                 .Group("{ _id: \"$Center.City\", Count: {$sum: \"$Count\" } }")
                 .Match("{_id: {$ne: null} }")
                 .ToEnumerable()
-                .ToDictionary(k => k["_id"].AsObjectId, v => v["Count"].AsInt32);
+                .ToDictionary(k => k["_id"].AsString, v => v["Count"].AsInt32);
 
             var onTimeAgg = db.Aggregate<EquipmentsPM>()
                 .Group("{ _id: \"$CenterId\", LastPmDate: {$last: \"$PmDate\"}}")

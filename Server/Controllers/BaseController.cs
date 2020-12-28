@@ -1,6 +1,5 @@
 ﻿using EasyMongoNet;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Bson;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
@@ -33,15 +32,7 @@ namespace TciPM.Blazor.Server.Controllers
 
         protected string Username => HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
 
-        protected ObjectId? UserId
-        {
-            get
-            {
-                if (ObjectId.TryParse(HttpContext.User.Claims.FirstOrDefault(c => c.Type == "Id")?.Value, out ObjectId val))
-                    return val;
-                return null;
-            }
-        }
+        protected string UserId => HttpContext.User.Claims.FirstOrDefault(c => c.Type == "Id")?.Value;
 
         protected IEnumerable<Permission> UserPermissions
         {
@@ -56,13 +47,7 @@ namespace TciPM.Blazor.Server.Controllers
             }
         }
 
-        protected AuthUserX GetUser()
-        {
-            var id = UserId;
-            if (id != null)
-                return db.FindById<AuthUserX>(id.Value);
-            return null;
-        }
+        protected AuthUserX GetUser() => db.FindById<AuthUserX>(UserId);
 
         protected IEnumerable<City> Cities => db.Find<City>(c => c.Province == Province.Id).SortBy(c => c.Name).ToEnumerable();
     }

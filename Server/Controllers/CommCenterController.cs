@@ -26,7 +26,7 @@ namespace TciPM.Blazor.Server.Controllers
             this.dataExporter = dataExporter;
         }
         
-        public ActionResult<List<TextValue>> List(ObjectId cityId)
+        public ActionResult<List<TextValue>> List(string cityId)
         {
             return db.Find<CommCenterX>(cc => cc.City == cityId)
                 .SortByDescending(c => c.ImportanceLevel)
@@ -36,7 +36,7 @@ namespace TciPM.Blazor.Server.Controllers
                 .ToList();
         }
 
-        public ActionResult<CommCenterVM> Item(ObjectId id)
+        public ActionResult<CommCenterVM> Item(string id)
         {
             var center = Mapper.Map<CommCenterVM>(db.FindById<CommCenterX>(id));
             center.Diesels = db.FindGetResults<Diesel>(d => d.Center == id).ToList();
@@ -54,7 +54,7 @@ namespace TciPM.Blazor.Server.Controllers
             return Ok();
         }
 
-        public ActionResult<List<CommCenterWithReports>> ListWithReports(ObjectId cityId)
+        public ActionResult<List<CommCenterWithReports>> ListWithReports(string cityId)
         {
             var list = db.Find<CommCenterX>(cc => cc.City == cityId)
                 .SortByDescending(c => c.ImportanceLevel)
@@ -77,7 +77,7 @@ namespace TciPM.Blazor.Server.Controllers
             return list;
         }
 
-        private int GetDaysLastPM(ObjectId centerId)
+        private int GetDaysLastPM(string centerId)
         {
             DateTime lastPmCreateDate = db.Find<EquipmentsPM>(pm => pm.CenterId == centerId)
                 .Project(pm => pm.PmDate).SortByDescending(pm => pm.PmDate).FirstOrDefault();
@@ -85,7 +85,7 @@ namespace TciPM.Blazor.Server.Controllers
             return (int)Math.Min(999, Math.Round((DateTime.Now - lastPmCreateDate).TotalDays));
         }
 
-        public ActionResult<List<TextValue>> DailyCentersList(ObjectId cityId)
+        public ActionResult<List<TextValue>> DailyCentersList(string cityId)
         {
             return db.Find<CommCenterX>(c => c.DailyPmEnabled && c.City == cityId)
                 .Project(c => new TextValue { Text = c.Name, Value = c.Id.ToString() })

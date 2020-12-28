@@ -45,16 +45,16 @@ namespace TciPM.Blazor.Server.Services
             }
         }
 
-        private void AddSheetForProvinceData<T>(IReadOnlyDbContext db, ExcelPackage pkg, Dictionary<ObjectId, string> centerNames, params string[] excludes) where T : Equipment
+        private void AddSheetForProvinceData<T>(IReadOnlyDbContext db, ExcelPackage pkg, Dictionary<string, string> centerNames, params string[] excludes) where T : Equipment
         {
             var sheet = pkg.Workbook.Worksheets.Add(typeof(T).Name);
             var table = CreateDataTable(db.Find<T>(t => t.Deleted != true).ToEnumerable(), centerNames, excludes);
             sheet.Cells["A1"].LoadFromDataTable(table, true);
         }
 
-        private DataTable CreateDataTable<T>(IEnumerable<T> data, Dictionary<ObjectId, string> centerNames, params string[] excludes) where T : Equipment
+        private DataTable CreateDataTable<T>(IEnumerable<T> data, Dictionary<string, string> centerNames, params string[] excludes) where T : Equipment
         {
-            var refs = new Dictionary<string, Dictionary<ObjectId, string>>();
+            var refs = new Dictionary<string, Dictionary<string, string>>();
             refs.Add(nameof(Equipment.Center), centerNames);
             List<string> excludesList = new List<string>(excludes);
             excludesList.Add(nameof(Equipment.Deleted));
@@ -64,7 +64,7 @@ namespace TciPM.Blazor.Server.Services
                 valuesReferenceReplacement: refs);
         }
 
-        private void AddBatterySheet(IReadOnlyDbContext db, ExcelPackage pkg, Dictionary<ObjectId, string> centerNames)
+        private void AddBatterySheet(IReadOnlyDbContext db, ExcelPackage pkg, Dictionary<string, string> centerNames)
         {
             var sheet = pkg.Workbook.Worksheets.Add("Batteries");
             var data = db.Find<RectifierAndBattery>(rb => rb.Deleted != true)
