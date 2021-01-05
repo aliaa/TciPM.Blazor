@@ -52,7 +52,9 @@ namespace TciPM.Blazor.Server.Controllers
         class AggResult
         {
             [BsonId]
+            [BsonRepresentation(BsonType.ObjectId)]
             public string Id { get; set; }
+            [BsonRepresentation(BsonType.ObjectId)]
             public string City { get; set; }
             public bool IsOnTime { get; set; }
             public bool IsImportant { get; set; }
@@ -67,7 +69,7 @@ namespace TciPM.Blazor.Server.Controllers
                 .Group("{ _id: \"$Center.City\", Count: {$sum: \"$Count\" } }")
                 .Match("{_id: {$ne: null} }")
                 .ToEnumerable()
-                .ToDictionary(k => k["_id"].AsString, v => v["Count"].AsInt32);
+                .ToDictionary(k => k["_id"].AsObjectId.ToString(), v => v["Count"].AsInt32);
 
             var dailyPmsCount = db.Aggregate<DailyPM2>()
                 .Group(id => id.CenterId, g => new { Id = g.Key, Count = g.Count() })
@@ -76,7 +78,7 @@ namespace TciPM.Blazor.Server.Controllers
                 .Group("{ _id: \"$Center.City\", Count: {$sum: \"$Count\" } }")
                 .Match("{_id: {$ne: null} }")
                 .ToEnumerable()
-                .ToDictionary(k => k["_id"].AsString, v => v["Count"].AsInt32);
+                .ToDictionary(k => k["_id"].AsObjectId.ToString(), v => v["Count"].AsInt32);
 
             var onTimeAgg = db.Aggregate<EquipmentsPM>()
                 .Group("{ _id: \"$CenterId\", LastPmDate: {$last: \"$PmDate\"}}")

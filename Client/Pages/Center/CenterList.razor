@@ -63,8 +63,8 @@ else
 
     private static ObjectTable<CommCenterWithReports>.LinkColumn[] linkColumns = new ObjectTable<CommCenterWithReports>.LinkColumn[]
     {
-        new ObjectTable<CommCenterWithReports>.LinkColumn { Text = "جزئیات", FieldName = nameof(CommCenterWithReports.Id), Link = @"/center/item/{Id}" },
-        new ObjectTable<CommCenterWithReports>.LinkColumn { Text = "ویرایش", FieldName = nameof(CommCenterWithReports.Id), Link = @"/center/edit/{Id}" }
+        new ObjectTable<CommCenterWithReports>.LinkColumn { Text = "جزئیات", KeyFieldName = nameof(CommCenterWithReports.Id), Link = @"/center/item/{Id}" },
+        new ObjectTable<CommCenterWithReports>.LinkColumn { Text = "ویرایش", KeyFieldName = nameof(CommCenterWithReports.Id), Link = @"/center/edit/{Id}" }
         };
 
     private Dictionary<string, List<string>> pmDaysColor;

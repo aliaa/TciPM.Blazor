@@ -1,13 +1,12 @@
 ﻿using MongoDB.Bson;
-using System;
-using System.Collections.Generic;
+using MongoDB.Bson.Serialization.Attributes;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
 namespace TciPM.Blazor.Shared.ViewModels
 {
     public class EquipmentsPmListItemVM
     {
+        [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
         [Display(Name = "شهر")]

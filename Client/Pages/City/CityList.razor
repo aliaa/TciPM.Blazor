@@ -25,7 +25,7 @@ else
 
     private static ObjectTable<CentersAggregatedData>.LinkColumn[] linkColumns = new ObjectTable<CentersAggregatedData>.LinkColumn[]
     {
-        new ObjectTable<CentersAggregatedData>.LinkColumn { Text = "ویرایش", FieldName = nameof(CentersAggregatedData.Id), Link = @"/city/edit/{Id}" }
+        new ObjectTable<CentersAggregatedData>.LinkColumn { Text = "ویرایش", KeyFieldName = nameof(CentersAggregatedData.Id), Link = @"/city/edit/{Id}" }
     };
 
     protected override async Task OnInitializedAsync()
