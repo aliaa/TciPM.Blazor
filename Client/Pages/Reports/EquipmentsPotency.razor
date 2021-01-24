@@ -3,13 +3,13 @@
 
 @inject HttpClientX http
 
-<div>
+<div class="container">
     <h3>گزارش توان تجهیزات (Rating)</h3>
     <div class="row mt-5">
         <div class="col-md-3">
             <div class="form-group">
                 <Label For="@(() => model.Type)" />
-                <select class="form-control" @bind="model.Type">
+                <select class="form-select" @bind="model.Type">
                     @foreach (var item in UtilsX.GetEnumValues<EquipmentsPotencyReport.ReportType>())
                     {
                         <option value="@item">@UtilsX.DisplayName(item)</option>
@@ -18,7 +18,7 @@
             </div>
             <div class="form-group">
                 <Label For="@(() => model.SourceType)" />
-                <select class="form-control" @bind="model.SourceType">
+                <select class="form-select" @bind="model.SourceType">
                     @foreach (var item in UtilsX.GetEnumValues<EquipmentsPotencyReport.ReportSource>())
                     {
                         <option value="@item">@UtilsX.DisplayName(item)</option>
@@ -29,7 +29,7 @@
                 <label>ظرفیت مرکز</label>
                 <div class="form-group row">
                     <div class="col">
-                        <select class="form-control" @bind="model.CenterCapacityLessGreater">
+                        <select class="form-select" @bind="model.CenterCapacityLessGreater">
                             @foreach (var item in UtilsX.GetEnumValues<EquipmentsPotencyReport.LessGreater>())
                             {
                                 <option value="@item">@UtilsX.DisplayName(item)</option>

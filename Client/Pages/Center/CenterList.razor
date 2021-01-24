@@ -9,10 +9,10 @@
 }
 else
 {
-    <div class="form-inline justify-content-center">
-        <div class="form-group">
-            <span class="m-2">شهر:</span>
-            <select class="form-control" @onchange="CityChanged">
+    <div class="row row-cols-lg-auto g-3 align-items-center justify-content-center">
+        <div class="form-group col">
+            <label>شهر:</label>
+            <select class="form-select" @onchange="CityChanged">
                 @if (cities != null)
                 {
                     foreach (var c in cities)
@@ -22,9 +22,9 @@ else
                 }
             </select>
         </div>
-        <div>
-            <a class="btn btn-info mr-4" href="/center/new">تعریف مرکز جدید</a>
-            <button class="btn btn-secondary mr-3" @onclick="ExcelOutput">خروجی اکسل تجهیزات مراکز</button>
+        <div class="col">
+            <a class="btn btn-info ms-3" href="/center/new">تعریف مرکز جدید</a>
+            <button class="btn btn-secondary ms-2" @onclick="ExcelOutput">خروجی اکسل تجهیزات مراکز</button>
         </div>
     </div>
 

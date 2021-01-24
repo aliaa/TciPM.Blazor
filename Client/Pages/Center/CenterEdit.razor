@@ -14,99 +14,99 @@
     {
         <h2>ویرایش مرکز</h2>
     }
-    <div class="card mt-5">
-        <div class="card-header">
-            <h5>اطلاعات مرکز</h5>
-        </div>
-        <div class="card-body">
-            <EditForm Model="model" OnValidSubmit="Save">
-                <DataAnnotationsValidator />
-                <div class="row">
-                    <div class="col-lg-3 col-sm-6 form-group">
-                        <Label For="@(() => model.City)" />
-                        <select @bind="model.City" class="form-control">
-                            @foreach (var c in cities)
-                            {
-                                <option value="@c.Value">@c.Text</option>
-                            }
-                        </select>
-                    </div>
-                    <div class="col-lg-3 col-sm-6 form-group">
-                        <Label For="@(() => model.Name)" />
-                        <InputText @bind-Value="model.Name" class="form-control" />
-                    </div>
-                    <div class="col-lg-3 col-sm-6 form-group">
-                        <Label For="@(() => model.ImportanceLevel)" />
-                        <InputNumber @bind-Value="model.ImportanceLevel" class="form-control" />
-                    </div>
-                    <div class="col-lg-3 col-sm-6 form-group">
-                        <Label For="@(() => model.CenterCapacity)" />
-                        <InputNumber @bind-Value="model.CenterCapacity" class="form-control" />
-                    </div>
-                    <div class="col-12 form-group">
-                        <Label For="@(() => model.Address)" />
-                        <InputText @bind-Value="model.Address" class="form-control" />
-                    </div>
-                    <div class="col-lg-3 col-sm-6 form-group">
-                        <Label For="@(() => model.SwitchType)" />
-                        <select @bind="model.SwitchType" class="form-control">
-                            @foreach (CommCenterX.SwitchTypeEnum st in Enum.GetValues(typeof(CommCenterX.SwitchTypeEnum)))
-                            {
-                                <option value="@st">@UtilsX.DisplayName(st)</option>
-                            }
-                        </select>
-                    </div>
-                    <div class="col-lg-3 col-sm-6 form-group">
-                        <Label For="@(() => model.ResponderName)" />
-                        <InputText @bind-Value="model.ResponderName" class="form-control" />
-                    </div>
-                    <div class="col-lg-3 col-sm-6 form-group">
-                        <Label For="@(() => model.SupervisorMobile)" />
-                        <InputText @bind-Value="model.SupervisorMobile" class="form-control" />
-                    </div>
-                    <div class="col-lg-3 col-sm-6 form-group"></div>
-                    <div class="col-lg-3 col-sm-6 form-group"></div>
-                    <div class="col-lg-3 col-sm-6 form-group"></div>
-                </div>
-                <div class="mt-4">
-                    <input type="submit" value="ذخیره" class="btn btn-primary" />
-                </div>
-            </EditForm>
-        </div>
-    </div>
     @if (model != null)
     {
         <div class="card mt-5">
             <div class="card-header">
-                <a class="float-left btn btn-secondary" href="/diesel/new">افزودن</a>
-                <h5>دیزل ژنراتورها</h5>
+                <h5 class="my-1">اطلاعات مرکز</h5>
+            </div>
+            <div class="card-body">
+                <EditForm Model="model" OnValidSubmit="Save">
+                    <DataAnnotationsValidator />
+                    <div class="row">
+                        <div class="col-lg-3 col-sm-6 form-group">
+                            <Label For="@(() => model.City)" />
+                            <select @bind="model.City" class="form-control">
+                                @foreach (var c in cities)
+                                {
+                                    <option value="@c.Value">@c.Text</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 form-group">
+                            <Label For="@(() => model.Name)" />
+                            <InputText @bind-Value="model.Name" class="form-control" />
+                        </div>
+                        <div class="col-lg-3 col-sm-6 form-group">
+                            <Label For="@(() => model.ImportanceLevel)" />
+                            <InputNumber @bind-Value="model.ImportanceLevel" class="form-control" />
+                        </div>
+                        <div class="col-lg-3 col-sm-6 form-group">
+                            <Label For="@(() => model.CenterCapacity)" />
+                            <InputNumber @bind-Value="model.CenterCapacity" class="form-control" />
+                        </div>
+                        <div class="col-12 form-group">
+                            <Label For="@(() => model.Address)" />
+                            <InputText @bind-Value="model.Address" class="form-control" />
+                        </div>
+                        <div class="col-lg-3 col-sm-6 form-group">
+                            <Label For="@(() => model.SwitchType)" />
+                            <select @bind="model.SwitchType" class="form-control">
+                                @foreach (CommCenterX.SwitchTypeEnum st in Enum.GetValues(typeof(CommCenterX.SwitchTypeEnum)))
+                                {
+                                    <option value="@st">@UtilsX.DisplayName(st)</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-lg-3 col-sm-6 form-group">
+                            <Label For="@(() => model.ResponderName)" />
+                            <InputText @bind-Value="model.ResponderName" class="form-control" />
+                        </div>
+                        <div class="col-lg-3 col-sm-6 form-group">
+                            <Label For="@(() => model.SupervisorMobile)" />
+                            <InputText @bind-Value="model.SupervisorMobile" class="form-control" />
+                        </div>
+                        <div class="col-lg-3 col-sm-6 form-group"></div>
+                        <div class="col-lg-3 col-sm-6 form-group"></div>
+                        <div class="col-lg-3 col-sm-6 form-group"></div>
+                    </div>
+                    <div class="mt-4">
+                        <input type="submit" value="ذخیره" class="btn btn-primary" />
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+        <div class="card mt-5">
+            <div class="card-header d-flex align-items-center">
+                <h5 class="mb-0">دیزل ژنراتورها</h5>
+                <a class="ms-auto btn btn-secondary" href="/diesel/new">افزودن</a>
             </div>
             <div class="card-body">
                 <ObjectTable Data="model.Diesels" FieldNames="DieselFields" LinkColumns="DieselColumns" />
             </div>
         </div>
         <div class="card mt-5">
-            <div class="card-header">
-                <a class="float-left btn btn-secondary" href="/rectbatt/new">افزودن</a>
-                <h5>یکسوسازها و باتری ها</h5>
+            <div class="card-header d-flex align-items-center">
+                <h5 class="mb-0">یکسوسازها و باتری ها</h5>
+                <a class="ms-auto btn btn-secondary" href="/rectbatt/new">افزودن</a>
             </div>
             <div class="card-body">
                 <ObjectTable Data="model.RectifierAndBatteries" FieldNames="RectAndBattFields" LinkColumns="RectAndBattColumns" />
             </div>
         </div>
         <div class="card mt-5">
-            <div class="card-header">
-                <a class="float-left btn btn-secondary" href="/ups/new">افزودن</a>
-                <h5>UPS ها</h5>
+            <div class="card-header  d-flex align-items-center">
+                <h5 class="mb-0">UPS ها</h5>
+                <a class="ms-auto btn btn-secondary" href="/ups/new">افزودن</a>
             </div>
             <div class="card-body">
                 <ObjectTable Data="model.Upses" FieldNames="UpsFields" LinkColumns="UpsColumns" />
             </div>
         </div>
         <div class="card mt-5">
-            <div class="card-header">
-                <a class="float-left btn btn-secondary" href="/airconditioner/new">افزودن</a>
-                <h5>کولرها</h5>
+            <div class="card-header d-flex align-items-center">
+                <h5 class="mb-0">کولرها</h5>
+                <a class="ms-auto btn btn-secondary" href="/airconditioner/new">افزودن</a>
             </div>
             <div class="card-body">
                 <ObjectTable Data="model.AirConditioners" FieldNames="AirConditionerFields" LinkColumns="AirConditionerColumns" />
@@ -155,11 +155,11 @@
         nameof(Diesel.AltitudePercentage),
         nameof(Diesel.DieselBatteryCount),
 
-        };
+            };
     private static readonly ObjectTable<Diesel>.LinkColumn[] DieselColumns = new ObjectTable<Diesel>.LinkColumn[]
     {
         new ObjectTable<Diesel>.LinkColumn { Text = "ویرایش", KeyFieldName = nameof(Diesel.Id), Link = @"/diesel/edit/{Id}" }
-        };
+            };
 
     private static readonly string[] RectAndBattFields = new string[]
     {
@@ -170,11 +170,11 @@
         nameof(RectifierAndBattery.SeriesCount),
         nameof(RectifierAndBattery.InstallationDate),
         nameof(RectifierAndBattery.ProductionDate),
-        };
+            };
     private static readonly ObjectTable<RectifierAndBattery>.LinkColumn[] RectAndBattColumns = new ObjectTable<RectifierAndBattery>.LinkColumn[]
     {
         new ObjectTable<RectifierAndBattery>.LinkColumn { Text = "ویرایش", KeyFieldName = nameof(RectifierAndBattery.Id), Link = @"/rectbatt/edit/{Id}" }
-        };
+            };
 
     private static readonly string[] UpsFields = new string[]
     {
@@ -190,11 +190,11 @@
         nameof(Ups.OutputType),
         nameof(Ups.InstallationDate),
         nameof(Ups.ProductionDate),
-        };
+            };
     private static readonly ObjectTable<Ups>.LinkColumn[] UpsColumns = new ObjectTable<Ups>.LinkColumn[]
     {
         new ObjectTable<Ups>.LinkColumn { Text = "ویرایش", KeyFieldName = nameof(Ups.Id), Link = @"/ups/edit/{Id}" }
-        };
+            };
 
     private static readonly string[] AirConditionerFields = new string[]
     {
@@ -204,9 +204,9 @@
         nameof(AirConditioner.Type),
         nameof(AirConditioner.InstallationDate),
         nameof(AirConditioner.ProductionDate),
-        };
+            };
     private static readonly ObjectTable<AirConditioner>.LinkColumn[] AirConditionerColumns = new ObjectTable<AirConditioner>.LinkColumn[]
     {
         new ObjectTable<AirConditioner>.LinkColumn { Text = "ویرایش", KeyFieldName = nameof(AirConditioner.Id), Link = @"/airconditioner/edit/{Id}" }
-        };
+            };
 }

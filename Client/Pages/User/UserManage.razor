@@ -11,10 +11,10 @@
 }
 else
 {
-    <div class="form-inline justify-content-center">
-        <div class="form-group">
-            <span class="m-2">کاربر:</span>
-            <select class="form-control" @onchange="UserChanged">
+    <div class="row row-cols-lg-auto g-3 align-items-center justify-content-center">
+        <div class="form-group col">
+            <label>کاربر:</label>
+            <select class="form-select" @onchange="UserChanged">
                 <option disabled>انتخاب کنید...</option>
                 @foreach (var user in users)
                 {
@@ -22,11 +22,13 @@ else
                 }
             </select>
         </div>
-        <button class="btn btn-info mr-3" @onclick="ShowNewUserModal">ایجاد کاربر جدید</button>
+        <div class="col">
+            <button class="btn btn-info mr-3" @onclick="ShowNewUserModal">ایجاد کاربر جدید</button>
+        </div>
     </div>
     @if (selectedUser != null)
     {
-        <div class="container mt-5">
+        <div class="container mt-4">
             <h3>جزئیات کاربر</h3>
             <EditForm Model="selectedUser" OnValidSubmit="Save">
                 <DataAnnotationsValidator />
@@ -69,7 +71,7 @@ else
                         <div class="form-check">
                             <label>
                                 <InputCheckbox @bind-Value="selectedUser.Disabled" />
-                                    @(UtilsX.DisplayName<ClientAuthUser>(u => u.Disabled))
+                                @(UtilsX.DisplayName<ClientAuthUser>(u => u.Disabled))
                             </label>
                         </div>
                         <div class="form-check">

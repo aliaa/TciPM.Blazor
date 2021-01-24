@@ -16,7 +16,7 @@ else
             <div class="mt-5 row">
                 <div class="col-lg-3 col-sm-6 form-group">
                     <Label For="@(() => model.City)" />
-                    <select @onchange="CityChanged" class="form-control">
+                    <select @onchange="CityChanged" class="form-select">
                         <option value="">همه</option>
                         @foreach (var c in cities)
                         {
@@ -26,7 +26,7 @@ else
                 </div>
                 <div class="col-lg-3 col-sm-6 form-group">
                     <Label For="@(() => model.Center)" />
-                    <select @bind="@model.Center" class="form-control">
+                    <select @bind="@model.Center" class="form-select">
                         <option value="">همه</option>
                         @if (centers != null)
                         {
@@ -47,7 +47,7 @@ else
                 </div>
                 <div class="col-lg-3 col-sm-6 form-group">
                     <Label For="@(() => model.SubmittedUser)" />
-                    <select @bind="model.SubmittedUser" class="form-control">
+                    <select @bind="model.SubmittedUser" class="form-select">
                         <option value="">همه</option>
                         @foreach (var u in users)
                         {

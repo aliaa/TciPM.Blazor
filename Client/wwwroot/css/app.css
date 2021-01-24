@@ -58,11 +58,6 @@ app {
     padding-top: 2rem;
 }
 
-.navbar-brand {
-    margin-right: 0rem !important;
-    margin-left: 1rem !important;
-}
-
 .valid.modified:not([type=checkbox]) {
     outline: 1px solid #26b050;
 }
@@ -94,16 +89,6 @@ app {
     top: 0.5rem;
 }
 
-.dropdown-menu {
-    text-align: right;
-}
-
-.dropdown-toggle::after {
-    margin-left: 0px;
-    margin-right: 0.255em;
-    vertical-align: unset;
-}
-
 .blazored-modal-close {
     margin: -1rem -1rem auto -1rem !important;
 }
@@ -132,4 +117,20 @@ app {
 
 .blazored-toast-warning .blazored-toast-header::before {
     content: 'هشدار';
+}
+
+label.error {
+    color: red;
+}
+
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.accordion-button, .collapsed {
+    background-color: #f2f2f2;
+}
+
+.card-header {
+    background-color: rgba(0,0,0,.1);
 }

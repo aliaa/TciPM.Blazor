@@ -1,15 +1,15 @@
-﻿<nav class="navbar navbar-expand-md navbar-toggleable-lg navbar-dark bg-dark border-bottom">
-    <div class="container-fluid flex-wrap">
+﻿<nav class="navbar navbar-expand-md navbar-dark bg-dark border-bottom">
+    <div class="container-fluid">
         <a class="navbar-brand" href="">سامانه ثبت PM مراکز مخابراتی</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarCollapse"
+                aria-expanded="false" aria-label="باز/بستن منو">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="navbar-collapse collapse d-lg-inline-flex">
-            <ul class="navbar-nav w-100 flex-wrap">
+        <div class="navbar-collapse collapse">
+            <ul class="navbar-nav me-auto">
                 <AuthorizeView Policy="SuperAdmin">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" role="button" data-toggle="dropdown">داشبورد کشوری</a>
+                        <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">داشبورد کشوری</a>
                         <div class="dropdown-menu">
                             <NavLink class="dropdown-item" href="country/usageStatus">گزارش کارکرد همکاران استانها</NavLink>
                             <NavLink class="dropdown-item" href="country/equipmentsStatus">گزارش تجهیزات استانها</NavLink>
@@ -28,7 +28,7 @@
                 </AuthorizeView>
                 <AuthorizeView Policy="@nameof(Permission.ShowPMs)">
                     <li Class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" role="button" data-toggle="dropdown">PM تجهیزات مراکز</a>
+                        <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">PM تجهیزات مراکز</a>
                         <div class="dropdown-menu">
                             <NavLink class="dropdown-item" href="equipmentsPm/list">لیست PM های تجهیزات</NavLink>
                             <AuthorizeView Context="a" Policy="@nameof(Permission.WriteEquipmentPM)">
@@ -39,7 +39,7 @@
                 </AuthorizeView>
                 <AuthorizeView Policy="@nameof(Permission.ShowPMs)">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" role="button" data-toggle="dropdown">PM روزانه مراکز کم ظرفیت</a>
+                        <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">PM روزانه مراکز کم ظرفیت</a>
                         <div class="dropdown-menu">
                             <AuthorizeView Context="a" Policy="@nameof(Permission.WriteDailyPM)">
                                 <NavLink class="dropdown-item" href="dailyPm/new">ثبت PM جدید روزانه</NavLink>
@@ -53,7 +53,7 @@
                 </AuthorizeView>
                 <AuthorizeView Policy="@nameof(Permission.ViewReports)">
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" role="button" data-toggle="dropdown">گزارش ها</a>
+                        <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">گزارش ها</a>
                         <div class="dropdown-menu">
                             <NavLink class="dropdown-item" href="reports/centersHealth">درصد سلامت مراکز</NavLink>
                             <NavLink class="dropdown-item" href="reports/unrepairedEquipments">ایرادات رفع نشده</NavLink>
@@ -70,6 +70,8 @@
                         <NavLink class="nav-link" href="user/manage">مدیریت کاربران</NavLink>
                     </li>
                 </AuthorizeView>
+            </ul>
+            <ul class="navbar-nav">
                 <AuthorizeView>
                     <Authorized>
                         <li class="nav-item mr-auto">
@@ -86,7 +88,3 @@
         </div>
     </div>
 </nav>
-
-@code {
-
-}
