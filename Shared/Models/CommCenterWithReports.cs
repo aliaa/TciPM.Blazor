@@ -18,6 +18,12 @@ namespace TciPM.Blazor.Shared.Models
         [Display(Name = "تعداد UPS")]
         public int UpsCount { get; set; }
 
+        [Display(Name = "تعداد کمپرسور")]
+        public int CompressorCount { get; set; }
+
+        [Display(Name = "تعداد کابل هواخور")]
+        public int GasCableCount { get; set; }
+
         [Display(Name = "تعداد گزارشات روزانه")]
         public int NotesCount { get; set; }
     }

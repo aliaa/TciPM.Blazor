@@ -26,7 +26,7 @@
                 {
                     <div class="form-group">
                         <Label For="@(() => model.Province)" />
-                        <InputSelect @bind-Value="model.Province" class="form-control">
+                        <InputSelect @bind-Value="model.Province" class="form-select">
                             <option selected disabled>انتخاب کنید</option>
                             @foreach (var p in provinces)
                                 {

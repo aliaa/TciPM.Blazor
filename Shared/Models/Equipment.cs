@@ -15,7 +15,8 @@ namespace TciPM.Blazor.Shared.Models
     public abstract class Equipment : MongoEntity
     {
         [Display(Name="نام")]
-        public string Name { get; set; }
+        [Required(ErrorMessage = "نام اجباری است!")]
+        public virtual string Name { get; set; }
 
         [Display(Name="مرکز")]
         [BsonRepresentation(BsonType.ObjectId)]
@@ -28,7 +29,6 @@ namespace TciPM.Blazor.Shared.Models
         public DateTime InstallationDate { get; set; }
 
         public bool Deleted { get; set; } = false;
-
 
         [DisplayName("برند")]
         public string Brand { get; set; }

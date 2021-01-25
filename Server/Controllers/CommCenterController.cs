@@ -43,6 +43,8 @@ namespace TciPM.Blazor.Server.Controllers
             center.RectifierAndBatteries = db.FindGetResults<RectifierAndBattery>(rb => rb.Center == id).ToList();
             center.Upses = db.FindGetResults<Ups>(u => u.Center == id).ToList();
             center.AirConditioners = db.FindGetResults<AirConditioner>(a => a.Center == id).ToList();
+            center.Compressors = db.FindGetResults<Compressor>(c => c.Center == id).ToList();
+            center.GasCables = db.FindGetResults<GasCable>(g => g.Center == id).ToList();
             return center;
         }
 
@@ -72,6 +74,8 @@ namespace TciPM.Blazor.Server.Controllers
                 center.DieselsCount = (int)db.Count<Diesel>(d => d.Center == center.Id && d.Deleted != true);
                 center.BatteryAndRectifiersCount = (int)db.Count<RectifierAndBattery>(rb => rb.Center == center.Id && rb.Deleted != true);
                 center.UpsCount = (int)db.Count<Ups>(u => u.Center == center.Id && u.Deleted != true);
+                center.CompressorCount = (int)db.Count<Compressor>(c => c.Center == center.Id && c.Deleted != true);
+                center.GasCableCount = (int)db.Count<GasCable>(c => c.Center == center.Id && c.Deleted != true);
                 center.NotesCount = (int)db.Count<DailyPM2>(n => n.CenterId == center.Id);
             }
             return list;
