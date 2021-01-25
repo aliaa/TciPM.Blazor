@@ -24,37 +24,37 @@ namespace TciPM.Blazor.Server.Controllers
 
 
         [HttpPost]
-        public IActionResult SaveDiesel(Diesel model)
+        public IActionResult Diesel(Diesel model)
         {
             db.Save(model);
             return Ok();
         }
         [HttpPost]
-        public IActionResult SaveRectBattery(RectifierAndBattery model)
+        public IActionResult RectBattery(RectifierAndBattery model)
         {
             db.Save(model);
             return Ok();
         }
         [HttpPost]
-        public IActionResult SaveAirConditioner(AirConditioner model)
+        public IActionResult AirConditioner(AirConditioner model)
         {
             db.Save(model);
             return Ok();
         }
         [HttpPost]
-        public IActionResult SaveUps(Ups model)
+        public IActionResult Ups(Ups model)
         {
             db.Save(model);
             return Ok();
         }
         [HttpPost]
-        public IActionResult SaveCompressor(Compressor model)
+        public IActionResult Compressor(Compressor model)
         {
             db.Save(model);
             return Ok();
         }
         [HttpPost]
-        public IActionResult SaveGasCable(GasCable model)
+        public IActionResult GasCable(GasCable model)
         {
             model.Index = GasCableNewIndex(model.Center).Value;
             db.Save(model);
