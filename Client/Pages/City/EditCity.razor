@@ -38,7 +38,7 @@
         else
             await http.PostAsJsonAsync("City/Add", city);
         if (modal != null)
-            await modal.Close();
+            await modal.CloseAsync();
         await OnSubmitted.InvokeAsync(null);
     }
 }
