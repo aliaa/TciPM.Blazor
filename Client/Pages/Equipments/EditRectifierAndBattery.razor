@@ -74,8 +74,52 @@
                     <h4 class="mb-0">باتری</h4>
                 </div>
                 <div class="card-body">
-                    <div class="">
-
+                    <div class="row justify-content-sm-center">
+                        <div class="col-lg-2 col-sm-4">
+                            <label class="form-label">تعداد سری باتری</label>
+                            <input type="number" value="@model.Batteries.Count" @onchange="BatteriesCountChange" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        @{ int i = 0; }
+                        @foreach (var battery in model.Batteries)
+                        {
+                            i++;
+                            <div class="card mt-3">
+                                <div class="card-header">
+                                    باتری @i
+                                </div>
+                                <div class="card-body row">
+                                    <div class="col-md-3 form-group">
+                                        <Label For="() => battery.Model" />
+                                        <InputText @bind-Value="battery.Model" class="form-control" />
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <Label For="() => battery.Capacity" />
+                                        <span>(آمپر ساعت)</span>
+                                        <InputNumber @bind-Value="battery.Capacity" class="form-control" />
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <Label For="() => battery.Type" />
+                                        <InputSelect @bind-Value="battery.Type" class="form-select">
+                                            @foreach (var item in DisplayUtils.GetEnumValues<RectifierAndBattery.BatteryTypeEnum>())
+                                                    {
+                                                <option value="@item">@DisplayUtils.DisplayName(item)</option>
+                                                    }
+                                        </InputSelect>
+                                    </div>
+                                    <div class="col-md-3 form-group">
+                                        <Label For="() => battery.CellsCount" />
+                                        <InputSelect @bind-Value="battery.Type" class="form-select">
+                                            @foreach (var item in DisplayUtils.GetEnumValues<RectifierAndBattery.CellCountEnum>())
+                                                    {
+                                                <option value="@item">@DisplayUtils.DisplayName(item)</option>
+                                                    }
+                                        </InputSelect>
+                                    </div>
+                                </div>
+                            </div>
+                        }
                     </div>
                 </div>
             </div>
@@ -118,5 +162,14 @@
 
         toast.ShowSuccess("اطلاعات با موفقیت ذخیره شده.");
         nav.NavigateTo($"/center/edit/{model.Center}");
+    }
+
+    private void BatteriesCountChange(ChangeEventArgs e)
+    {
+        int count = int.Parse((string)e.Value);
+        while (model.Batteries.Count < count)
+            model.Batteries.Add(new RectifierAndBattery.BatterySeries());
+        while (model.Batteries.Count > count)
+            model.Batteries.RemoveAt(model.Batteries.Count - 1);
     }
 }
