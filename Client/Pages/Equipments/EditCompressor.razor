@@ -1,62 +1,43 @@
 ﻿@page "/compressor/new/{CenterId}"
 @page "/compressor/edit/{Id}"
 
-@inject HttpClientX http
-@inject IToastService toast
-@inject NavigationManager nav
-
-<div class="container">
-    @if (Id == null)
-    {
-        <h2>کمپرسور جدید</h2>
-    }
-    else
-    {
-        <h2>ویرایش کمپرسور</h2>
-    }
-    @if (model != null)
-    {
-        <EditForm Model="model" OnValidSubmit="Save">
-            <DataAnnotationsValidator />
-            <div class="row mt-4">
-                <div class="col-lg-3 col-sm-6">
-                    <div class="form-group">
-                        <Label For="() => model.Name" />
-                        <InputText class="form-control" @bind-Value="model.Name" />
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6">
-                    <div class="form-group">
-                        <Label For="() => model.Brand" />
-                        <InputText class="form-control" @bind-Value="model.Brand" />
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6">
-                    <div class="form-group">
-                        <Label For="() => model.Model" />
-                        <InputText class="form-control" @bind-Value="model.Model" />
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6">
-                    <div class="form-group">
-                        <Label For="() => model.ProductionDate" />
-                        <InputDate class="form-control" @bind-Value="model.ProductionDate" />
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6">
-                    <div class="form-group">
-                        <Label For="() => model.InstallationDate" />
-                        <InputDate class="form-control" @bind-Value="model.InstallationDate" />
-                    </div>
+<EditEquipment @ref="editEquipment" Eq="Compressor" CenterId="@CenterId" Id="@Id" TypeDisplayName="کمپرسور گاز کنترل">
+    <div class="row mt-4">
+        @if (Model != null)
+        {
+            <div class="col-lg-3 col-sm-6">
+                <div class="form-group">
+                    <Label For="() => Model.Name" />
+                    <InputText class="form-control" @bind-Value="Model.Name" />
                 </div>
             </div>
-            <ValidationSummary />
-            <div class="form-group">
-                <input type="submit" value="ذخیره" class="btn btn-primary" />
+            <div class="col-lg-3 col-sm-6">
+                <div class="form-group">
+                    <Label For="() => Model.Brand" />
+                    <InputText class="form-control" @bind-Value="Model.Brand" />
+                </div>
             </div>
-        </EditForm>
-    }
-</div>
+            <div class="col-lg-3 col-sm-6">
+                <div class="form-group">
+                    <Label For="() => Model.Model" />
+                    <InputText class="form-control" @bind-Value="Model.Model" />
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+                <div class="form-group">
+                    <Label For="() => Model.ProductionDate" />
+                    <InputDate class="form-control" @bind-Value="Model.ProductionDate" />
+                </div>
+            </div>
+            <div class="col-lg-3 col-sm-6">
+                <div class="form-group">
+                    <Label For="() => Model.InstallationDate" />
+                    <InputDate class="form-control" @bind-Value="Model.InstallationDate" />
+                </div>
+            </div>
+        }
+    </div>
+</EditEquipment>
 
 @code {
     [Parameter]
@@ -65,29 +46,8 @@
     [Parameter]
     public string Id { get; set; }
 
-    private Compressor model;
+    EditEquipment<Compressor> editEquipment;
 
-    protected override async Task OnInitializedAsync()
-    {
-        if (Id != null)
-            model = await http.GetFromJsonAsync<Compressor>($"Equipments/Compressor/{Id}");
-        else
-            model = new Compressor { Center = CenterId };
-    }
+    Compressor Model => editEquipment.Model;
 
-    private async Task Save(EditContext context)
-    {
-        try
-        {
-            await http.PostAsJsonAsync("Equipments/Compressor", model);
-        }
-        catch (Exception ex)
-        {
-            toast.ShowError(ex.Message);
-            return;
-        }
-
-        toast.ShowSuccess("اطلاعات با موفقیت ذخیره شده.");
-        nav.NavigateTo($"/center/edit/{model.Center}");
-    }
 }

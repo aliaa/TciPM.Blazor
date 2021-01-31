@@ -39,12 +39,12 @@ namespace TciPM.Blazor.Server.Controllers
         public ActionResult<CommCenterVM> Item(string id)
         {
             var center = Mapper.Map<CommCenterVM>(db.FindById<CommCenterX>(id));
-            center.Diesels = db.FindGetResults<Diesel>(d => d.Center == id).ToList();
-            center.RectifierAndBatteries = db.FindGetResults<RectifierAndBattery>(rb => rb.Center == id).ToList();
-            center.Upses = db.FindGetResults<Ups>(u => u.Center == id).ToList();
-            center.AirConditioners = db.FindGetResults<AirConditioner>(a => a.Center == id).ToList();
-            center.Compressors = db.FindGetResults<Compressor>(c => c.Center == id).ToList();
-            center.GasCables = db.FindGetResults<GasCable>(g => g.Center == id).ToList();
+            center.Diesels = db.FindGetResults<Diesel>(d => d.Center == id && !d.Deleted).ToList();
+            center.RectifierAndBatteries = db.FindGetResults<RectifierAndBattery>(rb => rb.Center == id && !rb.Deleted).ToList();
+            center.Upses = db.FindGetResults<Ups>(u => u.Center == id && !u.Deleted).ToList();
+            center.AirConditioners = db.FindGetResults<AirConditioner>(a => a.Center == id && !a.Deleted).ToList();
+            center.Compressors = db.FindGetResults<Compressor>(c => c.Center == id && !c.Deleted).ToList();
+            center.GasCables = db.FindGetResults<GasCable>(g => g.Center == id && !g.Deleted).ToList();
             return center;
         }
 

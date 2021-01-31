@@ -1,116 +1,94 @@
 ﻿@page "/diesel/new/{CenterId}"
 @page "/diesel/edit/{Id}"
 
-@inject HttpClientX http
-@inject IToastService toast
-@inject NavigationManager nav
-
-<div class="container">
-    @if (Id == null)
-    {
-        <h2>دیزل ژنراتور جدید</h2>
-    }
-    else
-    {
-        <h2>ویرایش دیزل ژنراتور</h2>
-    }
-    @if (model != null)
-    {
-        <EditForm Model="model" OnValidSubmit="Save">
-            <DataAnnotationsValidator />
-            <div class="row mt-4">
-                <div class="col-lg-3 col-sm-6">
-                    <div class="form-group">
-                        <Label For="() => model.Name" />
-                        <InputText class="form-control" @bind-Value="model.Name" />
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6">
-                    <div class="form-group">
-                        <Label For="() => model.Brand" />
-                        <InputText class="form-control" @bind-Value="model.Brand" />
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6">
-                    <div class="form-group">
-                        <Label For="() => model.Model" />
-                        <InputText class="form-control" @bind-Value="model.Model" />
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6">
-                    <div class="form-group">
-                        <Label For="() => model.ProductionDate" />
-                        <InputDate class="form-control" @bind-Value="model.ProductionDate" />
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6">
-                    <div class="form-group">
-                        <Label For="() => model.InstallationDate" />
-                        <InputDate class="form-control" @bind-Value="model.InstallationDate" />
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6">
-                    <div class="form-group">
-                        <Label For="() => model.Power" />
-                        <InputNumber class="form-control" @bind-Value="model.Power" />
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6">
-                    <div class="form-group">
-                        <Label For="() => model.EfficiencyPercentage" />
-                        <InputNumber class="form-control" @bind-Value="model.EfficiencyPercentage" />
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6">
-                    <div class="form-group">
-                        <Label For="() => model.AltitudePercentage" />
-                        <InputNumber class="form-control" @bind-Value="model.AltitudePercentage" />
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6">
-                    <div class="form-group">
-                        <Label For="() => model.InitiationPercentage" />
-                        <InputNumber class="form-control" @bind-Value="model.InitiationPercentage" />
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6">
-                    <div class="form-group">
-                        <Label For="() => model.StorageCapacity" />
-                        <InputNumber class="form-control" @bind-Value="model.StorageCapacity" />
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6">
-                    <div class="form-group">
-                        <Label For="() => model.MainStorageCapacity" />
-                        <InputNumber class="form-control" @bind-Value="model.MainStorageCapacity" />
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6">
-                    <div class="form-group">
-                        <Label For="() => model.OilCapacity" />
-                        <InputNumber class="form-control" @bind-Value="model.OilCapacity" />
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6">
-                    <div class="form-group">
-                        <Label For="() => model.RadiatorCapacity" />
-                        <InputNumber class="form-control" @bind-Value="model.RadiatorCapacity" />
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6">
-                    <div class="form-group">
-                        <Label For="() => model.DieselBatteryCount" />
-                        <InputNumber class="form-control" @bind-Value="model.DieselBatteryCount" />
-                    </div>
-                </div>
-            </div>
-            <ValidationSummary />
+<EditEquipment @ref="editEquipment" Eq="Diesel" CenterId="@CenterId" Id="@Id" TypeDisplayName="دیزل ژنراتور">
+    <div class="row mt-4">
+        <div class="col-lg-3 col-sm-6">
             <div class="form-group">
-                <input type="submit" value="ذخیره" class="btn btn-primary" />
+                <Label For="() => model.Name" />
+                <InputText class="form-control" @bind-Value="model.Name" />
             </div>
-        </EditForm>
-    }
-</div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <div class="form-group">
+                <Label For="() => model.Brand" />
+                <InputText class="form-control" @bind-Value="model.Brand" />
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <div class="form-group">
+                <Label For="() => model.Model" />
+                <InputText class="form-control" @bind-Value="model.Model" />
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <div class="form-group">
+                <Label For="() => model.ProductionDate" />
+                <InputDate class="form-control" @bind-Value="model.ProductionDate" />
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <div class="form-group">
+                <Label For="() => model.InstallationDate" />
+                <InputDate class="form-control" @bind-Value="model.InstallationDate" />
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <div class="form-group">
+                <Label For="() => model.Power" />
+                <InputNumber class="form-control" @bind-Value="model.Power" />
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <div class="form-group">
+                <Label For="() => model.EfficiencyPercentage" />
+                <InputNumber class="form-control" @bind-Value="model.EfficiencyPercentage" />
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <div class="form-group">
+                <Label For="() => model.AltitudePercentage" />
+                <InputNumber class="form-control" @bind-Value="model.AltitudePercentage" />
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <div class="form-group">
+                <Label For="() => model.InitiationPercentage" />
+                <InputNumber class="form-control" @bind-Value="model.InitiationPercentage" />
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <div class="form-group">
+                <Label For="() => model.StorageCapacity" />
+                <InputNumber class="form-control" @bind-Value="model.StorageCapacity" />
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <div class="form-group">
+                <Label For="() => model.MainStorageCapacity" />
+                <InputNumber class="form-control" @bind-Value="model.MainStorageCapacity" />
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <div class="form-group">
+                <Label For="() => model.OilCapacity" />
+                <InputNumber class="form-control" @bind-Value="model.OilCapacity" />
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <div class="form-group">
+                <Label For="() => model.RadiatorCapacity" />
+                <InputNumber class="form-control" @bind-Value="model.RadiatorCapacity" />
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <div class="form-group">
+                <Label For="() => model.DieselBatteryCount" />
+                <InputNumber class="form-control" @bind-Value="model.DieselBatteryCount" />
+            </div>
+        </div>
+    </div>
+</EditEquipment>
 
 @code {
     [Parameter]
@@ -119,29 +97,7 @@
     [Parameter]
     public string Id { get; set; }
 
-    private Diesel model;
+    EditEquipment<Diesel> editEquipment;
 
-    protected override async Task OnInitializedAsync()
-    {
-        if (Id != null)
-            model = await http.GetFromJsonAsync<Diesel>($"Equipments/Diesel/{Id}");
-        else
-            model = new Diesel { Center = CenterId };
-    }
-
-    private async Task Save(EditContext context)
-    {
-        try
-        {
-            await http.PostAsJsonAsync("Equipments/Diesel", model);
-        }
-        catch (Exception ex)
-        {
-            toast.ShowError(ex.Message);
-            return;
-        }
-
-        toast.ShowSuccess("اطلاعات با موفقیت ذخیره شده.");
-        nav.NavigateTo($"/center/edit/{model.Center}");
-    }
+    Diesel model => editEquipment.Model;
 }

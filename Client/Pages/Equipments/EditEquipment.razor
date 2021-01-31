@@ -1,0 +1,108 @@
+﻿@typeparam Eq
+
+@inject HttpClientX http
+@inject IToastService toast
+@inject NavigationManager nav
+
+<div class="container">
+    @if (center != null)
+    {
+        <h2><a href="/center/edit/@center.Id">مرکز @center.Name</a></h2>
+    }
+    <div class="d-flex">
+        @if (Id == null)
+        {
+            <h4 class="me-auto">@TypeDisplayName جدید</h4>
+        }
+        else
+        {
+            <h4 class="me-auto">ویرایش @TypeDisplayName</h4>
+        }
+        <div>
+            @if (Id != null)
+            {
+                <button class="btn btn-danger ms-3" @onclick="Delete">حذف</button>
+            }
+        </div>
+    </div>
+    <div class="mt-5">
+        @if (Model != null)
+        {
+            <EditForm Model="Model" OnValidSubmit="Save">
+                <DataAnnotationsValidator />
+                @ChildContent
+                <ValidationSummary />
+                <div class="mt-4">
+                    <input type="submit" value="ذخیره" class="btn btn-primary" />
+                </div>
+            </EditForm>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string CenterId { get; set; }
+
+    [Parameter]
+    public string Id { get; set; }
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public string TypeDisplayName { get; set; }
+
+    [Parameter]
+    public EventCallback AfterInitialized { get; set; }
+
+    public Eq Model { get; set; }
+
+    protected CommCenterVM center;
+
+    protected string TypeName => typeof(Eq).Name;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id != null)
+            Model = await http.GetFromJsonAsync<Eq>($"Equipments/{TypeName}/{Id}");
+        else
+        {
+            Model = (Eq)Activator.CreateInstance(typeof(Eq));
+            Model.Center = CenterId;
+        }
+        center = await http.GetFromJsonAsync<CommCenterVM>($"CommCenter/Item/{Model.Center}");
+        await AfterInitialized.InvokeAsync();
+    }
+
+    private async Task Save(EditContext context)
+    {
+        try
+        {
+            await http.PostAsJsonAsync($"Equipments/{TypeName}", Model);
+        }
+        catch (Exception ex)
+        {
+            toast.ShowError(ex.Message);
+            return;
+        }
+
+        toast.ShowSuccess("اطلاعات با موفقیت ذخیره شد.");
+        nav.NavigateTo($"/center/edit/{Model.Center}");
+    }
+
+    private async Task Delete()
+    {
+        try
+        {
+            await http.DeleteAsync($"Equipments/Delete{TypeName}/{Id}");
+        }
+        catch (Exception ex)
+        {
+            toast.ShowError(ex.Message);
+            return;
+        }
+        toast.ShowSuccess(TypeDisplayName + " با موفقیت حذف شد.");
+        nav.NavigateTo($"/center/edit/{Model.Center}");
+    }
+}

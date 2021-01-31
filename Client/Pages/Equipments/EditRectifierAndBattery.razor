@@ -5,131 +5,115 @@
 @inject IToastService toast
 @inject NavigationManager nav
 
-<div class="container">
-    @if (Id == null)
-    {
-        <h2>یکسوساز و باتری جدید</h2>
-    }
-    else
-    {
-        <h2>ویرایش یکسوساز و باتری</h2>
-    }
-    @if (model != null)
-    {
-        <EditForm Model="model" OnValidSubmit="Save">
-            <DataAnnotationsValidator />
-            <div class="card mt-5">
-                <div class="card-header">
-                    <h4 class="mb-0">یکسوساز</h4>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="form-group">
-                                <Label For="() => model.Name" />
-                                <InputText class="form-control" @bind-Value="model.Name" />
-                            </div>
+<EditEquipment Eq="RectifierAndBattery" @ref="editEquipment" CenterId="@CenterId" Id="@Id" TypeDisplayName="یکسوساز و باتری ها">
+    <div>
+        <div class="card mt-5">
+            <div class="card-header">
+                <h4 class="mb-0">یکسوساز</h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="form-group">
+                            <Label For="() => model.Name" />
+                            <InputText class="form-control" @bind-Value="model.Name" />
                         </div>
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="form-group">
-                                <Label For="() => model.Brand" />
-                                <InputText class="form-control" @bind-Value="model.Brand" />
-                            </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="form-group">
+                            <Label For="() => model.Brand" />
+                            <InputText class="form-control" @bind-Value="model.Brand" />
                         </div>
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="form-group">
-                                <Label For="() => model.RectifierModel" />
-                                <InputText class="form-control" @bind-Value="model.Model" />
-                            </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="form-group">
+                            <Label For="() => model.RectifierModel" />
+                            <InputText class="form-control" @bind-Value="model.Model" />
                         </div>
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="form-group">
-                                <Label For="() => model.ProductionDate" />
-                                <InputDate class="form-control" @bind-Value="model.ProductionDate" />
-                            </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="form-group">
+                            <Label For="() => model.ProductionDate" />
+                            <InputDate class="form-control" @bind-Value="model.ProductionDate" />
                         </div>
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="form-group">
-                                <Label For="() => model.InstallationDate" />
-                                <InputDate class="form-control" @bind-Value="model.InstallationDate" />
-                            </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="form-group">
+                            <Label For="() => model.InstallationDate" />
+                            <InputDate class="form-control" @bind-Value="model.InstallationDate" />
                         </div>
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="form-group">
-                                <Label For="() => model.EachRectifierCapacity" />
-                                <InputNumber class="form-control" @bind-Value="model.EachRectifierCapacity" />
-                            </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="form-group">
+                            <Label For="() => model.EachRectifierCapacity" />
+                            <InputNumber class="form-control" @bind-Value="model.EachRectifierCapacity" />
                         </div>
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="form-group">
-                                <Label For="() => model.RectifierCount" />
-                                <InputNumber class="form-control" @bind-Value="model.RectifierCount" />
-                            </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="form-group">
+                            <Label For="() => model.RectifierCount" />
+                            <InputNumber class="form-control" @bind-Value="model.RectifierCount" />
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="card mt-5">
-                <div class="card-header">
-                    <h4 class="mb-0">باتری</h4>
-                </div>
-                <div class="card-body">
-                    <div class="row justify-content-sm-center">
-                        <div class="col-lg-2 col-sm-4">
-                            <label class="form-label">تعداد سری باتری</label>
-                            <input type="number" value="@model.Batteries.Count" @onchange="BatteriesCountChange" class="form-control" />
-                        </div>
+        </div>
+        <div class="card mt-5">
+            <div class="card-header">
+                <h4 class="mb-0">باتری</h4>
+            </div>
+            <div class="card-body">
+                <div class="row justify-content-sm-center">
+                    <div class="col-lg-2 col-sm-4">
+                        <label class="form-label">تعداد سری باتری</label>
+                        <input type="number" value="@model.Batteries.Count" @onchange="BatteriesCountChange" class="form-control" />
                     </div>
-                    <div class="mt-4">
-                        @{ int i = 0; }
-                        @foreach (var battery in model.Batteries)
-                        {
-                            i++;
-                            <div class="card mt-3">
-                                <div class="card-header">
-                                    باتری @i
+                </div>
+                <div class="mt-4">
+                    @{ int i = 0; }
+                    @foreach (var battery in model.Batteries)
+                    {
+                        i++;
+                        <div class="card mt-3">
+                            <div class="card-header">
+                                باتری @i
+                            </div>
+                            <div class="card-body row">
+                                <div class="col-md-3 form-group">
+                                    <Label For="() => battery.Model" />
+                                    <InputText @bind-Value="battery.Model" class="form-control" />
                                 </div>
-                                <div class="card-body row">
-                                    <div class="col-md-3 form-group">
-                                        <Label For="() => battery.Model" />
-                                        <InputText @bind-Value="battery.Model" class="form-control" />
-                                    </div>
-                                    <div class="col-md-3 form-group">
-                                        <Label For="() => battery.Capacity" />
-                                        <span>(آمپر ساعت)</span>
-                                        <InputNumber @bind-Value="battery.Capacity" class="form-control" />
-                                    </div>
-                                    <div class="col-md-3 form-group">
-                                        <Label For="() => battery.Type" />
-                                        <InputSelect @bind-Value="battery.Type" class="form-select">
-                                            @foreach (var item in DisplayUtils.GetEnumValues<RectifierAndBattery.BatteryTypeEnum>())
-                                                    {
-                                                <option value="@item">@DisplayUtils.DisplayName(item)</option>
-                                                    }
-                                        </InputSelect>
-                                    </div>
-                                    <div class="col-md-3 form-group">
-                                        <Label For="() => battery.CellsCount" />
-                                        <InputSelect @bind-Value="battery.Type" class="form-select">
-                                            @foreach (var item in DisplayUtils.GetEnumValues<RectifierAndBattery.CellCountEnum>())
-                                                    {
-                                                <option value="@item">@DisplayUtils.DisplayName(item)</option>
-                                                    }
-                                        </InputSelect>
-                                    </div>
+                                <div class="col-md-3 form-group">
+                                    <Label For="() => battery.Capacity" />
+                                    <span>(آمپر ساعت)</span>
+                                    <InputNumber @bind-Value="battery.Capacity" class="form-control" />
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <Label For="() => battery.Type" />
+                                    <InputSelect @bind-Value="battery.Type" class="form-select">
+                                        @foreach (var item in DisplayUtils.GetEnumValues<RectifierAndBattery.BatteryTypeEnum>())
+                                            {
+                                            <option value="@item">@DisplayUtils.DisplayName(item)</option>
+                                            }
+                                    </InputSelect>
+                                </div>
+                                <div class="col-md-3 form-group">
+                                    <Label For="() => battery.CellsCount" />
+                                    <InputSelect @bind-Value="battery.CellsCount" class="form-select">
+                                        @foreach (var item in DisplayUtils.GetEnumValues<RectifierAndBattery.CellCountEnum>())
+                                            {
+                                            <option value="@item">@DisplayUtils.DisplayName(item)</option>
+                                            }
+                                    </InputSelect>
                                 </div>
                             </div>
-                        }
-                    </div>
+                        </div>
+                    }
                 </div>
             </div>
-            <ValidationSummary />
-            <div class="mt-5">
-                <input type="submit" value="ذخیره" class="btn btn-primary" />
-            </div>
-        </EditForm>
-    }
-</div>
+        </div>
+    </div>
+</EditEquipment>
 
 @code {
     [Parameter]
@@ -138,31 +122,9 @@
     [Parameter]
     public string Id { get; set; }
 
-    private RectifierAndBattery model;
+    EditEquipment<RectifierAndBattery> editEquipment;
 
-    protected override async Task OnInitializedAsync()
-    {
-        if (Id != null)
-            model = await http.GetFromJsonAsync<RectifierAndBattery>($"Equipments/RectBattery/{Id}");
-        else
-            model = new RectifierAndBattery { Center = CenterId };
-    }
-
-    private async Task Save(EditContext context)
-    {
-        try
-        {
-            await http.PostAsJsonAsync("Equipments/RectBattery", model);
-        }
-        catch (Exception ex)
-        {
-            toast.ShowError(ex.Message);
-            return;
-        }
-
-        toast.ShowSuccess("اطلاعات با موفقیت ذخیره شده.");
-        nav.NavigateTo($"/center/edit/{model.Center}");
-    }
+    RectifierAndBattery model => editEquipment.Model;
 
     private void BatteriesCountChange(ChangeEventArgs e)
     {

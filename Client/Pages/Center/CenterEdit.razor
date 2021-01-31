@@ -26,7 +26,7 @@
                     <div class="row">
                         <div class="col-lg-3 col-sm-6 form-group">
                             <Label For="@(() => model.City)" />
-                            <select @bind="model.City" class="form-control">
+                            <select @bind="model.City" class="form-select">
                                 @foreach (var c in cities)
                                 {
                                     <option value="@c.Value">@c.Text</option>
@@ -51,7 +51,7 @@
                         </div>
                         <div class="col-lg-3 col-sm-6 form-group">
                             <Label For="@(() => model.SwitchType)" />
-                            <select @bind="model.SwitchType" class="form-control">
+                            <select @bind="model.SwitchType" class="form-select">
                                 @foreach (CommCenterX.SwitchTypeEnum st in Enum.GetValues(typeof(CommCenterX.SwitchTypeEnum)))
                                 {
                                     <option value="@st">@UtilsX.DisplayName(st)</option>

@@ -2,85 +2,68 @@
 @page "/gasCable/edit/{Id}"
 
 @inject HttpClientX http
-@inject IToastService toast
-@inject NavigationManager nav
 
-<div class="container">
-    @if (Id == null)
-    {
-        <h2>کابل هواخور جدید</h2>
-    }
-    else
-    {
-        <h2>ویرایش کابل هواخور</h2>
-    }
-    @if (model != null)
-    {
-        <h4>نام: @model.Name</h4>
-        <EditForm Model="model" OnValidSubmit="Save">
-            <DataAnnotationsValidator />
-            <div class="row mt-5">
-                <div class="col-lg-2 col-sm-4">
-                    <div class="form-group">
-                        <Label For="() => model.ConnectedCompressor" />
-                        <select class="form-select" @bind="model.ConnectedCompressor">
-                            @foreach (var item in compressors)
-                            {
-                                <option value="@item.Value">@item.Text</option>
-                            }
-                        </select>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-sm-4">
-                    <div class="form-group">
-                        <Label For="() => model.Index" />
-                        <label class="form-control">@model.Index</label>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-sm-4">
-                    <div class="form-group">
-                        <Label For="() => model.WirePairsCount" />
-                        <InputNumber class="form-control" @bind-Value="model.WirePairsCount" />
-                    </div>
-                </div>
-                <div class="col-lg-2 col-sm-4">
-                    <div class="form-group">
-                        <Label For="() => model.WiresDiameter" />
-                        <InputNumber class="form-control" @bind-Value="model.WiresDiameter" />
-                    </div>
-                </div>
-                <div class="col-lg-2 col-sm-4">
-                    <div class="form-group">
-                        <Label For="() => model.Length" />
-                        <InputNumber class="form-control" @bind-Value="model.Length" />
-                    </div>
-                </div>
-                <div class="col-lg-4 col-sm-12">
-                    <div class="form-group">
-                        <Label For="() => model.DestinationAddress" />
-                        <InputText class="form-control" @bind-Value="model.DestinationAddress" />
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6">
-                    <div class="form-group">
-                        <Label For="() => model.ProductionDate" />
-                        <InputDate class="form-control" @bind-Value="model.ProductionDate" />
-                    </div>
-                </div>
-                <div class="col-lg-3 col-sm-6">
-                    <div class="form-group">
-                        <Label For="() => model.InstallationDate" />
-                        <InputDate class="form-control" @bind-Value="model.InstallationDate" />
-                    </div>
+
+<EditEquipment @ref="editEquipment" Eq="GasCable" CenterId="@CenterId" Id="@Id" TypeDisplayName="کابل هواخور" AfterInitialized="OnAfterInit">
+    <div class="row mt-4">
+        @if (compressors != null)
+        {
+            <div class="col-lg-2 col-sm-4">
+                <div class="form-group">
+                    <Label For="() => model.ConnectedCompressor" />
+                    <select class="form-select" @bind="model.ConnectedCompressor">
+                        @foreach (var item in compressors)
+                        {
+                            <option value="@item.Value">@item.Text</option>
+                        }
+                    </select>
                 </div>
             </div>
-            <ValidationSummary />
+        }
+        <div class="col-lg-2 col-sm-4">
             <div class="form-group">
-                <input type="submit" value="ذخیره" class="btn btn-primary" />
+                <Label For="() => model.Index" />
+                <label class="form-control">@model.Index</label>
             </div>
-        </EditForm>
-    }
-</div>
+        </div>
+        <div class="col-lg-2 col-sm-4">
+            <div class="form-group">
+                <Label For="() => model.WirePairsCount" />
+                <InputNumber class="form-control" @bind-Value="model.WirePairsCount" />
+            </div>
+        </div>
+        <div class="col-lg-2 col-sm-4">
+            <div class="form-group">
+                <Label For="() => model.WiresDiameter" />
+                <InputNumber class="form-control" @bind-Value="model.WiresDiameter" />
+            </div>
+        </div>
+        <div class="col-lg-2 col-sm-4">
+            <div class="form-group">
+                <Label For="() => model.Length" />
+                <InputNumber class="form-control" @bind-Value="model.Length" />
+            </div>
+        </div>
+        <div class="col-lg-4 col-sm-12">
+            <div class="form-group">
+                <Label For="() => model.DestinationAddress" />
+                <InputText class="form-control" @bind-Value="model.DestinationAddress" />
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <div class="form-group">
+                <Label For="() => model.ProductionDate" />
+                <InputDate class="form-control" @bind-Value="model.ProductionDate" />
+            </div>
+        </div>
+        <div class="col-lg-3 col-sm-6">
+            <div class="form-group">
+                <Label For="() => model.InstallationDate" />
+                <InputDate class="form-control" @bind-Value="model.InstallationDate" />
+            </div>
+        </div>
+    </div>
+</EditEquipment>
 
 @code {
     [Parameter]
@@ -89,39 +72,23 @@
     [Parameter]
     public string Id { get; set; }
 
-    private GasCable model;
-    private List<TextValue> compressors;
+    EditEquipment<GasCable> editEquipment;
 
-    protected override async Task OnInitializedAsync()
+    GasCable model => editEquipment.Model;
+    List<TextValue> compressors;
+
+    protected async Task OnAfterInit()
     {
         if (Id != null)
         {
-            model = await http.GetFromJsonAsync<GasCable>($"Equipments/GasCable/{Id}");
             compressors = await http.GetFromJsonAsync<List<TextValue>>($"Equipments/Compressors?centerId={model.Center}");
         }
         else
         {
             compressors = await http.GetFromJsonAsync<List<TextValue>>($"Equipments/Compressors?centerId={CenterId}");
-            int index = await http.GetFromJsonAsync<int>($"Equipments/GasCableNewIndex?centerId={CenterId}");
-            model = new GasCable { Center = CenterId, Index = index };
+            model.Index = await http.GetFromJsonAsync<int>($"Equipments/GasCableNewIndex?centerId={CenterId}");
             if (compressors != null && compressors.Count > 0)
                 model.ConnectedCompressor = compressors[0].Value;
         }
-    }
-
-    private async Task Save(EditContext context)
-    {
-        try
-        {
-            await http.PostAsJsonAsync("Equipments/GasCable", model);
-        }
-        catch (Exception ex)
-        {
-            toast.ShowError(ex.Message);
-            return;
-        }
-
-        toast.ShowSuccess("اطلاعات با موفقیت ذخیره شده.");
-        nav.NavigateTo($"/center/edit/{model.Center}");
     }
 }
