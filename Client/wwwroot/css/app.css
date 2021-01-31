@@ -127,7 +127,7 @@ label.error {
     margin-bottom: 1.25rem;
 }
 
-.accordion-button, .collapsed {
+.accordion-button .collapsed {
     background-color: #f2f2f2;
 }
 
