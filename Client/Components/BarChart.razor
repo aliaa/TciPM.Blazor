@@ -1,16 +1,14 @@
-﻿@using ChartJs.Blazor.ChartJS.BarChart
-@using ChartJs.Blazor.ChartJS.Common.Axes
-@using ChartJs.Blazor.ChartJS.Common.Axes.Ticks
-@using ChartJs.Blazor.ChartJS.Common.Enums
-@using ChartJs.Blazor.ChartJS.Common.Properties
-@using ChartJs.Blazor.ChartJS.Common.Wrappers
-@using ChartJs.Blazor.Charts
-@using ChartJs.Blazor.ChartJS.Common.Handlers.OnClickHandler
-@using ChartJs.Blazor.ChartJS.Common.Handlers 
+﻿@using ChartJs.Blazor.BarChart
+@using ChartJs.Blazor.Common.Axes
+@using ChartJs.Blazor.Common.Axes.Ticks
+@using ChartJs.Blazor
+@using ChartJs.Blazor.Interop
+@using ChartJs.Blazor.Common
+@using ChartJs.Blazor.Common.Handlers
 
 @inject NavigationManager nav
 
-<ChartJsBarChart @ref="chart" Config="@config" Width="800" Height="@height" />
+<Chart @ref="chart" Config="@config" Width="800" Height="@height" />
 
 @code {
     [Parameter]
@@ -26,21 +24,21 @@
     }
 
     private BarConfig config;
-    private ChartJsBarChart chart;
-    private BarDataset<DoubleWrapper> dataset;
+    private Chart chart;
+    private BarDataset<double> dataset;
 
     protected override void OnInitialized()
     {
-        config = new BarConfig(ChartType.HorizontalBar)
+        config = new BarConfig(horizontal: true)
         {
             Options = new BarOptions
             {
                 Responsive = true,
-                OnClick = new DotNetInstanceClickHandler(OnClickHandler),
+                OnClick = new DelegateHandler<ChartMouseEvent>(OnClickHandler),
                 Scales = new BarScales
                 {
                     XAxes = new List<CartesianAxis>
-                {
+                    {
                         new LinearCartesianAxis
                         {
                             Ticks = new LinearCartesianTicks
@@ -63,13 +61,13 @@
             }
         };
 
-        config.Data.Labels.AddRange(Data.Select(i => i.Text));
+        Data.ForEach(d => config.Data.Labels.Add(d.Text));
 
-        dataset = new BarDataset<DoubleWrapper>(ChartType.HorizontalBar)
+        dataset = new BarDataset<double>(horizontal: true)
         {
             BackgroundColor = Data.Select(i => i.Color).ToArray()
         };
-        dataset.AddRange(Data.Select(i => i.Value).Wrap());
+        dataset.AddRange(Data.Select(i => i.Value));
         config.Data.Datasets.Add(dataset);
 
         height = Math.Max(400, Data.Count * 15);
