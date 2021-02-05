@@ -67,11 +67,11 @@ namespace TciPM.Blazor.Server.Configuration
 
             services.AddSingleton<HtmlEncoder>(HtmlEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Arabic));
 
-            services.AddRazorPages();
-            
             services.AddMongDbContext(Configuration);
             services.AddSingleton(sp => new DataTableFactory(sp.GetService<IReadOnlyDbContext>()));
             services.AddSingleton(sp => new DataExporter(sp.GetService<ProvinceDBs>(), sp.GetService<DataTableFactory>()));
+
+            services.AddRazorPages();
 
             services.Configure<IISServerOptions>(options =>
             {

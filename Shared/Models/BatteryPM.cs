@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Text.Json.Serialization;
 using TciPM.Blazor.Shared.Utils;
 
 namespace TciPM.Blazor.Shared.Models
@@ -148,9 +149,11 @@ namespace TciPM.Blazor.Shared.Models
         public BatteryPM(RectifierAndBattery Source) : base(Source) { }
 
         [DisplayName("درصد سلامتی")]
+        [JsonIgnore]
         public override double HealthPercentage => Series.Count > 0 ? Series.Sum(bs => bs.HealthPercentage) / Series.Count : 0;
 
         [DisplayName("تعداد سلولهای دارای ولتاژ مشکل دار")]
+        [JsonIgnore]
         public int HavingVoltageProblemCellsCount
         {
             get
@@ -164,15 +167,19 @@ namespace TciPM.Blazor.Shared.Models
         }
 
         [DisplayName("تعداد سلولهای دارای غلظت مشکل دار")]
+        [JsonIgnore]
         public int HavingDensityProblemCellsCount => Series.Sum(bs => bs.Densities.Count(d => d > 0 && (d > MAX_DENSITY || d < MIN_DENSITY)));
 
         [DisplayName("میانگین دما")]
+        [JsonIgnore]
         public float TemperatureAverage => Series.Average(bs => bs.Temperature);
 
         [DisplayName("تعداد باتری مستعمل")]
+        [JsonIgnore]
         public int OldBatteriesCount => Series.Sum(s => s.OldBatteryCount);
 
         [DisplayName("انحراف معیار جریان خروجی سری ها")]
+        [JsonIgnore]
         public float SeriesOutputCurrentDeviation => UtilsX.CalculateStandardDeviation(Series.Select(s => s.OutputCurrent).ToArray());
 
         //[DisplayName("انحراف معیار جمع ولتاژ سری ها")]

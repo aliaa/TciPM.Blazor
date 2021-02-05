@@ -11,6 +11,7 @@ using TciPM.Blazor.Shared.Models;
 using TciPM.Blazor.Shared.ViewModels;
 using TciCommon.Server;
 using TciPM.Blazor.Server.Services;
+using EasyMongoNet;
 
 namespace TciPM.Blazor.Server.Controllers
 {
@@ -36,7 +37,9 @@ namespace TciPM.Blazor.Server.Controllers
                 .ToList();
         }
 
-        public ActionResult<CommCenterVM> Item(string id)
+        public ActionResult<CommCenterVM> Item(string id) => GetItem(db, id);
+
+        public static CommCenterVM GetItem(IDbContext db, string id)
         {
             var center = Mapper.Map<CommCenterVM>(db.FindById<CommCenterX>(id));
             center.Diesels = db.FindGetResults<Diesel>(d => d.Center == id && !d.Deleted).ToList();

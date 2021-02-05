@@ -16,6 +16,10 @@ namespace TciPM.Blazor.Shared.Models
         Battery,
         [Display(Name="UPS")]
         UPS,
+        [Display(Name = "کمپرسور گاز کنترل")]
+        Compressor,
+        [Display(Name = "کابل هواخور")]
+        GasCable
     }
 
     public static class EquipmentTypeExtentions
@@ -28,6 +32,8 @@ namespace TciPM.Blazor.Shared.Models
                 case EquipmentType.Rectifier:   return typeof(RectifierPM);
                 case EquipmentType.Battery:     return typeof(BatteryPM);
                 case EquipmentType.UPS:         return typeof(UpsPM);
+                //case EquipmentType.Compressor:  return typeof(CompressorPM);
+                //case EquipmentType.GasCable:    return typeof(GasCablePM);
                 default:    throw new NotImplementedException();
             }
         }
@@ -40,6 +46,8 @@ namespace TciPM.Blazor.Shared.Models
                 case EquipmentType.Rectifier:   return nameof(EquipmentsPM.RectifiersPM);
                 case EquipmentType.Battery:     return nameof(EquipmentsPM.BatteriesPM);
                 case EquipmentType.UPS:         return nameof(EquipmentsPM.UpsPM);
+                //case EquipmentType.Compressor:  return nameof(EquipmentsPM.CompressorsPM);
+                //case EquipmentType.GasCable:    return nameof(EquipmentPM.GasCablesPM);
                 default: throw new NotImplementedException();
             }
         }
@@ -64,6 +72,8 @@ namespace TciPM.Blazor.Shared.Models
                 case EquipmentType.Rectifier:   return pm.RectifiersPM;
                 case EquipmentType.Battery:     return pm.BatteriesPM;
                 case EquipmentType.UPS:         return pm.UpsPM;
+                //case EquipmentType.Compressor: return pm.CompressorsPM);
+                //case EquipmentType.GasCable:    pm.GasCablesPM);
                 default: throw new NotImplementedException();
             }
         }

@@ -1,0 +1,46 @@
+﻿@page "/equipmentsPm/new/{CenterId}"
+@page "/equipmentsPm/edit/{Id}"
+
+@inject HttpClientX http
+@inject IToastService toast
+@inject NavigationManager nav
+
+<div class="container">
+    @if (pm != null)
+    {
+        @foreach (var dpm in pm.DieselsPM)
+        {
+            <div class="card mt-5" style="background-color: rgba(121, 172, 104, 1);">
+                <div class="card-header">
+                    <h4>دیزل "@dpm.Source.Name"</h4>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+@code {
+
+    [Parameter]
+    public string CenterId { get; set; }
+
+    [Parameter]
+    public string Id { get; set; }
+
+    CommCenterVM center;
+    EquipmentsPM pm;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if(Id != null)
+        {
+            pm = await http.GetFromJsonAsync<EquipmentsPM>($"EquipmentsPm/Item/{Id}");
+            @*center = await http.GetFromJsonAsync<CommCenterVM>($"CommCenter/Item/{pm.CenterId}");*@
+            throw new NotImplementedException();
+        }
+        else
+        {
+            pm = await http.GetFromJsonAsync<EquipmentsPM>($"EquipmentsPm/New?centerId={CenterId}");
+        }
+    }
+}

@@ -3,7 +3,6 @@ using System.Linq;
 using AliaaCommon;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Bson;
 using MongoDB.Driver;
 using TciCommon.Models;
 using TciPM.Blazor.Server.Models;
@@ -13,22 +12,46 @@ using TciPM.Blazor.Shared.ViewModels;
 using TciCommon.Server;
 using System.Reflection;
 using System.IO;
-using System;
 using OfficeOpenXml;
 
 namespace TciPM.Blazor.Server.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]/[action]/{id?}")]
     [ApiController]
-    [Authorize]
+    [Authorize(nameof(Permission.ShowPMs))]
     public class EquipmentsPmController : BaseController
     {
         private static Dictionary<int, PmSearchVM> registeredSearches = new Dictionary<int, PmSearchVM>();
 
         public EquipmentsPmController(ProvinceDBs dbs) : base(dbs) { }
 
+        public ActionResult<EquipmentsPM> Item(string id) => db.FindById<EquipmentsPM>(id);
+
+        public ActionResult<EquipmentsPM> New(string centerId)
+        {
+            var center = CommCenterController.GetItem(db, centerId);
+            var user = GetUser();
+            var pm = new EquipmentsPM { CenterId = centerId };
+            if (user.AllowedEquipmentTypes.Contains(EquipmentType.Diesel))
+            {
+                foreach (var eq in center.Diesels)
+                    pm.DieselsPM.Add(new DieselPM(eq));
+            }
+            if (user.AllowedEquipmentTypes.Contains(EquipmentType.Rectifier))
+            {
+                foreach (var eq in center.RectifierAndBatteries)
+                    pm.RectifiersPM.Add(new RectifierPM(eq));
+            }
+            if (user.AllowedEquipmentTypes.Contains(EquipmentType.Battery))
+            {
+                foreach (var eq in center.RectifierAndBatteries)
+                    pm.BatteriesPM.Add(new BatteryPM(eq));
+            }
+            //TODO
+            return pm;
+        }
+
         [HttpPost]
-        [Authorize(nameof(Permission.ShowPMs))]
         public ActionResult<List<EquipmentsPmListItemVM>> List(PmSearchVM search)
         {
             var query = GetPmList(search);
