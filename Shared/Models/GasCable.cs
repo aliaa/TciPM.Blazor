@@ -1,10 +1,19 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace TciPM.Blazor.Shared.Models
 {
     public class GasCable : Equipment
     {
+        public class GasCableDestination
+        {
+            [Display(Name = "آدرس")]
+            public string Address { get; set; }
+            [Display(Name = "طول کابل (متر)")]
+            public int Length { get; set; }
+        }
+
         [Display(Name = "متصل به کمپرسور")]
         [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
         [Required(ErrorMessage = "لطفا کمپرسور متصل را انتخاب کنید و یا ابتدا کمپرسور را تعریف کنید.")]
@@ -26,10 +35,9 @@ namespace TciPM.Blazor.Shared.Models
             set { }
         }
 
-        [Display(Name = "طول کابل (متر)")]
-        public int Length { get; set; }
+        [Display(Name = "انشعاب")]
+        public GasCableDestination Branch { get; set; }
 
-        [Display(Name = "آدرس انتها")]
-        public string DestinationAddress { get; set; }
+        public List<GasCableDestination> Destinations { get; set; } = new List<GasCableDestination> { new GasCableDestination() };
     }
 }

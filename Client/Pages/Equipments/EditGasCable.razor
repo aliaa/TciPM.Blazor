@@ -38,29 +38,74 @@
                 <InputNumber class="form-control" @bind-Value="model.WiresDiameter" />
             </div>
         </div>
-        <div class="col-lg-2 col-sm-4">
-            <div class="form-group">
-                <Label For="() => model.Length" />
-                <InputNumber class="form-control" @bind-Value="model.Length" />
+        <div class="col-lg-2 col-sm-4 mt-4 pt-3">
+            <div class="form-group form-check">
+                <label>
+                    <input type="checkbox" @onchange="ToggleHasBranch" class="form-check-input" checked="@(model.Branch != null)" />
+                    انشعاب دارد
+                </label>
             </div>
         </div>
-        <div class="col-lg-4 col-sm-12">
-            <div class="form-group">
-                <Label For="() => model.DestinationAddress" />
-                <InputText class="form-control" @bind-Value="model.DestinationAddress" />
+    </div>
+    @if (model.Branch != null)
+    {
+        <div class="mt-4 card">
+            <div class="card-header">محل انشعاب</div>
+            <div class="card-body row">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="form-label">طول کابل از مبدا تا انشعاب (متر)</label>
+                        <InputNumber class="form-control" @bind-Value="model.Branch.Length" />
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <Label For="() => model.Branch.Address" />
+                        <InputText class="form-control" @bind-Value="model.Branch.Address" />
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="col-lg-3 col-sm-6">
-            <div class="form-group">
-                <Label For="() => model.ProductionDate" />
-                <InputDate class="form-control" @bind-Value="model.ProductionDate" />
+    }
+    <div class="card mt-4">
+        <div class="card-header">مقصدها</div>
+        <div class="card-body">
+            <div class="row justify-content-sm-center">
+                <div class="col-lg-2 col-sm-4">
+                    <label class="form-label">تعداد مقصد</label>
+                    <input type="number" value="@model.Destinations.Count" @onchange="DestinationsCountChange" class="form-control"
+                           min="@(model.Branch == null ? 1 : 2)" max="@(model.Branch == null ? 1 : 5)" disabled="@(model.Branch == null)" />
+                </div>
             </div>
-        </div>
-        <div class="col-lg-3 col-sm-6">
-            <div class="form-group">
-                <Label For="() => model.InstallationDate" />
-                <InputDate class="form-control" @bind-Value="model.InstallationDate" />
-            </div>
+            @{ int i = 0; }
+            @foreach (var dest in model.Destinations)
+            {
+                <div class="card mt-3 mx-3">
+                    <div class="card-header">مقصد @(i+1)</div>
+                    <div class="card-body row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                @if (model.Branch == null)
+                                {
+                                    <label class="form-label">طول کابل از مبدا تا مقصد</label>
+                                }
+                                else
+                                {
+                                    <label class="form-label">طول کابل از محل انشعاب تا مقصد</label>
+                                }
+                                <InputNumber class="form-control" @bind-Value="dest.Length" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <Label For="() => dest.Address" />
+                                <InputText class="form-control" @bind-Value="dest.Address" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                i++;
+            }
         </div>
     </div>
 </EditEquipment>
@@ -90,5 +135,34 @@
             if (compressors != null && compressors.Count > 0)
                 model.ConnectedCompressor = compressors[0].Value;
         }
+    }
+
+    protected void ToggleHasBranch(ChangeEventArgs e)
+    {
+        if ((bool)e.Value)
+        {
+            model.Branch = new GasCable.GasCableDestination();
+            if (model.Destinations.Count == 1)
+                DestinationsCountChange(2);
+        }
+        else
+        {
+            model.Branch = null;
+            DestinationsCountChange(1);
+        }
+    }
+
+    private void DestinationsCountChange(ChangeEventArgs e)
+    {
+        int count = int.Parse((string)e.Value);
+        DestinationsCountChange(count);
+    }
+
+    private void DestinationsCountChange(int count)
+    {
+        while (model.Destinations.Count < count)
+            model.Destinations.Add(new GasCable.GasCableDestination());
+        while (model.Destinations.Count > count)
+            model.Destinations.RemoveAt(model.Destinations.Count - 1);
     }
 }
