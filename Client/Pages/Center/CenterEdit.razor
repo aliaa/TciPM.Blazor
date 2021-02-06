@@ -82,7 +82,10 @@
                 <a class="ms-auto btn btn-secondary" href="/diesel/new/@model.Id">افزودن</a>
             </div>
             <div class="card-body">
-                <ObjectTable Data="model.Diesels" FieldNames="DieselFields" LinkColumns="DieselColumns" />
+                @if (model.Diesels.Count > 0)
+                {
+                    <ObjectTable Data="model.Diesels" FieldNames="DieselFields" LinkColumns="DieselColumns" />
+                }
             </div>
         </div>
         <div class="card mt-5">
@@ -91,7 +94,10 @@
                 <a class="ms-auto btn btn-secondary" href="/rectbatt/new/@model.Id">افزودن</a>
             </div>
             <div class="card-body">
-                <ObjectTable Data="model.RectifierAndBatteries" FieldNames="RectAndBattFields" LinkColumns="RectAndBattColumns" />
+                @if (model.RectifierAndBatteries.Count > 0)
+                {
+                    <ObjectTable Data="model.RectifierAndBatteries" FieldNames="RectAndBattFields" LinkColumns="RectAndBattColumns" />
+                }
             </div>
         </div>
         <div class="card mt-5">
@@ -100,7 +106,10 @@
                 <a class="ms-auto btn btn-secondary" href="/ups/new/@model.Id">افزودن</a>
             </div>
             <div class="card-body">
-                <ObjectTable Data="model.Upses" FieldNames="UpsFields" LinkColumns="UpsColumns" />
+                @if (model.Upses.Count > 0)
+                {
+                    <ObjectTable Data="model.Upses" FieldNames="UpsFields" LinkColumns="UpsColumns" />
+                }
             </div>
         </div>
         <div class="card mt-5">
@@ -109,7 +118,10 @@
                 <a class="ms-auto btn btn-secondary" href="/compressor/new/@model.Id">افزودن</a>
             </div>
             <div class="card-body">
-                <ObjectTable Data="model.Compressors" LinkColumns="CompressorColumns" />
+                @if (model.Compressors.Count > 0)
+                {
+                    <ObjectTable Data="model.Compressors" LinkColumns="CompressorColumns" />
+                }
             </div>
         </div>
         <div class="card mt-5">
@@ -118,7 +130,10 @@
                 <a class="ms-auto btn btn-secondary" href="/gasCable/new/@model.Id">افزودن</a>
             </div>
             <div class="card-body">
-                <ObjectTable Data="model.GasCables" FieldNames="GasCableFields" LinkColumns="GasCableColumns" />
+                @if (model.GasCables.Count > 0)
+                {
+                    <ObjectTable Data="model.GasCables" FieldNames="GasCableFields" LinkColumns="GasCableColumns" />
+                }
             </div>
         </div>
         <div class="card mt-5">
@@ -127,7 +142,10 @@
                 <a class="ms-auto btn btn-secondary" href="/airconditioner/new/@model.Id">افزودن</a>
             </div>
             <div class="card-body">
-                <ObjectTable Data="model.AirConditioners" FieldNames="AirConditionerFields" LinkColumns="AirConditionerColumns" />
+                @if (model.AirConditioners.Count > 0)
+                {
+                    <ObjectTable Data="model.AirConditioners" FieldNames="AirConditionerFields" LinkColumns="AirConditionerColumns" />
+                }
             </div>
         </div>
     }
@@ -171,13 +189,12 @@
         nameof(Diesel.EfficiencyPercentage),
         nameof(Diesel.InitiationPercentage),
         nameof(Diesel.AltitudePercentage),
-        nameof(Diesel.DieselBatteryCount),
-
-            };
+        nameof(Diesel.DieselBatteryCount)
+    };
     private static readonly ObjectTable<Diesel>.LinkColumn[] DieselColumns = new ObjectTable<Diesel>.LinkColumn[]
     {
         new ObjectTable<Diesel>.LinkColumn { Text = "ویرایش", KeyFieldName = nameof(Diesel.Id), Link = @"/diesel/edit/{Id}" }
-            };
+    };
 
     private static readonly string[] RectAndBattFields = new string[]
     {
@@ -189,6 +206,7 @@
         nameof(RectifierAndBattery.InstallationDate),
         nameof(RectifierAndBattery.ProductionDate),
     };
+
     private static readonly ObjectTable<RectifierAndBattery>.LinkColumn[] RectAndBattColumns = new ObjectTable<RectifierAndBattery>.LinkColumn[]
     {
         new ObjectTable<RectifierAndBattery>.LinkColumn { Text = "ویرایش", KeyFieldName = nameof(RectifierAndBattery.Id), Link = @"/rectbatt/edit/{Id}" }
@@ -209,10 +227,11 @@
         nameof(Ups.InstallationDate),
         nameof(Ups.ProductionDate),
     };
+
     private static readonly ObjectTable<Ups>.LinkColumn[] UpsColumns = new ObjectTable<Ups>.LinkColumn[]
     {
         new ObjectTable<Ups>.LinkColumn { Text = "ویرایش", KeyFieldName = nameof(Ups.Id), Link = @"/ups/edit/{Id}" }
-    };
+        };
 
     private static readonly string[] AirConditionerFields = new string[]
     {
