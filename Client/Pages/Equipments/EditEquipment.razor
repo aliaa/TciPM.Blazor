@@ -3,6 +3,7 @@
 @inject HttpClientX http
 @inject IToastService toast
 @inject NavigationManager nav
+@inject IJSRuntime js
 
 <div class="container">
     @if (center != null)
@@ -41,20 +42,20 @@
 </div>
 
 @code {
-    [Parameter]
-    public string CenterId { get; set; }
+        [Parameter]
+        public string CenterId { get; set; }
 
-    [Parameter]
-    public string Id { get; set; }
+        [Parameter]
+        public string Id { get; set; }
 
-    [Parameter]
-    public RenderFragment ChildContent { get; set; }
+        [Parameter]
+        public RenderFragment ChildContent { get; set; }
 
-    [Parameter]
-    public string TypeDisplayName { get; set; }
+        [Parameter]
+        public string TypeDisplayName { get; set; }
 
-    [Parameter]
-    public EventCallback AfterInitialized { get; set; }
+        [Parameter]
+        public EventCallback AfterInitialized { get; set; }
 
     public Eq Model { get; set; }
 
@@ -93,16 +94,20 @@
 
     private async Task Delete()
     {
-        try
+        bool confirmed = await js.InvokeAsync<bool>("confirm", $"آیا برای حذف {TypeDisplayName} مطمئن هستید؟");
+        if (confirmed)
         {
-            await http.DeleteAsync($"Equipments/Delete{TypeName}/{Id}");
+            try
+            {
+                await http.DeleteAsync($"Equipments/Delete{TypeName}/{Id}");
+            }
+            catch (Exception ex)
+            {
+                toast.ShowError(ex.Message);
+                return;
+            }
+            toast.ShowSuccess(TypeDisplayName + " با موفقیت حذف شد.");
+            nav.NavigateTo($"/center/edit/{Model.Center}");
         }
-        catch (Exception ex)
-        {
-            toast.ShowError(ex.Message);
-            return;
-        }
-        toast.ShowSuccess(TypeDisplayName + " با موفقیت حذف شد.");
-        nav.NavigateTo($"/center/edit/{Model.Center}");
     }
 }
