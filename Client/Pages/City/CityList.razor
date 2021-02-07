@@ -3,21 +3,23 @@
 @inject HttpClientX http
 @inject IModalService modal
 
-@if (cities == null)
-{
-    <Loading />
-}
-else
-{
-    <div class="text-center">
-        <button class="btn btn-info" @onclick="@(() => modal.Show<EditCity>("شهر جدید"))">تعریف شهر جدید</button>
-    </div>
+<div class="container">
+    @if (cities == null)
+    {
+        <Loading />
+    }
+    else
+    {
+        <div class="text-center">
+            <button class="btn btn-info" @onclick="@(() => modal.Show<EditCity>("شهر جدید"))">تعریف شهر جدید</button>
+        </div>
 
 
-    <div class="mt-4">
-        <ObjectTable Data="cities" LinkColumns="linkColumns" ColumnsBackColor="colorsOfColumns" />
-    </div>
-}
+        <div class="mt-4">
+            <ObjectTable Data="cities" LinkColumns="linkColumns" ColumnsBackColor="colorsOfColumns" MinWidth="840" />
+        </div>
+    }
+</div>
 
 @code {
     private CentersAggregatedData[] cities;
@@ -26,7 +28,7 @@ else
     private static ObjectTable<CentersAggregatedData>.LinkColumn[] linkColumns = new ObjectTable<CentersAggregatedData>.LinkColumn[]
     {
         new ObjectTable<CentersAggregatedData>.LinkColumn { Text = "ویرایش", KeyFieldName = nameof(CentersAggregatedData.Id), Link = @"/city/edit/{Id}" }
-    };
+        };
 
     protected override async Task OnInitializedAsync()
     {

@@ -3,42 +3,44 @@
 @attribute [Authorize(nameof(Permission.ShowCenters))]
 @inject HttpClientX http
 
-@if (cities == null)
-{
-    <Loading />
-}
-else
-{
-    <div class="row row-cols-lg-auto g-3 align-items-center justify-content-center">
-        <div class="form-group col">
-            <label>شهر:</label>
-            <select class="form-select" @onchange="CityChanged">
-                @if (cities != null)
-                {
-                    foreach (var c in cities)
-                    {
-                        <option value="@c.Value">@c.Text</option>
-                    }
-                }
-            </select>
-        </div>
-        <div class="col">
-            <a class="btn btn-info ms-3" href="/center/new">تعریف مرکز جدید</a>
-            <button class="btn btn-secondary ms-2" @onclick="ExcelOutput">خروجی اکسل تجهیزات مراکز</button>
-        </div>
-    </div>
-
-    if (loading)
+<div class="container">
+    @if (cities == null)
     {
         <Loading />
     }
-    if (centers != null && !loading)
+    else
     {
-        <div class="mt-4">
-            <ObjectTable Data="centers" FieldNames="fields" LinkColumns="linkColumns" ColumnsBackColor="pmDaysColor" />
+        <div class="row row-cols-lg-auto g-3 align-items-center justify-content-center">
+            <div class="form-group col">
+                <label>شهر:</label>
+                <select class="form-select" @onchange="CityChanged">
+                    @if (cities != null)
+                    {
+                        foreach (var c in cities)
+                        {
+                            <option value="@c.Value">@c.Text</option>
+                        }
+                    }
+                </select>
+            </div>
+            <div class="col">
+                <a class="btn btn-info ms-3" href="/center/new">تعریف مرکز جدید</a>
+                <button class="btn btn-secondary ms-2" @onclick="ExcelOutput">خروجی اکسل تجهیزات مراکز</button>
+            </div>
         </div>
+
+        if (loading)
+        {
+            <Loading />
+        }
+        if (centers != null && !loading)
+        {
+            <div class="mt-4">
+                <ObjectTable Data="centers" FieldNames="fields" LinkColumns="linkColumns" ColumnsBackColor="pmDaysColor" MinWidth="936" />
+            </div>
+        }
     }
-}
+</div>
 
 @code {
     private List<TextValue> cities;
@@ -60,13 +62,13 @@ else
         nameof(CommCenterWithReports.BatteryAndRectifiersCount),
         nameof(CommCenterWithReports.UpsCount),
         nameof(CommCenterWithReports.CompressorCount),
-        };
+    };
 
     private static ObjectTable<CommCenterWithReports>.LinkColumn[] linkColumns = new ObjectTable<CommCenterWithReports>.LinkColumn[]
     {
         new ObjectTable<CommCenterWithReports>.LinkColumn { Text = "جزئیات", KeyFieldName = nameof(CommCenterWithReports.Id), Link = @"/center/item/{Id}" },
         new ObjectTable<CommCenterWithReports>.LinkColumn { Text = "ویرایش", KeyFieldName = nameof(CommCenterWithReports.Id), Link = @"/center/edit/{Id}" }
-        };
+    };
 
     private Dictionary<string, List<string>> pmDaysColor;
 
@@ -90,8 +92,8 @@ else
                 colors.Add("#7cf7a5");
         }
 
-        pmDaysColor = new Dictionary<string, List<string>>
-        {{  nameof(CommCenterWithReports.ElapsedDaysOfLastPm) , colors  }};
+    pmDaysColor = new Dictionary<string, List<string>>
+    {{  nameof(CommCenterWithReports.ElapsedDaysOfLastPm) , colors  }};
 
         loading = false;
     }

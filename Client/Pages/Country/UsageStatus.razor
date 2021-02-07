@@ -4,18 +4,17 @@
 
 <div class="container">
     <h3>گزارش کارکرد همکاران استانها</h3>
+    @if (stats == null)
+    {
+        <Loading />
+    }
+    else
+    {
+        <div class="mt-4">
+            <ObjectTable Data="stats" ColumnsBackColor="colorsOfColumns" MinWidth="810" />
+        </div>
+    }
 </div>
-@if (stats == null)
-{
-    <Loading />
-}
-else
-{
-    <div class="mt-4">
-        <ObjectTable Data="stats" ColumnsBackColor="colorsOfColumns" />
-    </div>
-}
-
 
 @code {
     private ProvinceStatus[] stats;
