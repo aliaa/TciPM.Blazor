@@ -16,6 +16,7 @@ using TciPM.Blazor.Shared;
 using TciPM.Blazor.Shared.Models;
 using TciPM.Blazor.Shared.ViewModels;
 using TciCommon.Server;
+using CaptchaGen.NetCore;
 
 namespace TciPM.Blazor.Server.Controllers
 {
@@ -31,6 +32,13 @@ namespace TciPM.Blazor.Server.Controllers
         {
             if (model == null || !dbs.Keys.Contains(model.Province))
                 return Unauthorized();
+
+            //check captcha:
+            await HttpContext.Session.LoadAsync();
+            var captchaCode = HttpContext.Session.GetString("captcha");
+            if (model.Captcha.Equals(captchaCode, System.StringComparison.InvariantCultureIgnoreCase))
+                return Unauthorized("کد امنیتی صحیح نمی باشد!");
+
             var db = dbs[model.Province];
             var user = AuthUserX.CheckAuthentication(db, model.Username, model.Password);
             if (user != null)
@@ -61,7 +69,7 @@ namespace TciPM.Blazor.Server.Controllers
                 clientUser.ProvincePrefix = model.Province;
                 return clientUser;
             }
-            return Unauthorized();
+            return Unauthorized("نام کاربری یا رمز عبور صحیح نمی باشد!");
         }
 
         public async Task<IActionResult> Logout()
@@ -142,6 +150,15 @@ namespace TciPM.Blazor.Server.Controllers
             existing.InjectFrom(user);
             db.Save(existing);
             return Ok();
+        }
+
+        public async Task<IActionResult> GenerateCaptcha()
+        {
+            string captchaCode = ImageFactory.CreateCode();
+            await HttpContext.Session.LoadAsync();
+            HttpContext.Session.SetString("captcha", captchaCode);
+            using var stream = ImageFactory.BuildImage(captchaCode, 50, 100, 20, 3);
+            return File(stream.ToArray(), "image/jpeg");
         }
     }
 }

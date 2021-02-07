@@ -17,5 +17,8 @@ namespace TciPM.Blazor.Shared.ViewModels
         public string Province { get; set; }
         
         public bool RememberMe { get; set; }
+
+        [Display(Name = "تصویر امنیتی")]
+        public string Captcha { get; set; }
     }
 }

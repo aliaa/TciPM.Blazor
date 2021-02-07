@@ -16,6 +16,8 @@ using AliaaCommon;
 using TciPM.Blazor.Server.Services;
 using TciCommon.Server;
 using System.Text.Json.Serialization;
+using CaptchaGen.NetCore;
+using System.Drawing;
 
 namespace TciPM.Blazor.Server.Configuration
 {
@@ -54,6 +56,13 @@ namespace TciPM.Blazor.Server.Configuration
                 options.AddPolicy("Admin", policy => policy.RequireClaim("IsAdmin"));
                 options.AddPolicy("SuperAdmin", policy => policy.RequireClaim("IsSuperAdmin"));
             });
+
+            services.AddDistributedMemoryCache();
+            services.AddSession(options =>
+            {
+                options.Cookie.IsEssential = true;
+            });
+            ImageFactory.BackgroundColor = Color.FromArgb(251, 243, 228);
 
             var mvcBuilder = services.AddControllersWithViews(config =>
             {
@@ -101,6 +110,8 @@ namespace TciPM.Blazor.Server.Configuration
             app.UseCookiePolicy();
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {
