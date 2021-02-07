@@ -10,7 +10,7 @@
                 <AuthorizeView Policy="SuperAdmin">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">داشبورد کشوری</a>
-                        <div class="dropdown-menu">
+                        <div class="dropdown-menu dropdown-menu-dark">
                             <NavLink class="dropdown-item" href="country/usageStatus">گزارش کارکرد همکاران استانها</NavLink>
                             <NavLink class="dropdown-item" href="country/equipmentsStatus">گزارش تجهیزات استانها</NavLink>
                         </div>
@@ -29,7 +29,7 @@
                 <AuthorizeView Policy="@nameof(Permission.ShowPMs)">
                     <li Class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">PM تجهیزات مراکز</a>
-                        <div class="dropdown-menu">
+                        <div class="dropdown-menu dropdown-menu-dark">
                             <NavLink class="dropdown-item" href="equipmentsPm/list">لیست PM های تجهیزات</NavLink>
                             <AuthorizeView Context="a" Policy="@nameof(Permission.WriteEquipmentPM)">
                                 <NavLink class="dropdown-item" href="equipmentsPm/new">ثبت PM جدید تجهیزات</NavLink>
@@ -40,7 +40,7 @@
                 <AuthorizeView Policy="@nameof(Permission.ShowPMs)">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">PM روزانه مراکز کم ظرفیت</a>
-                        <div class="dropdown-menu">
+                        <div class="dropdown-menu dropdown-menu-dark">
                             <AuthorizeView Context="a" Policy="@nameof(Permission.WriteDailyPM)">
                                 <NavLink class="dropdown-item" href="dailyPm/new">ثبت PM جدید روزانه</NavLink>
                             </AuthorizeView>
@@ -54,7 +54,7 @@
                 <AuthorizeView Policy="@nameof(Permission.ViewReports)">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown">گزارش ها</a>
-                        <div class="dropdown-menu">
+                        <div class="dropdown-menu dropdown-menu-dark">
                             <NavLink class="dropdown-item" href="reports/centersHealth">درصد سلامت مراکز</NavLink>
                             <NavLink class="dropdown-item" href="reports/unrepairedEquipments">ایرادات رفع نشده</NavLink>
                             <NavLink class="dropdown-item" href="reports/equipmentsPotency">توان تجهیزات (Rating)</NavLink>
