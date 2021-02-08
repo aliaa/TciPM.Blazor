@@ -17,6 +17,7 @@ using TciPM.Blazor.Shared.Models;
 using TciPM.Blazor.Shared.ViewModels;
 using TciCommon.Server;
 using CaptchaGen.NetCore;
+using System;
 
 namespace TciPM.Blazor.Server.Controllers
 {
@@ -152,13 +153,13 @@ namespace TciPM.Blazor.Server.Controllers
             return Ok();
         }
 
-        public async Task<IActionResult> GenerateCaptcha()
+        public async Task<IActionResult> Captcha()
         {
-            string captchaCode = ImageFactory.CreateCode();
+            string captchaCode = ImageFactory.CreateCode(LoginVM.CAPTCHA_CODE_LENGTH);
             await HttpContext.Session.LoadAsync();
             HttpContext.Session.SetString("captcha", captchaCode);
             using var stream = ImageFactory.BuildImage(captchaCode, 50, 100, 20, 3);
-            return File(stream.ToArray(), "image/jpeg");
+            return Ok("data:image/jpeg; base64, " + Convert.ToBase64String(stream.ToArray()));
         }
     }
 }
