@@ -3,6 +3,7 @@
 @inject AuthenticationStateProvider _auth
 @inject NavigationManager nav
 @inject HttpClientX http
+@inject IToastService toast  
 
 <div class="container mt-4">
     <h3>ورود</h3>
@@ -79,16 +80,26 @@
 
     private async Task RefreshCaptcha()
     {
+        model.Captcha = "";
         captchaImageBase64 = await http.GetStringAsync("Account/Captcha");
     }
 
     private async Task CheckLogin(EditContext editContext)
     {
         var auth = (AuthStateProvider)_auth;
-        var user = await auth.Login(model);
-        if (user != null)
+        try
         {
-            nav.NavigateTo("/");
+            var user = await auth.Login(model);
+            if (user != null)
+            {
+                nav.NavigateTo("/");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("login failed! " + ex.Message);
+            toast.ShowError(ex.Message);
+            await RefreshCaptcha();
         }
     }
 }

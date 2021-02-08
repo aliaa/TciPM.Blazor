@@ -43,7 +43,7 @@ namespace TciPM.Blazor.Client
                     new Claim(nameof(Province), user.ProvincePrefix)
                 };
                 var perms = new StringBuilder();
-                if(user.IsAdmin)
+                if (user.IsAdmin)
                 {
                     foreach (string p in Enum.GetNames(typeof(Permission)))
                         perms.Append(p).Append(",");
@@ -72,20 +72,13 @@ namespace TciPM.Blazor.Client
 
         public async Task<ClientAuthUser> Login(LoginVM m)
         {
-            try
+            var user = await httpClient.PostAsJsonAsync<LoginVM, ClientAuthUser>("Account/Login", m, navigateToLoginWhenUnauthorized: false);
+            if (user != null)
             {
-                var user = await httpClient.PostAsJsonAsync<LoginVM, ClientAuthUser>("Account/Login", m);
-                if (user != null)
-                {
-                    await storage.SetItemAsync("user", user);
-                    NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
-                }
-                return user;
+                await storage.SetItemAsync("user", user);
+                NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
             }
-            catch
-            {
-                return null;
-            }
+            return user;
         }
 
         public async Task Logout()

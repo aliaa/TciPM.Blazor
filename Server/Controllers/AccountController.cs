@@ -37,7 +37,7 @@ namespace TciPM.Blazor.Server.Controllers
             //check captcha:
             await HttpContext.Session.LoadAsync();
             var captchaCode = HttpContext.Session.GetString("captcha");
-            if (model.Captcha.Equals(captchaCode, System.StringComparison.InvariantCultureIgnoreCase))
+            if (captchaCode == null || !captchaCode.Equals(model.Captcha, StringComparison.InvariantCultureIgnoreCase))
                 return Unauthorized("کد امنیتی صحیح نمی باشد!");
 
             var db = dbs[model.Province];
