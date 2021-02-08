@@ -25,6 +25,8 @@ namespace TciPM.Blazor.Server.Controllers
     [Route("api/[controller]/[action]")]
     public class AccountController : BaseController
     {
+        private const string CAPTCHA = "captcha";
+
         public AccountController(ProvinceDBs dbs) : base(dbs) { }
 
         [HttpPost]
@@ -36,7 +38,8 @@ namespace TciPM.Blazor.Server.Controllers
 
             //check captcha:
             await HttpContext.Session.LoadAsync();
-            var captchaCode = HttpContext.Session.GetString("captcha");
+            var captchaCode = HttpContext.Session.GetString(CAPTCHA);
+            HttpContext.Session.Remove(CAPTCHA);
             if (captchaCode == null || !captchaCode.Equals(model.Captcha, StringComparison.InvariantCultureIgnoreCase))
                 return Unauthorized("کد امنیتی صحیح نمی باشد!");
 
@@ -59,7 +62,7 @@ namespace TciPM.Blazor.Server.Controllers
 
                 var perms = new StringBuilder();
                 foreach (var perm in user.Permissions)
-                    perms.Append(perm).Append(",");
+                    perms.Append(perm).Append(',');
                 claims.Add(new Claim(nameof(Permission), perms.ToString()));
 
                 var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -157,7 +160,7 @@ namespace TciPM.Blazor.Server.Controllers
         {
             string captchaCode = ImageFactory.CreateCode(LoginVM.CAPTCHA_CODE_LENGTH);
             await HttpContext.Session.LoadAsync();
-            HttpContext.Session.SetString("captcha", captchaCode);
+            HttpContext.Session.SetString(CAPTCHA, captchaCode);
             using var stream = ImageFactory.BuildImage(captchaCode, 50, 100, 20, 3);
             return Ok("data:image/jpeg; base64, " + Convert.ToBase64String(stream.ToArray()));
         }
