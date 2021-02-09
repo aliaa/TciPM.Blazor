@@ -9,6 +9,7 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
     [CollectionIndex(new string[] { nameof(SourceId) })]
     public class DieselPM : EquipmentPM<Diesel>
     {
+        public DieselPM() { }
         public DieselPM(Diesel Source) : base(Source) { }
 
         [DisplayName("ساعت کارکرد فعلی")]

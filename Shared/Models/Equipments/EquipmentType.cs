@@ -14,6 +14,8 @@ namespace TciPM.Blazor.Shared.Models.Equipments
         Battery,
         [Display(Name="UPS")]
         UPS,
+        [Display(Name = "کولر")]
+        AirConditioner,
         [Display(Name = "کمپرسور گاز کنترل")]
         Compressor,
         [Display(Name = "کابل هواخور")]

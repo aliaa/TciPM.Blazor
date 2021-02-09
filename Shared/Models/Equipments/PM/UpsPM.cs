@@ -4,6 +4,7 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
 {
     public class UpsPM : EquipmentPM<Ups>
     {
+        public UpsPM() { }
         public UpsPM(Ups Source) : base(Source) { }
 
         [DisplayName("ولتاژ AC ورودی")]

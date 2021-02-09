@@ -1,0 +1,19 @@
+﻿<div class="card mt-5" style="background-color: hsl(@BackgroundHue , 41%, 89%);">
+    <div class="card-header">
+        <h5 class="m-1">@Header</h5>
+    </div>
+    <div class="card-body">
+        @ChildContent
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int BackgroundHue { get; set; }
+
+    [Parameter]
+    public string Header { get; set; }
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+}

@@ -8,14 +8,46 @@
 <div class="container">
     @if (pm != null)
     {
-        @foreach (var dpm in pm.DieselsPM)
-        {
-            <div class="card mt-5" style="background-color: rgba(121, 172, 104, 1);">
-                <div class="card-header">
-                    <h4>دیزل "@dpm.Source.Name"</h4>
-                </div>
+        <EditForm Model="pm">
+            <DataAnnotationsValidator />
+            @if (pm != null)
+            {
+                @foreach (var dpm in pm.DieselsPM)
+                {
+                    <DieselPmEdit Pm="dpm" />
+                }
+                @foreach (var rpm in pm.RectifiersPM)
+                {
+                    <RectifierPmEdit Pm="rpm" />
+                }
+                @foreach (var bpm in pm.BatteriesPM)
+                {
+                    <BatteryPmEdit Pm="bpm" />
+                }
+                @foreach (var upm in pm.UpsPM)
+                {
+                    <UpsPmEdit Pm="upm" />
+                }
+                <Card Header="اطلاعات عمومی" BackgroundHue="180">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4 form-group">
+                            <Label For="() => pm.PmDate" />
+                            <InputDate @bind-Value="pm.PmDate" class="form-control" />
+                        </div>
+                        <div class="col-lg-3 col-md-4 form-group">
+                            <label class="form-label">امتیاز کلی سلامت مرکز</label>
+                            <InputNumber @bind-Value="pm.TotalRate" class="form-control" min="1" max="5" />
+                        </div>
+                    </div>
+                </Card>
+            }
+            <div class="mt-5">
+                <ValidationSummary />
             </div>
-        }
+            <div class="my-4">
+                <input type="submit" value="ذخیره" class="btn btn-primary" />
+            </div>
+        </EditForm>
     }
 </div>
 
@@ -32,7 +64,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        if(Id != null)
+        if (Id != null)
         {
             pm = await http.GetFromJsonAsync<EquipmentsPM>($"EquipmentsPm/Item/{Id}");
             @*center = await http.GetFromJsonAsync<CommCenterVM>($"CommCenter/Item/{pm.CenterId}");*@

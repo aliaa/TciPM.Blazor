@@ -9,6 +9,7 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
     [CollectionIndex(new string[] { nameof(SourceId) })]
     public class RectifierPM : EquipmentPM<RectifierAndBattery>
     {
+        public RectifierPM() { }
         public RectifierPM(RectifierAndBattery Source) : base(Source) { }
 
         //[HealthParameter(MinOkRange = 0, MaxOkRange = 2)]

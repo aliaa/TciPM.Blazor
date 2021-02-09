@@ -14,6 +14,8 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
 
         public Eq Source { get; set; }
 
+        public EquipmentPM() { }
+
         public EquipmentPM(Eq Source)
         {
             this.Source = Source;

@@ -59,6 +59,7 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
         [BsonIgnoreExtraElements]
         public class BatterySeriesPM
         {
+            public BatterySeriesPM() { }
             public BatterySeriesPM(int cellCount)
             {
                 Voltages = new float[cellCount];
@@ -127,6 +128,8 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
         }
 
         public List<BatterySeriesPM> Series { get; set; } = new List<BatterySeriesPM>();
+
+        public BatteryPM() { }
 
         public BatteryPM(RectifierAndBattery Source) : base(Source) { }
 
