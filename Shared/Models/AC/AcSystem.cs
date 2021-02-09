@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
+using TciPM.Blazor.Shared.Models.Equipments;
 
-namespace TciPM.Blazor.Shared.Models
+namespace TciPM.Blazor.Shared.Models.AC
 {
     public class AcSystem : Equipment
     {

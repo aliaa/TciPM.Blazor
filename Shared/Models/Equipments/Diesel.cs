@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace TciPM.Blazor.Shared.Models
+namespace TciPM.Blazor.Shared.Models.Equipments
 {
     [CollectionSave(WriteLog = true)]
     public class Diesel : Equipment

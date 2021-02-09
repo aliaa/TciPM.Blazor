@@ -1,7 +1,7 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace TciPM.Blazor.Shared.Models
+namespace TciPM.Blazor.Shared.Models.AC
 {
     public class DieselAcRef : AcEquipment
     {

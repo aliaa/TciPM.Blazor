@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 
-namespace TciPM.Blazor.Shared.Models
+namespace TciPM.Blazor.Shared.Models.AC
 {
     public class ElectricalEnclosure : AcEquipment
     {

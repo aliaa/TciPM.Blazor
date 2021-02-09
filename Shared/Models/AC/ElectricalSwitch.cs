@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace TciPM.Blazor.Shared.Models
+namespace TciPM.Blazor.Shared.Models.AC
 {
     public class ElectricalSwitch
     {

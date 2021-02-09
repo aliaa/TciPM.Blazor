@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel;
 
-namespace TciPM.Blazor.Shared.Models
+namespace TciPM.Blazor.Shared.Models.Equipments.PM
 {
-    public class UpsPM : EquipmentPM
+    public class UpsPM : EquipmentPM<Ups>
     {
         public UpsPM(Ups Source) : base(Source) { }
 

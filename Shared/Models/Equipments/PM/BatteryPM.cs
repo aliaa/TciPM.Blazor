@@ -7,11 +7,11 @@ using System.Linq;
 using System.Text.Json.Serialization;
 using TciPM.Blazor.Shared.Utils;
 
-namespace TciPM.Blazor.Shared.Models
+namespace TciPM.Blazor.Shared.Models.Equipments.PM
 {
     [CollectionIndex(new string[] { nameof(SourceId) })]
     [BsonIgnoreExtraElements]
-    public class BatteryPM : EquipmentPM
+    public class BatteryPM : EquipmentPM<RectifierAndBattery>
     {
         public const float MIN_VOLTAGE_2V = 1.9f;
         public const float NORMAL_VOLTAGE_2V = 1.95f;
@@ -25,53 +25,35 @@ namespace TciPM.Blazor.Shared.Models
         
         public static float GetBatteryMinVoltage(RectifierAndBattery.CellCountEnum cellCount)
         {
-            switch (cellCount)
+            return cellCount switch
             {
-                case RectifierAndBattery.CellCountEnum._2:
-                case RectifierAndBattery.CellCountEnum._4:
-                    return MIN_VOLTAGE_12V;
-                case RectifierAndBattery.CellCountEnum._8:
-                    return MIN_VOLTAGE_12V / 2;
-                case RectifierAndBattery.CellCountEnum._12:
-                case RectifierAndBattery.CellCountEnum._24:
-                case RectifierAndBattery.CellCountEnum._25:
-                    return MIN_VOLTAGE_2V;
-            }
-            throw new NotImplementedException();
+                RectifierAndBattery.CellCountEnum._2 or RectifierAndBattery.CellCountEnum._4 => MIN_VOLTAGE_12V,
+                RectifierAndBattery.CellCountEnum._8 => MIN_VOLTAGE_12V / 2,
+                RectifierAndBattery.CellCountEnum._12 or RectifierAndBattery.CellCountEnum._24 or RectifierAndBattery.CellCountEnum._25 => MIN_VOLTAGE_2V,
+                _ => throw new NotImplementedException(),
+            };
         }
 
         public static float GetBatteryMaxVoltage(RectifierAndBattery.CellCountEnum cellCount)
         {
-            switch (cellCount)
+            return cellCount switch
             {
-                case RectifierAndBattery.CellCountEnum._2:
-                case RectifierAndBattery.CellCountEnum._4:
-                    return MAX_VOLTAGE_12V;
-                case RectifierAndBattery.CellCountEnum._8:
-                    return MAX_VOLTAGE_12V / 2;
-                case RectifierAndBattery.CellCountEnum._12:
-                case RectifierAndBattery.CellCountEnum._24:
-                case RectifierAndBattery.CellCountEnum._25:
-                    return MAX_VOLTAGE_2V;
-            }
-            throw new NotImplementedException();
+                RectifierAndBattery.CellCountEnum._2 or RectifierAndBattery.CellCountEnum._4 => MAX_VOLTAGE_12V,
+                RectifierAndBattery.CellCountEnum._8 => MAX_VOLTAGE_12V / 2,
+                RectifierAndBattery.CellCountEnum._12 or RectifierAndBattery.CellCountEnum._24 or RectifierAndBattery.CellCountEnum._25 => MAX_VOLTAGE_2V,
+                _ => throw new NotImplementedException(),
+            };
         }
 
         public static float GetBatteryNormalVoltage(RectifierAndBattery.CellCountEnum cellCount)
         {
-            switch (cellCount)
+            return cellCount switch
             {
-                case RectifierAndBattery.CellCountEnum._2:
-                case RectifierAndBattery.CellCountEnum._4:
-                    return NORMAL_VOLTAGE_12V;
-                case RectifierAndBattery.CellCountEnum._8:
-                    return NORMAL_VOLTAGE_12V / 2;
-                case RectifierAndBattery.CellCountEnum._12:
-                case RectifierAndBattery.CellCountEnum._24:
-                case RectifierAndBattery.CellCountEnum._25:
-                    return NORMAL_VOLTAGE_2V;
-            }
-            throw new NotImplementedException();
+                RectifierAndBattery.CellCountEnum._2 or RectifierAndBattery.CellCountEnum._4 => NORMAL_VOLTAGE_12V,
+                RectifierAndBattery.CellCountEnum._8 => NORMAL_VOLTAGE_12V / 2,
+                RectifierAndBattery.CellCountEnum._12 or RectifierAndBattery.CellCountEnum._24 or RectifierAndBattery.CellCountEnum._25 => NORMAL_VOLTAGE_2V,
+                _ => throw new NotImplementedException(),
+            };
         }
 
         [BsonIgnoreExtraElements]

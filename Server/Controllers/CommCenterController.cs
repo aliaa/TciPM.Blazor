@@ -12,6 +12,7 @@ using TciPM.Blazor.Shared.ViewModels;
 using TciCommon.Server;
 using TciPM.Blazor.Server.Services;
 using EasyMongoNet;
+using TciPM.Blazor.Shared.Models.Equipments;
 
 namespace TciPM.Blazor.Server.Controllers
 {

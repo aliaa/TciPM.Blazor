@@ -4,8 +4,9 @@ using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using TciPM.Blazor.Shared.Models.AC;
 
-namespace TciPM.Blazor.Shared.Models
+namespace TciPM.Blazor.Shared.Models.Equipments
 {
 
     [CollectionIndex(new string[] { nameof(Name) })]

@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Text;
 using TciPM.Blazor.Shared.Utils;
 
-namespace TciPM.Blazor.Shared.Models
+namespace TciPM.Blazor.Shared.Models.Equipments
 {
     [CollectionSave(WriteLog = true)]
     [BsonIgnoreExtraElements]

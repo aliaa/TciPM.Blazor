@@ -2,7 +2,7 @@
 using MongoDB.Bson.Serialization.Attributes;
 using System.ComponentModel;
 
-namespace TciPM.Blazor.Shared.Models
+namespace TciPM.Blazor.Shared.Models.AC
 {
     [BsonKnownTypes(typeof(ElectricalEnclosure), typeof(InnerElectricalEnclosure), typeof(CapacitorBank), typeof(DieselAcRef))]
     public abstract class AcEquipment

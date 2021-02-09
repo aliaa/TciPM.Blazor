@@ -4,7 +4,7 @@ using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Linq;
 using TciCommon.Server;
-using TciPM.Blazor.Shared.Models;
+using TciPM.Blazor.Shared.Models.Equipments;
 using TciPM.Blazor.Shared.ViewModels;
 
 namespace TciPM.Blazor.Server.Controllers

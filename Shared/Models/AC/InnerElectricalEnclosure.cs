@@ -1,4 +1,4 @@
-﻿namespace TciPM.Blazor.Shared.Models
+﻿namespace TciPM.Blazor.Shared.Models.AC
 {
     public class InnerElectricalEnclosure : ElectricalEnclosure
     {

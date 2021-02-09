@@ -10,6 +10,7 @@ using System.Linq;
 using TciCommon.Models;
 using TciCommon.Server;
 using TciPM.Blazor.Shared.Models;
+using TciPM.Blazor.Shared.Models.Equipments;
 
 namespace TciPM.Blazor.Server.Services
 {
@@ -28,21 +29,17 @@ namespace TciPM.Blazor.Server.Services
         {
             var db = dbs[province.Prefix];
             var cities = db.Find<City>(c => c.Province == province.Id).ToEnumerable().ToDictionary(i => i.Id, i => i.Name);
-            using (var memory = new MemoryStream())
-            {
-                ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-                using (ExcelPackage pkg = new ExcelPackage(memory))
-                {
-                    var centerNames = db.All<CommCenterX>().ToDictionary(i => i.Id, i => cities[i.City] + " - " + i.Name);
+            using var memory = new MemoryStream();
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            using ExcelPackage pkg = new ExcelPackage(memory);
+            var centerNames = db.All<CommCenterX>().ToDictionary(i => i.Id, i => cities[i.City] + " - " + i.Name);
 
-                    AddSheetForProvinceData<Diesel>(db, pkg, centerNames);
-                    AddSheetForProvinceData<RectifierAndBattery>(db, pkg, centerNames, excludes: nameof(RectifierAndBattery.Batteries));
-                    AddBatterySheet(db, pkg, centerNames);
-                    AddSheetForProvinceData<Ups>(db, pkg, centerNames);
-                    pkg.Save();
-                }
-                return memory.ToArray();
-            }
+            AddSheetForProvinceData<Diesel>(db, pkg, centerNames);
+            AddSheetForProvinceData<RectifierAndBattery>(db, pkg, centerNames, excludes: nameof(RectifierAndBattery.Batteries));
+            AddBatterySheet(db, pkg, centerNames);
+            AddSheetForProvinceData<Ups>(db, pkg, centerNames);
+            pkg.Save();
+            return memory.ToArray();
         }
 
         private void AddSheetForProvinceData<T>(IReadOnlyDbContext db, ExcelPackage pkg, Dictionary<string, string> centerNames, params string[] excludes) where T : Equipment
@@ -56,15 +53,17 @@ namespace TciPM.Blazor.Server.Services
         {
             var refs = new Dictionary<string, Dictionary<string, string>>();
             refs.Add(nameof(Equipment.Center), centerNames);
-            List<string> excludesList = new List<string>(excludes);
-            excludesList.Add(nameof(Equipment.Deleted));
-            excludesList.Add(nameof(Equipment.Id));
+            List<string> excludesList = new List<string>(excludes)
+            {
+                nameof(Equipment.Deleted),
+                nameof(Equipment.Id)
+            };
             return tableFactory.Create(data, addIndexColumn: true,
                 excludeColumns: excludesList.ToArray(),
                 valuesReferenceReplacement: refs);
         }
 
-        private void AddBatterySheet(IReadOnlyDbContext db, ExcelPackage pkg, Dictionary<string, string> centerNames)
+        private static void AddBatterySheet(IReadOnlyDbContext db, ExcelPackage pkg, Dictionary<string, string> centerNames)
         {
             var sheet = pkg.Workbook.Worksheets.Add("Batteries");
             var data = db.Find<RectifierAndBattery>(rb => rb.Deleted != true)

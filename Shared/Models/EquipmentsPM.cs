@@ -4,6 +4,7 @@ using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using TciPM.Blazor.Shared.Models.Equipments.PM;
 
 namespace TciPM.Blazor.Shared.Models
 {

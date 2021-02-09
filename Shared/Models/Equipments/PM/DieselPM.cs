@@ -4,10 +4,10 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using TciPM.Blazor.Shared.Utils;
 
-namespace TciPM.Blazor.Shared.Models
+namespace TciPM.Blazor.Shared.Models.Equipments.PM
 {
     [CollectionIndex(new string[] { nameof(SourceId) })]
-    public class DieselPM : EquipmentPM
+    public class DieselPM : EquipmentPM<Diesel>
     {
         public DieselPM(Diesel Source) : base(Source) { }
 

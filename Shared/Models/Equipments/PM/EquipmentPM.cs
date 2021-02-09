@@ -5,16 +5,16 @@ using System.ComponentModel;
 using System.Reflection;
 using TciPM.Blazor.Shared.Utils;
 
-namespace TciPM.Blazor.Shared.Models
+namespace TciPM.Blazor.Shared.Models.Equipments.PM
 {
-    public abstract class EquipmentPM
+    public abstract class EquipmentPM<Eq> where Eq : Equipment
     {
         [BsonRepresentation(BsonType.ObjectId)]
         public string SourceId { get; set; }
 
-        public Equipment Source { get; set; }
+        public Eq Source { get; set; }
 
-        public EquipmentPM(Equipment Source)
+        public EquipmentPM(Eq Source)
         {
             this.Source = Source;
             this.SourceId = Source.Id;

@@ -10,6 +10,7 @@ using TciCommon.Models;
 using TciPM.Blazor.Shared.Models;
 using TciCommon.Server;
 using TciPM.Blazor.Server.Models;
+using TciPM.Blazor.Shared.Models.Equipments;
 
 namespace TciPM.Blazor.Server.Controllers
 {
