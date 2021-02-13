@@ -1,0 +1,61 @@
+﻿<Card Header="@("دیزل ژنراتور " + Pm.Source.Name)" BackgroundHue="106">
+    <div class="card" style="background-color:#fff4">
+        <div class="card-header">مشخصات کلی</div>
+        <div class="card-body row">
+            <div class="col-md-2 col-sm-6">
+                <Label For="() => Pm.Source.Model" />
+                <h6>@Pm.Source.Model</h6>
+            </div>
+            <div class="col-md-2 col-sm-6">
+                <Label For="() => Pm.Source.Power" />
+                <h6>@Pm.Source.Power</h6>
+            </div>
+            <div class="col-md-2 col-sm-6">
+                <Label For="() => Pm.Source.PermissivePower" />
+                <h6>@Pm.Source.PermissivePower</h6>
+            </div>
+            <div class="col-md-2 col-sm-6">
+                <Label For="() => Pm.Source.StorageCapacity" />
+                <h6>@Pm.Source.StorageCapacity</h6>
+            </div>
+            <div class="col-md-2 col-sm-6">
+                <Label For="() => Pm.Source.OilCapacity" />
+                <h6>@Pm.Source.OilCapacity</h6>
+            </div>
+        </div>
+    </div>
+    <div class="card mt-4" style="background-color:#fff4">
+        <div class="card-header">جزئیات PM</div>
+        <div class="card-body row">
+            <div class="col-lg-3 col-md-4 col-sm-6 form-group">
+                <Label For="() => Pm.CurrentUsageTime" />
+                <InputNumber @bind-Value="Pm.CurrentUsageTime" class="form-control" />
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 form-group">
+                <Label For="() => Pm.GasolineFilterChangeDate" />
+                <PersianDate Value="Pm.GasolineFilterChangeDate" />
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 form-group">
+                <Label For="() => Pm.OilChangeDate" />
+                <PersianDate Value="Pm.OilChangeDate" />
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 form-group">
+                <Label For="() => Pm.OilFilterChangeDate" />
+                <PersianDate Value="Pm.OilFilterChangeDate" />
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 form-group">
+                <Label For="() => Pm.WaterHoseQuality" />
+                <GoodBadSelect GoodText="نرمال" BadText="نیاز به تعویض" Value="Pm.WaterHoseQuality" ValueChanged="(val) => Pm.WaterHoseQuality = val" />
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 form-group">
+                <Label For="() => Pm.GasolineHoseQuality" />
+                <GoodBadSelect GoodText="نرمال" BadText="نیاز به تعویض" Value="Pm.GasolineHoseQuality" ValueChanged="(val) => Pm.GasolineHoseQuality= val" />
+            </div>
+        </div>
+    </div>
+</Card>
+
+@code {
+    [Parameter]
+    public DieselPM Pm { get; set; }
+}

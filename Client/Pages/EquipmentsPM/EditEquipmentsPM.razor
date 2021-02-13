@@ -8,7 +8,7 @@
 <div class="container">
     @if (pm != null)
     {
-        <EditForm Model="pm">
+        <EditForm Model="pm" OnValidSubmit="Submit">
             <DataAnnotationsValidator />
             @if (pm != null)
             {
@@ -74,5 +74,10 @@
         {
             pm = await http.GetFromJsonAsync<EquipmentsPM>($"EquipmentsPm/New?centerId={CenterId}");
         }
+    }
+
+    private async Task Submit(EditContext context)
+    {
+        await http.PostAsJsonAsync("EquipmentsPm/Submit", pm);
     }
 }

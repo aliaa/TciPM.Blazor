@@ -28,12 +28,18 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
         public DateTime OilFilterChangeDate { get; set; }
 
         [HealthParameter(EnumOkItems = new string[] { nameof(GoodBad.Good) })]
+        [ValidArray(InvalidValues = new string[] { nameof(GoodBad.None) })]
         [DisplayName("کیفیت شلنگهای آب")]
-        public GoodBad WaterHoseQuality { get; set; }
+        public GoodBad WaterHoseQuality { get; set; } = GoodBad.None;
 
         [HealthParameter(EnumOkItems = new string[] { nameof(GoodBad.Good) })]
+        [ValidArray(InvalidValues = new string[] { nameof(GoodBad.None) })]
         [DisplayName("کیفیت شلنگهای گازوئیل")]
-        public GoodBad GasolineHoseQuality { get; set; }
+        public GoodBad GasolineHoseQuality { get; set; } = GoodBad.None;
+
+        [HealthParameter(MinOkRange = 13, MaxOkRange = 28)]
+        [DisplayName("ولتاژ تریکل شارژر")]
+        public float TrickleChargingVoltage { get; set; } = -1;
 
         [HealthParameter(MinOkRange = 11.5, MaxOkRange = 13)]
         [DisplayName("ولتاژ باتری استارت 1")]
@@ -44,6 +50,7 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
         public float StartingBattery2Voltage { get; set; } = -1;
 
         [HealthParameter(EnumOkItems = new string[] { nameof(GoodBad.Good) })]
+        [ValidArray(InvalidValues = new string[] { nameof(GoodBad.None) })]
         [DisplayName("کیفیت ضدیخ")]
         public GoodBad AntiFreezeQuality { get; set; }
 
@@ -52,6 +59,7 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
         public DateTime AntiFreezeChangeDate { get; set; }
 
         [HealthParameter(EnumOkItems = new string[] { nameof(GoodBad.Good) })]
+        [ValidArray(InvalidValues = new string[] { nameof(GoodBad.None) })]
         [DisplayName("کیفیت هیتر دیزل")]
         public GoodBad HeaterQuality { get; set; }
 
@@ -83,6 +91,7 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
         public string ControlCardName { get; set; }
 
         [HealthParameter(EnumOkItems = new string[] { nameof(GoodBad.Good) })]
+        [ValidArray(InvalidValues = new string[] { nameof(GoodBad.None) })]
         [DisplayName("وضعیت کارت کنترل")]
         public GoodBad ControlCardStatus { get; set; }
 
@@ -146,10 +155,6 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
         [HealthParameter(MinOkRange = 13, MaxOkRange = 28.5)]
         [DisplayName("ولتاژ دینام")]
         public float GeneratorVoltage { get; set; } = -1;
-
-        [HealthParameter(MinOkRange = 13, MaxOkRange = 28)]
-        [DisplayName("ولتاژ تریکل شارژر")]
-        public float TrickleChargingVoltage { get; set; } = -1;
 
         [HealthParameter(EnumOkItems = new string[] { nameof(GoodBad.Good) })]
         [DisplayName("آلارم آب دیزل")]
