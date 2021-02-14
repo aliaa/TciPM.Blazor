@@ -27,35 +27,278 @@
     <div class="card mt-4" style="background-color:#fff4">
         <div class="card-header">جزئیات PM</div>
         <div class="card-body row">
-            <div class="col-lg-3 col-md-4 col-sm-6 form-group">
+            <div class="@FORM_ITEM_CLASS">
                 <Label For="() => Pm.CurrentUsageTime" />
                 <InputNumber @bind-Value="Pm.CurrentUsageTime" class="form-control" />
             </div>
-            <div class="col-lg-3 col-md-4 col-sm-6 form-group">
+            <div class="@FORM_ITEM_CLASS">
                 <Label For="() => Pm.GasolineFilterChangeDate" />
                 <PersianDate Value="Pm.GasolineFilterChangeDate" />
             </div>
-            <div class="col-lg-3 col-md-4 col-sm-6 form-group">
+            <div class="@FORM_ITEM_CLASS">
                 <Label For="() => Pm.OilChangeDate" />
                 <PersianDate Value="Pm.OilChangeDate" />
             </div>
-            <div class="col-lg-3 col-md-4 col-sm-6 form-group">
+            <div class="@FORM_ITEM_CLASS">
                 <Label For="() => Pm.OilFilterChangeDate" />
                 <PersianDate Value="Pm.OilFilterChangeDate" />
             </div>
-            <div class="col-lg-3 col-md-4 col-sm-6 form-group">
+            <div class="@FORM_ITEM_CLASS">
                 <Label For="() => Pm.WaterHoseQuality" />
-                <GoodBadSelect GoodText="نرمال" BadText="نیاز به تعویض" Value="Pm.WaterHoseQuality" ValueChanged="(val) => Pm.WaterHoseQuality = val" />
+                <InputSelect @bind-Value="Pm.WaterHoseQuality" class="@GoodBadClass(Pm.WaterHoseQuality)">
+                    <option value="@nameof(GoodBad.None)"></option>
+                    <option value="@nameof(GoodBad.Good)">نرمال</option>
+                    <option value="@nameof(GoodBad.Bad)">نیاز به تعویض</option>
+                </InputSelect>
             </div>
-            <div class="col-lg-3 col-md-4 col-sm-6 form-group">
+            <div class="@FORM_ITEM_CLASS">
                 <Label For="() => Pm.GasolineHoseQuality" />
-                <GoodBadSelect GoodText="نرمال" BadText="نیاز به تعویض" Value="Pm.GasolineHoseQuality" ValueChanged="(val) => Pm.GasolineHoseQuality= val" />
+                <InputSelect @bind-Value="Pm.GasolineHoseQuality" class="@GoodBadClass(Pm.GasolineHoseQuality)">
+                    <option value="@nameof(GoodBad.None)"></option>
+                    <option value="@nameof(GoodBad.Good)">نرمال</option>
+                    <option value="@nameof(GoodBad.Bad)">نیاز به تعویض</option>
+                </InputSelect>
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.GeneratorVoltage" />
+                <GoodBadInputNumber Source="Pm" For="() => Pm.GeneratorVoltage" Step="0.01" />
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.TrickleChargingVoltage" />
+                <GoodBadInputNumber Source="Pm" For="() => Pm.TrickleChargingVoltage" Step="0.01" />
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.StartingBattery1Voltage" />
+                <GoodBadInputNumber Source="Pm" For="() => Pm.StartingBattery1Voltage" Step="0.01" />
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.StartingBattery2Voltage" />
+                <GoodBadInputNumber Source="Pm" For="() => Pm.StartingBattery2Voltage" Step="0.01" />
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.AntiFreezeQuality" />
+                <InputSelect @bind-Value="Pm.AntiFreezeQuality" class="@GoodBadClass(Pm.AntiFreezeQuality)">
+                    <option value="@nameof(GoodBad.None)"></option>
+                    <option value="@nameof(GoodBad.Good)">نرمال</option>
+                    <option value="@nameof(GoodBad.Bad)">نیاز به تعویض</option>
+                </InputSelect>
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.AntiFreezeChangeDate" />
+                <PersianDate Value="Pm.AntiFreezeChangeDate" />
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.HeaterQuality" />
+                <InputSelect @bind-Value="Pm.HeaterQuality" class="@GoodBadClass(Pm.HeaterQuality)">
+                    <option value="@nameof(GoodBad.None)"></option>
+                    <option value="@nameof(GoodBad.Good)">نرمال</option>
+                    <option value="@nameof(GoodBad.Bad)">نیاز به تعویض</option>
+                </InputSelect>
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.TemperatureAfterHalfHourWork" />
+                <GoodBadInputNumber Source="Pm" For="() => Pm.TemperatureAfterHalfHourWork" />
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.OilPressureWhileWorking" />
+                <GoodBadInputNumber Source="Pm" For="() => Pm.OilPressureWhileWorking" />
+            </div>
+            <div class="col-xl-6 col-lg-9 col-md-12">
+                <div class="row">
+                    <div class="col-sm form-group">
+                        <Label For="() => Pm.OutAmperR" />
+                        <InputNumber @bind-Value="Pm.OutAmperR" class="form-control" step="0.01" />
+                    </div>
+                    <div class="col-sm form-group">
+                        <Label For="() => Pm.OutAmperS" />
+                        <InputNumber @bind-Value="Pm.OutAmperS" class="form-control" step="0.01" />
+                    </div>
+                    <div class="col-sm form-group">
+                        <Label For="() => Pm.OutAmperT" />
+                        <InputNumber @bind-Value="Pm.OutAmperT" class="form-control" step="0.01" />
+                    </div>
+                    @if (Pm.PowerConsumptionPercent != null)
+                    {
+                        <div class="col-sm form-group">
+                            <Label For="() => Pm.PowerConsumptionPercent" />
+                            <label class="form-control" style="background-color: hsl(@GetHueOfPercent(Pm.PowerConsumptionPercent.Value) , 74%, 89%)">
+                                @Pm.PowerConsumptionPercent.Value.ToString("N2")%
+                            </label>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.ControlCardName" />
+                <InputText @bind-Value="Pm.ControlCardName" class="form-control" />
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.ControlCardStatus" />
+                <InputSelect @bind-Value="Pm.ControlCardStatus" class="@GoodBadClass(Pm.ControlCardStatus)">
+                    <option value="@nameof(GoodBad.None)"></option>
+                    <option value="@nameof(GoodBad.Good)">سالم</option>
+                    <option value="@nameof(GoodBad.Bad)">ناسالم</option>
+                </InputSelect>
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.OilWaterStatus" />
+                <InputSelect @bind-Value="Pm.OilWaterStatus" class="@OilWaterStatusClass(Pm.OilWaterStatus)">
+                    @foreach (var item in Enum.GetValues<DieselPM.OilWaterStatusEnum>())
+                    {
+                        <option value="@item">@DisplayUtils.DisplayName(item)</option>
+                    }
+                </InputSelect>
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.GovernerOilChangeDate" />
+                <PersianDate Value="Pm.GovernerOilChangeDate" />
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.GasolinePumpStatus" />
+                <InputSelect @bind-Value="Pm.GasolinePumpStatus" class="@GoodBadClass(Pm.GasolinePumpStatus)">
+                    <option value="@nameof(GoodBad.None)"></option>
+                    <option value="@nameof(GoodBad.Good)">سالم</option>
+                    <option value="@nameof(GoodBad.Bad)">ناسالم</option>
+                </InputSelect>
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.GasolineViewHoseQuality" />
+                <InputSelect @bind-Value="Pm.GasolineViewHoseQuality" class="@GoodBadClass(Pm.GasolineViewHoseQuality)">
+                    <option value="@nameof(GoodBad.None)"></option>
+                    <option value="@nameof(GoodBad.Good)">سالم</option>
+                    <option value="@nameof(GoodBad.Bad)">ناسالم</option>
+                </InputSelect>
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.CityVoltageRN" />
+                <GoodBadInputNumber Source="Pm" For="() => Pm.CityVoltageRN" Step="0.01" />
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.CityVoltageSN" />
+                <GoodBadInputNumber Source="Pm" For="() => Pm.CityVoltageSN" Step="0.01" />
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.CityVoltageTN" />
+                <GoodBadInputNumber Source="Pm" For="() => Pm.CityVoltageTN" Step="0.01" />
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.DieselVoltageRN" />
+                <GoodBadInputNumber Source="Pm" For="() => Pm.DieselVoltageRN" Step="0.01" />
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.DieselVoltageSN" />
+                <GoodBadInputNumber Source="Pm" For="() => Pm.DieselVoltageSN" Step="0.01" />
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.DieselVoltageTN" />
+                <GoodBadInputNumber Source="Pm" For="() => Pm.DieselVoltageTN" Step="0.01" />
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.DampersWorkStatus" />
+                <InputSelect @bind-Value="Pm.DampersWorkStatus" class="@GoodBadClass(Pm.DampersWorkStatus)">
+                    <option value="@nameof(GoodBad.None)"></option>
+                    <option value="@nameof(GoodBad.Good)">سالم</option>
+                    <option value="@nameof(GoodBad.Bad)">خراب</option>
+                </InputSelect>
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.OutputFrequency" />
+                <GoodBadInputNumber Source="Pm" For="() => Pm.OutputFrequency" Step="0.01" />
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.WaterAlarm" />
+                <InputSelect @bind-Value="Pm.WaterAlarm" class="@GoodBadClass(Pm.WaterAlarm)">
+                    <option value="@nameof(GoodBad.None)"></option>
+                    <option value="@nameof(GoodBad.Good)">فعال</option>
+                    <option value="@nameof(GoodBad.Bad)">غیرفعال</option>
+                </InputSelect>
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.OilAlarm" />
+                <InputSelect @bind-Value="Pm.OilAlarm" class="@GoodBadClass(Pm.OilAlarm)">
+                    <option value="@nameof(GoodBad.None)"></option>
+                    <option value="@nameof(GoodBad.Good)">فعال</option>
+                    <option value="@nameof(GoodBad.Bad)">غیرفعال</option>
+                </InputSelect>
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.VoltageBetweenEarthAndNoleOfDiesel" />
+                <GoodBadInputNumber Source="Pm" For="() => Pm.VoltageBetweenEarthAndNoleOfDiesel" Step="0.01" />
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.VoltageBetweenEarthAndNoleOfCity" />
+                <GoodBadInputNumber Source="Pm" For="() => Pm.VoltageBetweenEarthAndNoleOfCity" Step="0.01" />
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.Cleaning" />
+                <InputSelect @bind-Value="Pm.Cleaning" class="@GoodBadClass(Pm.Cleaning)">
+                    <option value="@nameof(GoodBad.None)"></option>
+                    <option value="@nameof(GoodBad.Good)">فعال</option>
+                    <option value="@nameof(GoodBad.Bad)">غیرفعال</option>
+                </InputSelect>
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.Lighting" />
+                <InputSelect @bind-Value="Pm.Lighting" class="@GoodBadClass(Pm.Lighting)">
+                    <option value="@nameof(GoodBad.None)"></option>
+                    <option value="@nameof(GoodBad.Good)">فعال</option>
+                    <option value="@nameof(GoodBad.Bad)">غیرفعال</option>
+                </InputSelect>
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.Ventilation" />
+                <InputSelect @bind-Value="Pm.Ventilation" class="@GoodBadClass(Pm.Ventilation)">
+                    <option value="@nameof(GoodBad.None)"></option>
+                    <option value="@nameof(GoodBad.Good)">فعال</option>
+                    <option value="@nameof(GoodBad.Bad)">غیرفعال</option>
+                </InputSelect>
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.CablesAppearance" />
+                <InputSelect @bind-Value="Pm.CablesAppearance" class="@GoodBadClass(Pm.CablesAppearance)">
+                    <option value="@nameof(GoodBad.None)"></option>
+                    <option value="@nameof(GoodBad.Good)">فعال</option>
+                    <option value="@nameof(GoodBad.Bad)">غیرفعال</option>
+                </InputSelect>
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.ExtraCable" />
+                
             </div>
         </div>
     </div>
 </Card>
 
 @code {
+    private const string FORM_ITEM_CLASS = "col-xl-2 col-lg-3 col-md-4 col-sm-6 form-group";
+
     [Parameter]
     public DieselPM Pm { get; set; }
+
+    private string GoodBadClass(GoodBad value)
+    {
+        return value switch
+        {
+            GoodBad.Good => "form-select normal-value",
+            GoodBad.Bad => "form-select bad-value",
+            _ => "form-select"
+        };
+    }
+
+    private string OilWaterStatusClass(DieselPM.OilWaterStatusEnum value)
+    {
+        return value switch
+        {
+            DieselPM.OilWaterStatusEnum.None => "form-select",
+            DieselPM.OilWaterStatusEnum.Normal => "form-select normal-value",
+            _ => "form-select bad-value"
+        };
+    }
+
+    private int GetHueOfPercent(double percent)
+    {
+        if (percent > 100)
+            return 0;
+        return (int)Math.Round(percent * 1.2);
+    }
 }

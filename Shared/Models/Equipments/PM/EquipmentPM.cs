@@ -40,15 +40,15 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
         [HealthParameter(EnumOkItems = new string[] { nameof(GoodBad.Good) })]
         public GoodBad Ventilation { get; set; }
 
+        [DisplayName("فرم ظاهری کابلها")]
+        [HealthParameter(EnumOkItems = new string[] { nameof(GoodBad.Good) })]
+        public GoodBad CablesAppearance { get; set; }
+
         [DisplayName("کابل اضافه")]
         public bool ExtraCable { get; set; }
 
         [DisplayName("وسایل سایر واحدها")]
         public bool OtherUnitsEquipments { get; set; }
-
-        [DisplayName("فرم ظاهری کابلها")]
-        [HealthParameter(EnumOkItems = new string[] { nameof(GoodBad.Good) })]
-        public GoodBad CablesAppearance { get; set; }
 
         [DisplayName("توضیحات")]
         public string Description { get; set; }

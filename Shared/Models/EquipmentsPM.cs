@@ -31,12 +31,16 @@ namespace TciPM.Blazor.Shared.Models
         [Display(Name = "کاربر ثبت کننده")]
         public string ReportingUser { get; set; }
 
+        [ValidateComplexType]
         public List<DieselPM> DieselsPM { get; set; } = new List<DieselPM>();
 
+        [ValidateComplexType]
         public List<RectifierPM> RectifiersPM { get; set; } = new List<RectifierPM>();
 
+        [ValidateComplexType]
         public List<BatteryPM> BatteriesPM { get; set; } = new List<BatteryPM>();
 
+        [ValidateComplexType]
         public List<UpsPM> UpsPM { get; set; } = new List<UpsPM>();
 
         [Display(Name = "امتیاز کلی مرکز")]

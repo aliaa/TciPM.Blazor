@@ -138,3 +138,11 @@ label.error {
 a {
     text-decoration: none;
 }
+
+.normal-value {
+    background-color: hsl(120, 74%, 89%);
+}
+
+.bad-value {
+    background-color: hsl(0, 74%, 89%);
+}

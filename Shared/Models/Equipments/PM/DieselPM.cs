@@ -28,14 +28,18 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
         public DateTime OilFilterChangeDate { get; set; }
 
         [HealthParameter(EnumOkItems = new string[] { nameof(GoodBad.Good) })]
-        [ValidArray(InvalidValues = new string[] { nameof(GoodBad.None) })]
+        [ValidArray(InvalidValues = new string[] { nameof(GoodBad.None) }, ErrorMessage = "کیفیت شلنگهای آب انتخاب نشده است!")]
         [DisplayName("کیفیت شلنگهای آب")]
         public GoodBad WaterHoseQuality { get; set; } = GoodBad.None;
 
         [HealthParameter(EnumOkItems = new string[] { nameof(GoodBad.Good) })]
-        [ValidArray(InvalidValues = new string[] { nameof(GoodBad.None) })]
+        [ValidArray(InvalidValues = new string[] { nameof(GoodBad.None) }, ErrorMessage = "کیفیت شلنگهای گازوئیل انتخاب نشده است!")]
         [DisplayName("کیفیت شلنگهای گازوئیل")]
         public GoodBad GasolineHoseQuality { get; set; } = GoodBad.None;
+
+        [HealthParameter(MinOkRange = 13, MaxOkRange = 28.5)]
+        [DisplayName("ولتاژ دینام")]
+        public float GeneratorVoltage { get; set; } = -1;
 
         [HealthParameter(MinOkRange = 13, MaxOkRange = 28)]
         [DisplayName("ولتاژ تریکل شارژر")]
@@ -50,7 +54,7 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
         public float StartingBattery2Voltage { get; set; } = -1;
 
         [HealthParameter(EnumOkItems = new string[] { nameof(GoodBad.Good) })]
-        [ValidArray(InvalidValues = new string[] { nameof(GoodBad.None) })]
+        [ValidArray(InvalidValues = new string[] { nameof(GoodBad.None) }, ErrorMessage = "کیفیت ضدیخ انتخاب نشده است!")]
         [DisplayName("کیفیت ضدیخ")]
         public GoodBad AntiFreezeQuality { get; set; }
 
@@ -59,12 +63,12 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
         public DateTime AntiFreezeChangeDate { get; set; }
 
         [HealthParameter(EnumOkItems = new string[] { nameof(GoodBad.Good) })]
-        [ValidArray(InvalidValues = new string[] { nameof(GoodBad.None) })]
+        [ValidArray(InvalidValues = new string[] { nameof(GoodBad.None) }, ErrorMessage = "کیفیت هیتر دیزل انتخاب نشده است!")]
         [DisplayName("کیفیت هیتر دیزل")]
         public GoodBad HeaterQuality { get; set; }
 
         [HealthParameter(MinOkRange = 45, MaxOkRange = 95)]
-        [DisplayName("دمای دیزل پس از نیم ساعت کار")]
+        [DisplayName("دما پس از نیم ساعت کار")]
         public int TemperatureAfterHalfHourWork { get; set; } = -1;
 
         [HealthParameter(MinOkRange = 2, MaxOkRange = 10)]
@@ -72,31 +76,44 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
         public float OilPressureWhileWorking { get; set; } = -1;
 
         //[HealthParameter(MinOkRange = 0, MaxOkRange = 80)]
-        [DisplayName("حداکثر جریان کشش از دیزل")]
-        public float MaxAmper => Math.Max(Math.Max(OutAmperR, OutAmperS), OutAmperT);
-
-        //[HealthParameter(MinOkRange = 0, MaxOkRange = 80)]
-        [DisplayName("جریان خروجی دیزل [R]")]
+        [DisplayName("جریان خروجی [R]")]
         public float OutAmperR { get; set; } = -1;
 
         //[HealthParameter(MinOkRange = 0, MaxOkRange = 80)]
-        [DisplayName("جریان خروجی دیزل [S]")]
+        [DisplayName("جریان خروجی [S]")]
         public float OutAmperS { get; set; } = -1;
 
         //[HealthParameter(MinOkRange = 0, MaxOkRange = 80)]
-        [DisplayName("جریان خروجی دیزل [T]")]
+        [DisplayName("جریان خروجی [T]")]
         public float OutAmperT { get; set; } = -1;
+
+        [Display(Name = "درصد توان مصرفی")]
+        public double? PowerConsumptionPercent
+        {
+            get
+            {
+                var usage = Math.Max(Math.Max(OutAmperR, OutAmperS), OutAmperT) * 380 * Math.Sqrt(3);
+                if (usage <= 0)
+                    return null;
+                return 100 * usage / (Source.PermissivePower * 1000);
+            }
+        }
+
+        //[HealthParameter(MinOkRange = 0, MaxOkRange = 80)]
+        [DisplayName("حداکثر جریان کشش از دیزل")]
+        public float MaxAmper => Math.Max(Math.Max(OutAmperR, OutAmperS), OutAmperT);
 
         [DisplayName("نام کارت کنترل")]
         public string ControlCardName { get; set; }
 
         [HealthParameter(EnumOkItems = new string[] { nameof(GoodBad.Good) })]
-        [ValidArray(InvalidValues = new string[] { nameof(GoodBad.None) })]
+        [ValidArray(InvalidValues = new string[] { nameof(GoodBad.None) }, ErrorMessage = "وضعیت کارت کنترل انتخاب نشده است!")]
         [DisplayName("وضعیت کارت کنترل")]
         public GoodBad ControlCardStatus { get; set; }
 
         public enum OilWaterStatusEnum
         {
+            [Display(Name = "")]
             None,
             [Display(Name="کم")]
             Low,
@@ -110,6 +127,7 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
 
         [HealthParameter(EnumOkItems = new string[] { nameof(OilWaterStatusEnum.Normal) })]
         [DisplayName("سطح آب و روغن")]
+        [ValidArray(InvalidValues = new string[] { nameof(OilWaterStatusEnum.None) }, ErrorMessage = "سطح آب و روغن انتخاب نشده است!")]
         public OilWaterStatusEnum OilWaterStatus { get; set; }
 
         [HealthParameter(DateDaysOkRange = 365)]
@@ -118,9 +136,11 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
 
         [HealthParameter(EnumOkItems = new string[] { nameof(GoodBad.Good) })]
         [DisplayName("وضعیت پمپ گازوئیل")]
+        [ValidArray(InvalidValues = new string[] { nameof(GoodBad.None) }, ErrorMessage = "وضعیت پمپ گازوئیل انتخاب نشده است!")]
         public GoodBad GasolinePumpStatus { get; set; }
 
         [HealthParameter(EnumOkItems = new string[] { nameof(GoodBad.Good) })]
+        [ValidArray(InvalidValues = new string[] { nameof(GoodBad.None) }, ErrorMessage = "کیفیت شلنگ نشاندهنده گازوئیل انتخاب نشده است!")]
         [DisplayName("کیفیت شلنگ نشاندهنده گازوئیل")]
         public GoodBad GasolineViewHoseQuality { get; set; }
 
@@ -150,18 +170,21 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
 
         [HealthParameter(EnumOkItems = new string[] { nameof(GoodBad.Good) })]
         [DisplayName("عملکرد کامل دمپرها")]
+        [ValidArray(InvalidValues = new string[] { nameof(GoodBad.None) }, ErrorMessage = "عملکرد کامل دمپرها انتخاب نشده است!")]
         public GoodBad DampersWorkStatus { get; set; }
 
-        [HealthParameter(MinOkRange = 13, MaxOkRange = 28.5)]
-        [DisplayName("ولتاژ دینام")]
-        public float GeneratorVoltage { get; set; } = -1;
+        [HealthParameter(MinOkRange = 47, MaxOkRange = 53)]
+        [DisplayName("فرکانس خروجی")]
+        public float OutputFrequency { get; set; }
 
         [HealthParameter(EnumOkItems = new string[] { nameof(GoodBad.Good) })]
         [DisplayName("آلارم آب دیزل")]
+        [ValidArray(InvalidValues = new string[] { nameof(GoodBad.None) }, ErrorMessage = "آلارم آب دیزل انتخاب نشده است!")]
         public GoodBad WaterAlarm { get; set; }
 
         [HealthParameter(EnumOkItems = new string[] { nameof(GoodBad.Good) })]
         [DisplayName("آلارم روغن دیزل")]
+        [ValidArray(InvalidValues = new string[] { nameof(GoodBad.None) }, ErrorMessage = "آلارم روغن دیزل انتخاب نشده است!")]
         public GoodBad OilAlarm { get; set; }
 
         [HealthParameter(MinOkRange = 0, MaxOkRange = 3)]
@@ -171,10 +194,6 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
         [HealthParameter(MinOkRange = 0, MaxOkRange = 3)]
         [DisplayName("ولتاژ بین ارت و نول برق شهری")]
         public float VoltageBetweenEarthAndNoleOfCity { get; set; } = -1;
-
-        [HealthParameter(MinOkRange = 47, MaxOkRange = 53)]
-        [DisplayName("فرکانس خروجی")]
-        public float OutputFrequency { get; set; }
 
         //public Diesel GetSourceObj(IReadOnlyDbContext db)
         //{

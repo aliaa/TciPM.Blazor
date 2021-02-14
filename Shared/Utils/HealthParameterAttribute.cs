@@ -5,7 +5,7 @@ using System.Reflection;
 namespace TciPM.Blazor.Shared.Utils
 {
     [System.AttributeUsage(AttributeTargets.Property, Inherited = true, AllowMultiple = false)]
-    sealed class HealthParameterAttribute : Attribute
+    public sealed class HealthParameterAttribute : Attribute
     {
         public int Importance { get; set; } = 1;
         public double MinOkRange { get; set; } = 0;

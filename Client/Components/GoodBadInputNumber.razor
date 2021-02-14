@@ -1,0 +1,62 @@
+﻿@using System.Reflection
+@typeparam T
+
+@if (PropertyInfo != null)
+{
+    <InputNumber TValue="T" Value="Value" ValueChanged="ValueChanged" ValueExpression="For" class="@Class" step="@Step" />
+}
+
+@code {
+    [Parameter]
+    public object Source { get; set; }
+
+    [Parameter]
+    public Expression<Func<T>> For { get; set; }
+
+    [Parameter]
+    public double Step { get; set; } = 1;
+
+    private T Value { get; set; }
+    private PropertyInfo PropertyInfo { get; set; }
+    private HealthParameterAttribute HealthAttribute { get; set; }
+    private string Class
+    {
+        get
+        {
+            if (HealthAttribute != null)
+            {
+                var health = HealthAttribute.GetHealth(PropertyInfo, Value);
+                if (health == 1)
+                    return "form-control normal-value";
+                else
+                    return "form-control bad-value";
+            }
+            return "form-control";
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        MemberInfo memberInfo;
+        if (For.Body is MemberExpression mex)
+            memberInfo = mex.Member;
+        else if (For.Body is UnaryExpression uex)
+            memberInfo = (uex.Operand as MemberExpression).Member;
+        else
+            throw new NotImplementedException();
+        if (memberInfo is PropertyInfo prop)
+        {
+            PropertyInfo = prop;
+            Value = (T)prop.GetValue(Source);
+            HealthAttribute = PropertyInfo.GetCustomAttribute<HealthParameterAttribute>();
+        }
+        else
+            throw new Exception($"Member {memberInfo.Name} is not a property!");
+    }
+
+    private void ValueChanged(T value)
+    {
+        Value = value;
+        PropertyInfo.SetValue(Source, value);
+    }
+}

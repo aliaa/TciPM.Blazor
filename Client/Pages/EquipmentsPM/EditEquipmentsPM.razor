@@ -9,7 +9,7 @@
     @if (pm != null)
     {
         <EditForm Model="pm" OnValidSubmit="Submit">
-            <DataAnnotationsValidator />
+            <ObjectGraphDataAnnotationsValidator />
             @if (pm != null)
             {
                 @foreach (var dpm in pm.DieselsPM)

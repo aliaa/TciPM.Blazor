@@ -8,8 +8,14 @@ namespace TciPM.Blazor.Shared.Utils
         public string[] ValidValues { get; set; }
         public string[] InvalidValues { get; set; }
 
-
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        {
+            if(!IsValid(value))
+                return new ValidationResult(ErrorMessage, new[] { validationContext.MemberName });
+            return null;
+        }
+
+        public override bool IsValid(object value)
         {
             string strVal = value.ToString();
             Console.WriteLine("strVal: " + strVal);
@@ -17,7 +23,7 @@ namespace TciPM.Blazor.Shared.Utils
             {
                 foreach (var item in InvalidValues)
                     if (item.Equals(strVal))
-                        return new ValidationResult(ErrorMessage, new[] { validationContext.MemberName });
+                        return false;
             }
             if (ValidValues != null && ValidValues.Length > 0)
             {
@@ -30,10 +36,10 @@ namespace TciPM.Blazor.Shared.Utils
                         break;
                     }
                 }
-                if(!found)
-                    return new ValidationResult(ErrorMessage, new[] { validationContext.MemberName });
+                if (!found)
+                    return false;
             }
-            return null;
+            return true;
         }
     }
 }

@@ -49,7 +49,7 @@ namespace TciPM.Blazor.Server.Controllers
                 foreach (var eq in center.RectifierAndBatteries)
                     pm.BatteriesPM.Add(new BatteryPM(eq));
             }
-            //TODO
+            //TODO other pms
             return pm;
         }
 
