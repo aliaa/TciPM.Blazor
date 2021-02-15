@@ -6,7 +6,11 @@
 @inject NavigationManager nav
 
 <div class="container">
-    @if (pm != null)
+    @if(pm == null)
+    {
+        <Loading />
+    }
+    else
     {
         <EditForm Model="pm" OnValidSubmit="Submit">
             <ObjectGraphDataAnnotationsValidator />

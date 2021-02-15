@@ -29,6 +29,25 @@ namespace TciPM.Blazor.Server.Controllers
 
         public ActionResult<EquipmentsPM> Item(string id) => db.FindById<EquipmentsPM>(id);
 
+        public ActionResult<List<CenterNameVM>> CentersToPm()
+        {
+            var user = GetUser();
+            if (!user.Permissions.Contains(Permission.WriteEquipmentPM))
+                return Unauthorized();
+            var list = new List<CenterNameVM>();
+            foreach (var cityId in user.Cities)
+            {
+                var city = db.FindById<City>(cityId);
+                list.AddRange(db.Find<CommCenterX>(c => c.City == cityId && c.EquipmentsPmEnabled)
+                    .SortByDescending(c => c.ImportanceLevel).ThenBy(c => c.Name)
+                    .ToEnumerable()
+                    .Select(c => new CenterNameVM { CityName = city.Name, Name = c.Name, Id = c.Id, PMPeriodDays = c.PMPeriodDays }));
+            }
+            foreach (var item in list)
+                item.ElapsedDaysOfLastPm = CommCenterController.GetDaysLastPM(db, item.Id);
+            return list;
+        }
+
         public ActionResult<EquipmentsPM> New(string centerId)
         {
             var center = CommCenterController.GetItem(db, centerId);

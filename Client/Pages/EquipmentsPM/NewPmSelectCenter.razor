@@ -1,0 +1,66 @@
+﻿@page "/equipmentsPm/new"
+
+@inject HttpClientX http
+
+<div class="container">
+    <h5>لطفا مرکزی را برای ثبت PM انتخاب کنید</h5>
+    @if (centers == null)
+    {
+        <Loading />
+    }
+    else
+    {
+        <div class="row mt-4" data-masonry='{"percentPosition": true }'>
+            @foreach (var city in centers.GroupBy(c => c.CityName))
+            {
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="card mt-4">
+                        <div class="card-header">
+                            <h5 class="m-0">
+                                @city.Key
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-bordered table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>مرکز</th>
+                                        <th>روزهای گذشته از آخرین PM</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var center in city)
+                                    {
+                                        <tr>
+                                            <td style="background-color:hsl(@(center.ElapsedDaysOfLastPm <= center.PMPeriodDays ? 120 : 0) , 74%, 89%)">
+                                                <a href="/equipmentsPm/new/@center.Id">@center.Name</a>
+                                            </td>
+                                            <td style="background-color:hsl(@GetHueOfElapsedDays(center) , 74%, 89%);">
+                                                @center.ElapsedDaysOfLastPm
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@code {
+    private List<CenterNameVM> centers;
+
+    protected override async Task OnInitializedAsync()
+    {
+        centers = await http.GetFromJsonAsync<List<CenterNameVM>>("EquipmentsPm/CentersToPm");
+    }
+
+    private int GetHueOfElapsedDays(CenterNameVM center)
+    {
+        var elapsed = Math.Min(center.PMPeriodDays, center.ElapsedDaysOfLastPm);
+        return (int)Math.Round(120.0 * (center.PMPeriodDays - elapsed) / center.PMPeriodDays);
+    }
+}

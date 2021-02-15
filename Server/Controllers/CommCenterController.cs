@@ -74,7 +74,7 @@ namespace TciPM.Blazor.Server.Controllers
             {
                 center.CityName = cityNames[center.City];
                 if (center.EquipmentsPmEnabled)
-                    center.ElapsedDaysOfLastPm = GetDaysLastPM(center.Id);
+                    center.ElapsedDaysOfLastPm = GetDaysLastPM(db, center.Id);
                 center.DieselsCount = (int)db.Count<Diesel>(d => d.Center == center.Id && d.Deleted != true);
                 center.BatteryAndRectifiersCount = (int)db.Count<RectifierAndBattery>(rb => rb.Center == center.Id && rb.Deleted != true);
                 center.UpsCount = (int)db.Count<Ups>(u => u.Center == center.Id && u.Deleted != true);
@@ -85,7 +85,7 @@ namespace TciPM.Blazor.Server.Controllers
             return list;
         }
 
-        private int GetDaysLastPM(string centerId)
+        public static int GetDaysLastPM(IDbContext db, string centerId)
         {
             DateTime lastPmCreateDate = db.Find<EquipmentsPM>(pm => pm.CenterId == centerId)
                 .Project(pm => pm.PmDate).SortByDescending(pm => pm.PmDate).FirstOrDefault();
