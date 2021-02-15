@@ -82,21 +82,30 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
         //}
 
         [DisplayName("درصد جریان مصرفی مرکز به ظرفیت یکسوساز")]
-        public float GetPowerConsumptionPercent(RectifierAndBattery source)
+        public float? PowerConsumptionPercent
         {
-            int totalCapacity = source.RectifierCount * source.EachRectifierCapacity;
-            return 100 * CenterMaxCurrentUsage / totalCapacity;
+            get
+            {
+                int totalCapacity = Source.RectifierCount * Source.EachRectifierCapacity;
+                var result = 100 * CenterMaxCurrentUsage / totalCapacity;
+                if (result < 0)
+                    return null;
+                return result;
+            }
         }
 
         [DisplayName("درصد جریان نهایی دشارژ به ظرفیت باتری")]
-        public float GetFinalDechargePercent(RectifierAndBattery source)
+        public float FinalDechargePercent
         {
-            var capacitySum = source.Batteries.Sum(s => s.Capacity);
-            if(capacitySum == 0)
+            get
             {
-                capacitySum = source.Batteries.Sum(s => s.Capacity);
+                var capacitySum = Source.Batteries.Sum(s => s.Capacity);
+                if (capacitySum == 0)
+                {
+                    capacitySum = Source.Batteries.Sum(s => s.Capacity);
+                }
+                return 100 * FinalDechargeCurrent / capacitySum;
             }
-            return 100 * FinalDechargeCurrent / capacitySum;
         }
     }
 }

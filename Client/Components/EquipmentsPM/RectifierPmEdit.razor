@@ -1,8 +1,226 @@
 ﻿<Card Header="@("یکسوساز " + Pm.Source.Name)" BackgroundHue="226">
-
+    <div class="card" style="background-color:#fff4">
+        <div class="card-header">مشخصات کلی</div>
+        <div class="card-body row">
+            <div class="col-md-2 col-sm-6">
+                <Label For="() => Pm.Source.Model" />
+                <h6>@Pm.Source.RectifierModel</h6>
+            </div>
+            <div class="col-md-2 col-sm-6">
+                <label class="form-label">ظرفیت</label>
+                <h6>@Pm.Source.EachRectifierCapacity * @Pm.Source.RectifierCount</h6>
+            </div>
+        </div>
+    </div>
+    <div class="card mt-4" style="background-color:#fff4">
+        <div class="card-header">جزئیات PM</div>
+        <div class="card-body row">
+            <div class="col-lg-6 col-md-9 form-group">
+                <Label For="() => Pm.BatteriesDechargeTime" />
+                <div class="d-flex">
+                    <InputNumber @bind-Value="DechargeHours" class="form-control" style="width: 18%;" min="0" />
+                    <span class="m-2">ساعت و</span>
+                    <InputNumber @bind-Value="DechargeMinutes" class="form-control" style="width: 18%;" min="0" max="59" />
+                    <span class="m-2">دقیقه و</span>
+                    <InputNumber @bind-Value="DechargeSeconds" class="form-control" style="width: 18%;" min="0" max="59" />
+                    <span class="m-2">ثانیه</span>
+                </div>
+            </div>
+            <div class="col-xxl-3 col-xl-4 col-lg-5 col-md-6 form-group">
+                <Label For="() => Pm.CenterMaxCurrentUsage">
+                    (حالت نرمال)
+                </Label>
+                <GoodBadInputNumber Source="Pm" For="() => Pm.CenterMaxCurrentUsage" Step="0.01" />
+            </div>
+            <div class="col-xxl-3 col-xl-4 col-lg-5 col-md-6 form-group">
+                @if (Pm.PowerConsumptionPercent != null)
+                {
+                    <Label For="() => Pm.PowerConsumptionPercent" />
+                    <label class="form-control" style="background-color: hsl(@GetHueOfPercent(Pm.PowerConsumptionPercent.Value) , 74%, 89%)">
+                        @Pm.PowerConsumptionPercent.Value.ToString("N2")%
+                    </label>
+                }
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.SustainVoltage" />
+                <GoodBadInputNumber Source="Pm" For="() => Pm.SustainVoltage" Step="0.01" />
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.RepeatingVoltage" />
+                <GoodBadInputNumber Source="Pm" For="() => Pm.RepeatingVoltage" Step="0.01" />
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.FinalDechargeVoltage" />
+                <GoodBadInputNumber Source="Pm" For="() => Pm.FinalDechargeVoltage" Step="0.01" />
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.FinalDechargeCurrent" />
+                <GoodBadInputNumber Source="Pm" For="() => Pm.FinalDechargeCurrent" Step="0.01" />
+            </div>
+            <div class="col-xxl-3 col-xl-4 col-lg-5 col-md-6 form-group">
+                @if (Pm.FinalDechargePercent > 0)
+                {
+                    <Label For="() => Pm.FinalDechargePercent" />
+                    <label class="form-control" style="background-color: hsl(@GetHueOfPercent(Pm.FinalDechargePercent) , 74%, 89%)">
+                        @Pm.FinalDechargePercent.ToString("N2")%
+                    </label>
+                }
+            </div>
+            <div class="col-lg-4 col-md-8 form-group">
+                <label class="form-label">مصرف AC یکسوکننده ها</label>
+                <div class="d-flex form-group">
+                    <span class="m-2">R:</span>
+                    <InputNumber @bind-Value="Pm.AcUsageR" class="form-control" style="width: 22%;" min="0" max="23" />
+                    <span class="m-2">S:</span>
+                    <InputNumber @bind-Value="Pm.AcUsageS" class="form-control" style="width: 22%;" min="0" max="59" />
+                    <span class="m-2">T:</span>
+                    <InputNumber @bind-Value="Pm.AcUsageT" class="form-control" style="width: 22%;" min="0" max="59" />
+                </div>
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.MinimumDensityExists" />
+                <GoodBadInputNumber Source="Pm" For="() => Pm.MinimumDensityExists" Step="0.01" />
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.MaximumDensityExists" />
+                <GoodBadInputNumber Source="Pm" For="() => Pm.MaximumDensityExists" Step="0.01" />
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.LastDechargeDate" />
+                <InputDate @bind-Value="Pm.LastDechargeDate" class="form-control" />
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.Alarm" />
+                <InputSelect @bind-Value="Pm.Alarm" class="@GoodBadClass(Pm.Alarm)">
+                    <option value="@nameof(GoodBad.None)"></option>
+                    <option value="@nameof(GoodBad.Good)">فعال</option>
+                    <option value="@nameof(GoodBad.Bad)">غیرفعال</option>
+                </InputSelect>
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.ReportsAreWriting" />
+                <InputSelect @bind-Value="Pm.ReportsAreWriting" class="@GoodBadClass(Pm.ReportsAreWriting)">
+                    <option value="@nameof(GoodBad.None)"></option>
+                    <option value="@nameof(GoodBad.Good)">بلی</option>
+                    <option value="@nameof(GoodBad.Bad)">خیر</option>
+                </InputSelect>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 form-group">
+                <Label For="() => Pm.ControlAndBatteryEnclosureUsage" />
+                <InputSelect @bind-Value="Pm.ControlAndBatteryEnclosureUsage" class="@GoodBadClass(Pm.ControlAndBatteryEnclosureUsage)">
+                    <option value="@nameof(GoodBad.None)"></option>
+                    <option value="@nameof(GoodBad.Good)">نرمال</option>
+                    <option value="@nameof(GoodBad.Bad)">غیرنرمال</option>
+                </InputSelect>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 form-group">
+                <Label For="() => Pm.AlarmStatusForRemoteCenters" />
+                <InputSelect @bind-Value="Pm.AlarmStatusForRemoteCenters" class="@GoodBadClass(Pm.AlarmStatusForRemoteCenters)">
+                    <option value="@nameof(GoodBad.None)"></option>
+                    <option value="@nameof(GoodBad.Good)">نرمال</option>
+                    <option value="@nameof(GoodBad.Bad)">غیرنرمال</option>
+                </InputSelect>
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.Cleaning" />
+                <InputSelect @bind-Value="Pm.Cleaning" class="@GoodBadClass(Pm.Cleaning)">
+                    <option value="@nameof(GoodBad.None)"></option>
+                    <option value="@nameof(GoodBad.Good)">خوب</option>
+                    <option value="@nameof(GoodBad.Bad)">بد</option>
+                </InputSelect>
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.Lighting" />
+                <InputSelect @bind-Value="Pm.Lighting" class="@GoodBadClass(Pm.Lighting)">
+                    <option value="@nameof(GoodBad.None)"></option>
+                    <option value="@nameof(GoodBad.Good)">خوب</option>
+                    <option value="@nameof(GoodBad.Bad)">بد</option>
+                </InputSelect>
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.Ventilation" />
+                <InputSelect @bind-Value="Pm.Ventilation" class="@GoodBadClass(Pm.Ventilation)">
+                    <option value="@nameof(GoodBad.None)"></option>
+                    <option value="@nameof(GoodBad.Good)">خوب</option>
+                    <option value="@nameof(GoodBad.Bad)">بد</option>
+                </InputSelect>
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.CablesAppearance" />
+                <InputSelect @bind-Value="Pm.CablesAppearance" class="@GoodBadClass(Pm.CablesAppearance)">
+                    <option value="@nameof(GoodBad.None)"></option>
+                    <option value="@nameof(GoodBad.Good)">خوب</option>
+                    <option value="@nameof(GoodBad.Bad)">بد</option>
+                </InputSelect>
+            </div>
+            <div class="@FORM_ITEM_CLASS mt-3">
+                <div class="form-check">
+                    <Label For="() => Pm.ExtraCable" Class="form-check-label">
+                        <InputCheckbox @bind-Value="Pm.ExtraCable" id="@nameof(Pm.ExtraCable)" class="form-check-input" />
+                    </Label>
+                </div>
+                <div class="form-check">
+                    <Label For="() => Pm.OtherUnitsEquipments" Class="form-check-label">
+                        <InputCheckbox @bind-Value="Pm.OtherUnitsEquipments" id="@nameof(Pm.OtherUnitsEquipments)" class="form-check-input" />
+                    </Label>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-4 col-md-6 mt-3 form-group">
+                <div class="form-check text-danger">
+                    <Label For="() => Pm.NeedsEmergencyOperations" Class="form-check-label">
+                        <InputCheckbox @bind-Value="Pm.NeedsEmergencyOperations" id="@nameof(Pm.NeedsEmergencyOperations)" class="form-check-input" />
+                    </Label>
+                </div>
+                <div class="form-check text-success">
+                    <Label For="() => Pm.ConnectedToAlarmsSystem" Class="form-check-label">
+                        <InputCheckbox @bind-Value="Pm.ConnectedToAlarmsSystem" id="@nameof(Pm.ConnectedToAlarmsSystem)" class="form-check-input" />
+                    </Label>
+                </div>
+            </div>
+            <div class="col-lg-6 form-group">
+                <Label For="() => Pm.Description" />
+                <InputTextArea @bind-Value="Pm.Description" class="form-control" />
+            </div>
+        </div>
+    </div>
 </Card>
 
 @code {
+    private const string FORM_ITEM_CLASS = "col-xl-2 col-lg-3 col-md-4 col-sm-6 form-group";
+
     [Parameter]
     public RectifierPM Pm { get; set; }
+
+    private int DechargeHours
+    {
+        get => Pm.BatteriesDechargeTime.Hours;
+        set => Pm.BatteriesDechargeTime = new TimeSpan(value, DechargeMinutes, DechargeSeconds);
+    }
+    private int DechargeMinutes
+    {
+        get => Pm.BatteriesDechargeTime.Minutes;
+        set => Pm.BatteriesDechargeTime = new TimeSpan(DechargeHours, value, DechargeSeconds);
+    }
+    private int DechargeSeconds
+    {
+        get => Pm.BatteriesDechargeTime.Seconds;
+        set => Pm.BatteriesDechargeTime = new TimeSpan(DechargeHours, DechargeMinutes, value);
+    }
+
+    private int GetHueOfPercent(double percent)
+    {
+        if (percent > 100)
+            return 0;
+        return (int)Math.Round((100 - percent) * 1.2);
+    }
+
+    private string GoodBadClass(GoodBad value)
+    {
+        return value switch
+        {
+            GoodBad.Good => "form-select normal-value",
+            GoodBad.Bad => "form-select bad-value",
+            _ => "form-select"
+        };
+    }
 }

@@ -33,15 +33,15 @@
             </div>
             <div class="@FORM_ITEM_CLASS">
                 <Label For="() => Pm.GasolineFilterChangeDate" />
-                <PersianDate Value="Pm.GasolineFilterChangeDate" />
+                <InputDate @bind-Value="Pm.GasolineFilterChangeDate" class="form-control" />
             </div>
             <div class="@FORM_ITEM_CLASS">
                 <Label For="() => Pm.OilChangeDate" />
-                <PersianDate Value="Pm.OilChangeDate" />
+                <InputDate @bind-Value="Pm.OilChangeDate" class="form-control" />
             </div>
             <div class="@FORM_ITEM_CLASS">
                 <Label For="() => Pm.OilFilterChangeDate" />
-                <PersianDate Value="Pm.OilFilterChangeDate" />
+                <InputDate @bind-Value="Pm.OilFilterChangeDate" class="form-control" />
             </div>
             <div class="@FORM_ITEM_CLASS">
                 <Label For="() => Pm.WaterHoseQuality" />
@@ -71,10 +71,13 @@
                 <Label For="() => Pm.StartingBattery1Voltage" />
                 <GoodBadInputNumber Source="Pm" For="() => Pm.StartingBattery1Voltage" Step="0.01" />
             </div>
-            <div class="@FORM_ITEM_CLASS">
-                <Label For="() => Pm.StartingBattery2Voltage" />
-                <GoodBadInputNumber Source="Pm" For="() => Pm.StartingBattery2Voltage" Step="0.01" />
-            </div>
+            @if (Pm.Source.DieselBatteryCount > 1)
+            {
+                <div class="@FORM_ITEM_CLASS">
+                    <Label For="() => Pm.StartingBattery2Voltage" />
+                    <GoodBadInputNumber Source="Pm" For="() => Pm.StartingBattery2Voltage" Step="0.01" />
+                </div>
+            }
             <div class="@FORM_ITEM_CLASS">
                 <Label For="() => Pm.AntiFreezeQuality" />
                 <InputSelect @bind-Value="Pm.AntiFreezeQuality" class="@GoodBadClass(Pm.AntiFreezeQuality)">
@@ -85,7 +88,7 @@
             </div>
             <div class="@FORM_ITEM_CLASS">
                 <Label For="() => Pm.AntiFreezeChangeDate" />
-                <PersianDate Value="Pm.AntiFreezeChangeDate" />
+                <InputDate @bind-Value="Pm.AntiFreezeChangeDate" class="form-control" />
             </div>
             <div class="@FORM_ITEM_CLASS">
                 <Label For="() => Pm.HeaterQuality" />
@@ -151,7 +154,7 @@
             </div>
             <div class="@FORM_ITEM_CLASS">
                 <Label For="() => Pm.GovernerOilChangeDate" />
-                <PersianDate Value="Pm.GovernerOilChangeDate" />
+                <InputDate @bind-Value="Pm.GovernerOilChangeDate" class="form-control" />
             </div>
             <div class="@FORM_ITEM_CLASS">
                 <Label For="() => Pm.GasolinePumpStatus" />
@@ -233,32 +236,32 @@
                 <Label For="() => Pm.Cleaning" />
                 <InputSelect @bind-Value="Pm.Cleaning" class="@GoodBadClass(Pm.Cleaning)">
                     <option value="@nameof(GoodBad.None)"></option>
-                    <option value="@nameof(GoodBad.Good)">فعال</option>
-                    <option value="@nameof(GoodBad.Bad)">غیرفعال</option>
+                    <option value="@nameof(GoodBad.Good)">خوب</option>
+                    <option value="@nameof(GoodBad.Bad)">بد</option>
                 </InputSelect>
             </div>
             <div class="@FORM_ITEM_CLASS">
                 <Label For="() => Pm.Lighting" />
                 <InputSelect @bind-Value="Pm.Lighting" class="@GoodBadClass(Pm.Lighting)">
                     <option value="@nameof(GoodBad.None)"></option>
-                    <option value="@nameof(GoodBad.Good)">فعال</option>
-                    <option value="@nameof(GoodBad.Bad)">غیرفعال</option>
+                    <option value="@nameof(GoodBad.Good)">خوب</option>
+                    <option value="@nameof(GoodBad.Bad)">بد</option>
                 </InputSelect>
             </div>
             <div class="@FORM_ITEM_CLASS">
                 <Label For="() => Pm.Ventilation" />
                 <InputSelect @bind-Value="Pm.Ventilation" class="@GoodBadClass(Pm.Ventilation)">
                     <option value="@nameof(GoodBad.None)"></option>
-                    <option value="@nameof(GoodBad.Good)">فعال</option>
-                    <option value="@nameof(GoodBad.Bad)">غیرفعال</option>
+                    <option value="@nameof(GoodBad.Good)">خوب</option>
+                    <option value="@nameof(GoodBad.Bad)">بد</option>
                 </InputSelect>
             </div>
             <div class="@FORM_ITEM_CLASS">
                 <Label For="() => Pm.CablesAppearance" />
                 <InputSelect @bind-Value="Pm.CablesAppearance" class="@GoodBadClass(Pm.CablesAppearance)">
                     <option value="@nameof(GoodBad.None)"></option>
-                    <option value="@nameof(GoodBad.Good)">فعال</option>
-                    <option value="@nameof(GoodBad.Bad)">غیرفعال</option>
+                    <option value="@nameof(GoodBad.Good)">خوب</option>
+                    <option value="@nameof(GoodBad.Bad)">بد</option>
                 </InputSelect>
             </div>
             <div class="@FORM_ITEM_CLASS mt-3">
@@ -273,7 +276,7 @@
                     </Label>
                 </div>
             </div>
-            <div class="col-lg-4 col-md-6 mt-3 form-group">
+            <div class="col-xl-3 col-lg-4 col-md-6 mt-3 form-group">
                 <div class="form-check text-danger">
                     <Label For="() => Pm.NeedsEmergencyOperations" Class="form-check-label">
                         <InputCheckbox @bind-Value="Pm.NeedsEmergencyOperations" id="@nameof(Pm.NeedsEmergencyOperations)" class="form-check-input" />
