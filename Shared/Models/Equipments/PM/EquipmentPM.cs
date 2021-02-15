@@ -60,10 +60,9 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
             {
                 int count = 0;
                 double sum = 0;
-                Type healthParamType = typeof(HealthParameterAttribute);
                 foreach (PropertyInfo prop in GetType().GetProperties())
                 {
-                    HealthParameterAttribute attr = (HealthParameterAttribute)prop.GetCustomAttribute(healthParamType);
+                    var attr = prop.GetCustomAttribute<HealthParameterAttribute>();
                     if (attr != null)
                     {
                         sum += attr.GetHealth(prop, prop.GetValue(this)) * attr.Importance;
