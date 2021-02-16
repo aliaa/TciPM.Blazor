@@ -1,4 +1,6 @@
-﻿<Card Header="@("یکسوساز " + Pm.Source.Name)" BackgroundHue="226">
+﻿@inject IEventAggregator eventAggregator
+
+<Card Header="@("یکسوساز " + Pm.Source.Name)" BackgroundHue="226">
     <div class="card" style="background-color:#fff4">
         <div class="card-header">مشخصات کلی</div>
         <div class="card-body row">
@@ -15,57 +17,84 @@
     <div class="card mt-4" style="background-color:#fff4">
         <div class="card-header">جزئیات PM</div>
         <div class="card-body row">
-            <div class="col-lg-6 col-md-9 form-group">
-                <Label For="() => Pm.BatteriesDechargeTime" />
-                <div class="d-flex">
-                    <InputNumber @bind-Value="DechargeHours" class="form-control" style="width: 18%;" min="0" />
-                    <span class="m-2">ساعت و</span>
-                    <InputNumber @bind-Value="DechargeMinutes" class="form-control" style="width: 18%;" min="0" max="59" />
-                    <span class="m-2">دقیقه و</span>
-                    <InputNumber @bind-Value="DechargeSeconds" class="form-control" style="width: 18%;" min="0" max="59" />
-                    <span class="m-2">ثانیه</span>
+            <div class="col-lg-3 col-md-4 col-sm-6 mt-4">
+                <div class="form-check">
+                    <label Class="form-check-label">
+                        <InputCheckbox Value="Pm.RectifierShutdownInPm" ValueExpression="() => Pm.RectifierShutdownInPm"
+                                       ValueChanged="ShutdownInPmChanged" class="form-check-input" />
+                        @DisplayUtils.DisplayName(() => Pm.RectifierShutdownInPm)
+                    </label>
                 </div>
             </div>
+            @if (Pm.RectifierShutdownInPm)
+            {
+                <div class="col-lg-6 col-md-9 form-group">
+                    <Label For="() => Pm.BatteriesDechargeTime" />
+                    <div class="d-flex">
+                        <InputNumber @bind-Value="DechargeHours" class="form-control" style="width: 18%;" min="0" />
+                        <span class="m-2">ساعت و</span>
+                        <InputNumber @bind-Value="DechargeMinutes" class="form-control" style="width: 18%;" min="0" max="59" />
+                        <span class="m-2">دقیقه و</span>
+                        <InputNumber @bind-Value="DechargeSeconds" class="form-control" style="width: 18%;" min="0" max="59" />
+                        <span class="m-2">ثانیه</span>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="@FORM_ITEM_CLASS">
+                    <Label For="() => Pm.ShutDownReason" />
+                    <InputSelect @bind-Value="Pm.ShutDownReason" class="form-select">
+                        @foreach (var item in Enum.GetValues<RectifierPM.RectifierNotShuttingDownReason>())
+                        {
+                            <option value="@item">@DisplayUtils.DisplayName(item)</option>
+                        }
+                    </InputSelect>
+                </div>
+            }
             <div class="col-xxl-3 col-xl-4 col-lg-5 col-md-6 form-group">
                 <Label For="() => Pm.CenterMaxCurrentUsage">
                     (حالت نرمال)
                 </Label>
                 <GoodBadInputNumber Source="Pm" For="() => Pm.CenterMaxCurrentUsage" Step="0.01" />
             </div>
-            <div class="col-xxl-3 col-xl-4 col-lg-5 col-md-6 form-group">
-                @if (Pm.PowerConsumptionPercent != null)
-                {
+            @if (Pm.PowerConsumptionPercent != null)
+            {
+                <div class="col-xxl-3 col-xl-4 col-lg-5 col-md-6 form-group">
                     <Label For="() => Pm.PowerConsumptionPercent" />
                     <label class="form-control" style="background-color: hsl(@GetHueOfPercent(Pm.PowerConsumptionPercent.Value) , 74%, 89%)">
                         @Pm.PowerConsumptionPercent.Value.ToString("N2")%
                     </label>
-                }
-            </div>
+                </div>
+            }
             <div class="@FORM_ITEM_CLASS">
                 <Label For="() => Pm.SustainVoltage" />
                 <GoodBadInputNumber Source="Pm" For="() => Pm.SustainVoltage" Step="0.01" />
             </div>
-            <div class="@FORM_ITEM_CLASS">
-                <Label For="() => Pm.RepeatingVoltage" />
-                <GoodBadInputNumber Source="Pm" For="() => Pm.RepeatingVoltage" Step="0.01" />
-            </div>
-            <div class="@FORM_ITEM_CLASS">
-                <Label For="() => Pm.FinalDechargeVoltage" />
-                <GoodBadInputNumber Source="Pm" For="() => Pm.FinalDechargeVoltage" Step="0.01" />
-            </div>
-            <div class="@FORM_ITEM_CLASS">
-                <Label For="() => Pm.FinalDechargeCurrent" />
-                <GoodBadInputNumber Source="Pm" For="() => Pm.FinalDechargeCurrent" Step="0.01" />
-            </div>
-            <div class="col-xxl-3 col-xl-4 col-lg-5 col-md-6 form-group">
-                @if (Pm.FinalDechargePercent > 0)
-                {
+            @if (Pm.RectifierShutdownInPm)
+            {
+                <div class="@FORM_ITEM_CLASS">
+                    <Label For="() => Pm.RepeatingVoltage" />
+                    <GoodBadInputNumber Source="Pm" For="() => Pm.RepeatingVoltage" Step="0.01" />
+                </div>
+                <div class="@FORM_ITEM_CLASS">
+                    <Label For="() => Pm.FinalDechargeVoltage" />
+                    <GoodBadInputNumber Source="Pm" For="() => Pm.FinalDechargeVoltage" Step="0.01" />
+                </div>
+                <div class="@FORM_ITEM_CLASS">
+                    <Label For="() => Pm.FinalDechargeCurrent" />
+                    <GoodBadInputNumber Source="Pm" For="() => Pm.FinalDechargeCurrent" Step="0.01" />
+                </div>
+            }
+            @if (Pm.FinalDechargePercent > 0)
+            {
+                <div class="col-xxl-3 col-xl-4 col-lg-5 col-md-6 form-group">
                     <Label For="() => Pm.FinalDechargePercent" />
                     <label class="form-control" style="background-color: hsl(@GetHueOfPercent(Pm.FinalDechargePercent) , 74%, 89%)">
                         @Pm.FinalDechargePercent.ToString("N2")%
                     </label>
-                }
-            </div>
+                </div>
+            }
             <div class="col-lg-4 col-md-8 form-group">
                 <label class="form-label">مصرف AC یکسوکننده ها</label>
                 <div class="d-flex form-group">
@@ -155,26 +184,30 @@
             </div>
             <div class="@FORM_ITEM_CLASS mt-3">
                 <div class="form-check">
-                    <Label For="() => Pm.ExtraCable" Class="form-check-label">
-                        <InputCheckbox @bind-Value="Pm.ExtraCable" id="@nameof(Pm.ExtraCable)" class="form-check-input" />
-                    </Label>
+                    <label class="form-check-label">
+                        <InputCheckbox @bind-Value="Pm.ExtraCable" class="form-check-input" />
+                        @DisplayUtils.DisplayName(() => Pm.ExtraCable)
+                    </label>
                 </div>
                 <div class="form-check">
-                    <Label For="() => Pm.OtherUnitsEquipments" Class="form-check-label">
-                        <InputCheckbox @bind-Value="Pm.OtherUnitsEquipments" id="@nameof(Pm.OtherUnitsEquipments)" class="form-check-input" />
-                    </Label>
+                    <label class="form-check-label">
+                        <InputCheckbox @bind-Value="Pm.OtherUnitsEquipments" class="form-check-input" />
+                        @DisplayUtils.DisplayName(() => Pm.OtherUnitsEquipments)
+                    </label>
                 </div>
             </div>
             <div class="col-xl-3 col-lg-4 col-md-6 mt-3 form-group">
                 <div class="form-check text-danger">
-                    <Label For="() => Pm.NeedsEmergencyOperations" Class="form-check-label">
-                        <InputCheckbox @bind-Value="Pm.NeedsEmergencyOperations" id="@nameof(Pm.NeedsEmergencyOperations)" class="form-check-input" />
-                    </Label>
+                    <label class="form-check-label">
+                        <InputCheckbox @bind-Value="Pm.NeedsEmergencyOperations" class="form-check-input" />
+                        @DisplayUtils.DisplayName(() => Pm.NeedsEmergencyOperations)
+                    </label>
                 </div>
                 <div class="form-check text-success">
-                    <Label For="() => Pm.ConnectedToAlarmsSystem" Class="form-check-label">
-                        <InputCheckbox @bind-Value="Pm.ConnectedToAlarmsSystem" id="@nameof(Pm.ConnectedToAlarmsSystem)" class="form-check-input" />
-                    </Label>
+                    <label class="form-check-label">
+                        <InputCheckbox @bind-Value="Pm.ConnectedToAlarmsSystem" class="form-check-input" />
+                        @DisplayUtils.DisplayName(() => Pm.ConnectedToAlarmsSystem)
+                    </label>
                 </div>
             </div>
             <div class="col-lg-6 form-group">
@@ -196,11 +229,13 @@
         get => Pm.BatteriesDechargeTime.Hours;
         set => Pm.BatteriesDechargeTime = new TimeSpan(value, DechargeMinutes, DechargeSeconds);
     }
+
     private int DechargeMinutes
     {
         get => Pm.BatteriesDechargeTime.Minutes;
         set => Pm.BatteriesDechargeTime = new TimeSpan(DechargeHours, value, DechargeSeconds);
     }
+
     private int DechargeSeconds
     {
         get => Pm.BatteriesDechargeTime.Seconds;
@@ -222,5 +257,12 @@
             GoodBad.Bad => "form-select bad-value",
             _ => "form-select"
         };
+    }
+
+    private async Task ShutdownInPmChanged(bool value)
+    {
+        Pm.RectifierShutdownInPm = value;
+        await eventAggregator.PublishAsync(new RectifierPmShutdownInPmChanged { SourceId = Pm.SourceId, ShutDownInPm = value });
+        Console.WriteLine("Event published: " + value);
     }
 }

@@ -41,6 +41,8 @@ namespace TciPM.Blazor.Client
             });
             builder.Services.AddBlazoredModal();
 
+            builder.Services.AddEventAggregator();
+
             await builder.Build().RunAsync();
         }
     }

@@ -266,26 +266,30 @@
             </div>
             <div class="@FORM_ITEM_CLASS mt-3">
                 <div class="form-check">
-                    <Label For="() => Pm.ExtraCable" Class="form-check-label">
-                        <InputCheckbox @bind-Value="Pm.ExtraCable" id="@nameof(Pm.ExtraCable)" class="form-check-input" />
-                    </Label>
+                    <label class="form-check-label">
+                        <InputCheckbox @bind-Value="Pm.ExtraCable" class="form-check-input" />
+                        @DisplayUtils.DisplayName(() => Pm.ExtraCable)
+                    </label>
                 </div>
                 <div class="form-check">
-                    <Label For="() => Pm.OtherUnitsEquipments" Class="form-check-label">
-                        <InputCheckbox @bind-Value="Pm.OtherUnitsEquipments" id="@nameof(Pm.OtherUnitsEquipments)" class="form-check-input" />
-                    </Label>
+                    <label class="form-check-label">
+                        <InputCheckbox @bind-Value="Pm.OtherUnitsEquipments"  class="form-check-input" />
+                        @DisplayUtils.DisplayName(() => Pm.OtherUnitsEquipments)
+                    </label>
                 </div>
             </div>
             <div class="col-xl-3 col-lg-4 col-md-6 mt-3 form-group">
                 <div class="form-check text-danger">
-                    <Label For="() => Pm.NeedsEmergencyOperations" Class="form-check-label">
-                        <InputCheckbox @bind-Value="Pm.NeedsEmergencyOperations" id="@nameof(Pm.NeedsEmergencyOperations)" class="form-check-input" />
-                    </Label>
+                    <label class="form-check-label">
+                        <InputCheckbox @bind-Value="Pm.NeedsEmergencyOperations" class="form-check-input" />
+                        @DisplayUtils.DisplayName(() => Pm.NeedsEmergencyOperations)
+                    </label>
                 </div>
                 <div class="form-check text-success">
-                    <Label For="() => Pm.ConnectedToAlarmsSystem" Class="form-check-label">
-                        <InputCheckbox @bind-Value="Pm.ConnectedToAlarmsSystem" id="@nameof(Pm.ConnectedToAlarmsSystem)" class="form-check-input" />
-                    </Label>
+                    <label class="form-check-label">
+                        <InputCheckbox @bind-Value="Pm.ConnectedToAlarmsSystem" class="form-check-input" />
+                        @DisplayUtils.DisplayName(() => Pm.ConnectedToAlarmsSystem)
+                    </label>
                 </div>
             </div>
             <div class="col-lg-6 form-group">
