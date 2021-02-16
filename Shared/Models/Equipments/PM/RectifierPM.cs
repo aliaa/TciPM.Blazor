@@ -1,7 +1,6 @@
 ﻿using EasyMongoNet;
 using MongoDB.Bson.Serialization.Attributes;
 using System;
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using TciPM.Blazor.Shared.Utils;
@@ -27,7 +26,7 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
         }
 
         [Display(Name = "عملیات PM باتریها با خاموش کردن یکسوکننده انجام گرفت")]
-        public bool RectifierShutdownInPm { get; set; }
+        public bool RectifierShutdownInPm { get; set; } = true;
 
         [BsonRepresentation(MongoDB.Bson.BsonType.String)]
         [ValidArray(InvalidValues = new string[] { nameof(RectifierNotShuttingDownReason.None) }, ErrorMessage = "دلیل عدم خاموش کردن یکسوساز انتخاب نشده است!")]

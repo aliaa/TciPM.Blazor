@@ -41,7 +41,7 @@ namespace TciPM.Blazor.Client
             });
             builder.Services.AddBlazoredModal();
 
-            builder.Services.AddEventAggregator();
+            builder.Services.AddEventAggregator(options => options.AutoRefresh = true);
 
             await builder.Build().RunAsync();
         }

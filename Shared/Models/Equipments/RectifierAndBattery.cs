@@ -54,6 +54,8 @@ namespace TciPM.Blazor.Shared.Models.Equipments
             [BsonRepresentation(MongoDB.Bson.BsonType.String)]
             public CellCountEnum CellsCount { get; set; } = CellCountEnum._25;
 
+            public int CellsCountInt => int.Parse(CellsCount.ToString()[1..]);
+
             [DisplayName("تاریخ تولید")]
             public DateTime ProductionDate { get; set; }
 

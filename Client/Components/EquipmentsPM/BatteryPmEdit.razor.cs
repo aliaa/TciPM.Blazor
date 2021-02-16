@@ -15,15 +15,22 @@ namespace TciPM.Blazor.Client.Components.EquipmentsPM
         [Inject]
         private IEventAggregator EventAggregator { get; set; }
 
+        private bool RectifierHasShutDown { get; set; }
+
         protected override void OnInitialized()
         {
             EventAggregator.Subscribe(this);
+            foreach (var serie in Pm.Source.Batteries)
+            {
+                Pm.Series.Add(new BatteryPM.BatterySeriesPM(serie.CellsCountInt));
+            }
         }
 
-        public async Task HandleAsync(RectifierPmShutdownInPmChanged message)
+        public Task HandleAsync(RectifierPmShutdownInPmChanged message)
         {
             if (message.SourceId == message.SourceId)
-                Console.WriteLine("message retrieved: " + message.ShutDownInPm);
+                RectifierHasShutDown = message.ShutDownInPm;
+            return Task.CompletedTask;
         }
     }
 }

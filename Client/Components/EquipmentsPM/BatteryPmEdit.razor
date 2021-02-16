@@ -1,3 +1,74 @@
 ﻿<Card Header="@("باتری " + Pm.Source.Name)" BackgroundHue="346">
-
+    @{
+        int i = 0;
+    }
+    @foreach (var serie in Pm.Source.Batteries)
+    {
+        <div class="card @(i > 0 ? "mt-4" : "")" style="background-color:#fff4">
+            <div class="card-header">سری @(i+1)</div>
+            <div class="card-body">
+                <div class="card" style="background-color:#fff4">
+                    <div class="card-header">مشخصات کلی</div>
+                    <div class="card-body row">
+                        <div class="col-md-2 col-sm-4">
+                            <Label For="() => serie.Model" />
+                            <h6>@serie.Model</h6>
+                        </div>
+                        <div class="col-md-2 col-sm-4">
+                            <Label For="() => serie.Capacity" />
+                            <h6>@serie.Capacity</h6>
+                        </div>
+                        <div class="col-md-2 col-sm-4">
+                            <Label For="() => serie.Type" />
+                            <h6>@DisplayUtils.DisplayName(serie.Type)</h6>
+                        </div>
+                        @if (serie.ProductionDate != default(DateTime))
+                        {
+                            <div class="col-md-2 col-sm-4">
+                                <Label For="() => serie.ProductionDate" />
+                                <h6>@serie.ProductionDate</h6>
+                            </div>
+                        }
+                        @if (serie.InstallationDate != default(DateTime))
+                        {
+                            <div class="col-md-2 col-sm-4">
+                                <Label For="() => serie.InstallationDate" />
+                                <h6>@serie.InstallationDate</h6>
+                            </div>
+                        }
+                    </div>
+                </div>
+                @{ 
+                    var seriePm = Pm.Series[i];
+                }
+                <div class="card mt-4" style="background-color:#fff4">
+                    <div class="card-header">جزئیات PM</div>
+                    <div class="card-body row">
+                        <div class="@FORM_ITEM_CLASS mt-4">
+                            <label class="form-check-label">
+                                <InputCheckbox @bind-Value="seriePm.DistilledWaterAdded" class="form-check-input" />
+                                @DisplayUtils.DisplayName(() => seriePm.DistilledWaterAdded)
+                            </label>
+                        </div>
+                        <div class="@FORM_ITEM_CLASS">
+                            <Label For="() => seriePm.Temperature" />
+                            <GoodBadInputNumber Source="seriePm" For="() => seriePm.Temperature" Step="0.1" />
+                        </div>
+                        @if(RectifierHasShutDown)
+                        {
+                            <div class="@FORM_ITEM_CLASS">
+                                <Label For="() => seriePm.OutputCurrent" />
+                                <GoodBadInputNumber Source="seriePm" For="() => seriePm.OutputCurrent" Step="0.1" />
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        i++;
+    }
 </Card>
+
+@code {
+    private const string FORM_ITEM_CLASS = "col-xl-2 col-lg-3 col-md-4 col-sm-6 form-group";
+}

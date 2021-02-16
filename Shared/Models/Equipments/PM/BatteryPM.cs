@@ -77,6 +77,7 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
             public bool DistilledWaterAdded { get; set; }
 
             [DisplayName("درجه دما")]
+            [HealthParameter(MinOkRange = 0, MaxOkRange = 27)]
             public float Temperature { get; set; }
 
             [DisplayName("جریان خروجی سری")]
