@@ -15,6 +15,9 @@ namespace TciPM.Blazor.Shared.ViewModels
         [Display(Name = "مرکز")]
         public string Center { get; set; }
 
+        [Display(Name = "کاربر ثبت کننده")]
+        public string ReportingUser { get; set; }
+
         [Display(Name = "تاریخ ثبت")]
         public string SubmitDate { get; set; }
 
@@ -24,9 +27,6 @@ namespace TciPM.Blazor.Shared.ViewModels
         [Display(Name = "تاریخ تغییر")]
         public string EditDate { get; set; }
 
-        [Display(Name = "کاربر ثبت کننده")]
-        public string ReportingUser { get; set; }
-        
         [Display(Name = "امتیاز کلی مرکز")]
         public int TotalRate { get; set; }
     }

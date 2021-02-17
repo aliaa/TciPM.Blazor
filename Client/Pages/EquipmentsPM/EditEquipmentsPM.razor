@@ -11,7 +11,7 @@
     {
         <div class="card">
             <div class="card-header">
-                <h5 class="m-0">آخرین PM های این مرکز</h5>
+                <h5 class="m-1">آخرین PM های این مرکز</h5>
             </div>
             <div class="card-body">
                 <ObjectTable Data="previousPms" LinkColumns="PreviousPmsLinkColumns" />
@@ -24,6 +24,41 @@
     }
     else
     {
+        if(ViewId != null)
+        {
+            <div class="card mt-5">
+                <div class="card-header">
+                    <h5 class="m-1">اطلاعات کلی PM</h5>
+                </div>
+                <div class="card-body row">
+                    <div class="col-md">
+                        <Label For="() => pm.CityName" />
+                        <h6>@pm.CityName</h6>
+                    </div>
+                    <div class="col-md">
+                        <Label For="() => pm.CenterName" />
+                        <h6>@pm.CenterName</h6>
+                    </div>
+                    <div class="col-md">
+                        <Label For="() => pm.ReportingUserName" />
+                        <h6>@pm.ReportingUserName</h6>
+                    </div>
+                    <div class="col-md">
+                        <Label For="() => pm.PmDate" />
+                        <h6>@pm.PmDate</h6>
+                    </div>
+                    <div class="col-md">
+                        <Label For="() => pm.SubmitDate" />
+                        <h6>@pm.SubmitDate</h6>
+                    </div>
+
+                    <div class="col-md">
+                        <Label For="() => pm.EditDate" />
+                        <h6>@pm.EditDate</h6>
+                    </div>
+                </div>
+            </div>
+        }
         <EditForm Model="pm" OnValidSubmit="Submit">
             <ObjectGraphDataAnnotationsValidator />
             @if (pm != null)
@@ -82,7 +117,7 @@
     public string ViewId { get; set; }
 
     CommCenterVM center;
-    EquipmentsPM pm;
+    EquipmentsPmVM pm;
     List<EquipmentsPmListItemVM> previousPms;
 
     protected override async Task OnInitializedAsync()
@@ -91,11 +126,11 @@
             Id = ViewId;
         if (Id != null)
         {
-            pm = await http.GetFromJsonAsync<EquipmentsPM>($"EquipmentsPm/Item/{Id}");
+            pm = await http.GetFromJsonAsync<EquipmentsPmVM>($"EquipmentsPm/Item/{Id}");
         }
         else
         {
-            pm = await http.GetFromJsonAsync<EquipmentsPM>($"EquipmentsPm/New?centerId={CenterId}");
+            pm = await http.GetFromJsonAsync<EquipmentsPmVM>($"EquipmentsPm/New?centerId={CenterId}");
         }
 
         var pmSearch = new PmSearchVM { Center = pm.CenterId, Limit = 50 };

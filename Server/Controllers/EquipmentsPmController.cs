@@ -16,6 +16,7 @@ using OfficeOpenXml;
 using TciPM.Blazor.Shared.Models.Equipments.PM;
 using TciPM.Blazor.Shared.Models.Equipments;
 using System.Threading.Tasks;
+using Omu.ValueInjecter;
 
 namespace TciPM.Blazor.Server.Controllers
 {
@@ -28,7 +29,7 @@ namespace TciPM.Blazor.Server.Controllers
 
         public EquipmentsPmController(ProvinceDBs dbs) : base(dbs) { }
 
-        public ActionResult<EquipmentsPM> Item(string id)
+        public ActionResult<EquipmentsPmVM> Item(string id)
         {
             var pm = db.FindById<EquipmentsPM>(id);
             foreach (var dpm in pm.DieselsPM)
@@ -43,7 +44,16 @@ namespace TciPM.Blazor.Server.Controllers
             foreach (var upm in pm.UpsPM)
                 if (upm.Source == null)
                     upm.Source = db.FindById<Ups>(upm.SourceId);
-            return pm;
+
+            var vm = Mapper.Map<EquipmentsPmVM>(pm);
+            vm.ReportingUserName = db.FindById<AuthUserX>(vm.ReportingUser)?.DisplayName ?? "[کاربر حذف شده]";
+            var center = db.Find<CommCenterX>(c => c.Id == pm.CenterId).Project(c => new { c.Name, c.City }).FirstOrDefault();
+            if(center != null)
+            {
+                vm.CenterName = center.Name;
+                vm.CityName = db.FindById<City>(center.City).Name;
+            }
+            return vm;
         }
 
         public ActionResult<List<CenterNameVM>> CentersToPm()
