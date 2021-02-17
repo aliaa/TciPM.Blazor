@@ -6,7 +6,18 @@
 @inject NavigationManager nav
 
 <div class="container">
-    @if(pm == null)
+    @if (previousPms != null)
+    {
+        <div class="card">
+            <div class="card-header">
+                <h5 class="m-0">PM های قبلی این مرکز</h5>
+            </div>
+            <div class="card-body">
+                <ObjectTable Data="previousPms" LinkColumns="PreviousPmsLinkColumns" />
+            </div>
+        </div>
+    }
+    @if (pm == null)
     {
         <Loading />
     }
@@ -22,7 +33,7 @@
                 }
                 @foreach (var rpm in pm.RectifiersPM)
                 {
-                    <RectifierPmEdit Pm="rpm"  />
+                    <RectifierPmEdit Pm="rpm" />
                 }
                 @foreach (var bpm in pm.BatteriesPM)
                 {
@@ -65,6 +76,7 @@
 
     CommCenterVM center;
     EquipmentsPM pm;
+    List<EquipmentsPmListItemVM> previousPms;
 
     protected override async Task OnInitializedAsync()
     {
@@ -78,10 +90,18 @@
         {
             pm = await http.GetFromJsonAsync<EquipmentsPM>($"EquipmentsPm/New?centerId={CenterId}");
         }
+
+        var pmSearch = new PmSearchVM { Center = pm.CenterId, Limit = 50 };
+        previousPms = await http.PostAsJsonAsync<PmSearchVM, List<EquipmentsPmListItemVM>>("EquipmentsPm/List", pmSearch);
     }
 
     private async Task Submit(EditContext context)
     {
         await http.PostAsJsonAsync("EquipmentsPm/Submit", pm);
     }
+
+    private static ObjectTable<EquipmentsPmListItemVM>.LinkColumn[] PreviousPmsLinkColumns = new ObjectTable<EquipmentsPmListItemVM>.LinkColumn[]
+    {
+        new ObjectTable<EquipmentsPmListItemVM>.LinkColumn { Name = "View", Text = "نمایش", KeyFieldName = "Id", Link = "/equipmentsPm/view/{Id}" }
+    };
 }

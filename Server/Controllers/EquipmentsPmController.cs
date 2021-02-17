@@ -15,6 +15,7 @@ using System.IO;
 using OfficeOpenXml;
 using TciPM.Blazor.Shared.Models.Equipments.PM;
 using TciPM.Blazor.Shared.Models.Equipments;
+using System.Threading.Tasks;
 
 namespace TciPM.Blazor.Server.Controllers
 {
@@ -73,12 +74,17 @@ namespace TciPM.Blazor.Server.Controllers
         }
 
         [HttpPost]
-        public ActionResult<List<EquipmentsPmListItemVM>> List(PmSearchVM search)
+        public async Task<ActionResult<List<EquipmentsPmListItemVM>>> List(PmSearchVM search)
         {
             var query = GetPmList(search);
             if (query == null)
                 return new List<EquipmentsPmListItemVM>();
-            var pmList = query.Limit(1000).ToList();
+            if (search.Limit > 0)
+                query = query.Limit(search.Limit);
+            else
+                query = query.Limit(1000);
+
+            var pmList = await query.ToListAsync();
             var centers = pmList.GroupBy(pm => pm.CenterId)
                 .Select(g => db.FindById<CommCenterX>(g.Key)).Where(c => c != null).ToDictionary(c => c.Id);
             var cities = centers.Values.GroupBy(c => c.City).Select(c => db.FindById<City>(c.Key)).Where(c => c != null).ToDictionary(c => c.Id);
@@ -103,7 +109,7 @@ namespace TciPM.Blazor.Server.Controllers
         {
             var filters = new List<FilterDefinition<EquipmentsPM>>();
             var fb = Builders<EquipmentsPM>.Filter;
-            if (search.City != null)
+            if (search.City != null || search.Center != null)
             {
                 if (search.Center != null)
                     filters.Add(fb.Eq(pm => pm.CenterId, search.Center));

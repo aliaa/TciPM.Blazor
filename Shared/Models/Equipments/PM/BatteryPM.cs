@@ -2,7 +2,7 @@
 using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text.Json.Serialization;
 using TciPM.Blazor.Shared.Utils;
@@ -22,7 +22,7 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
         public const float MIN_DENSITY = 1.21f;
         public const float NORMAL_DENSITY = 1.23f;
         public const float MAX_DENSITY = 1.26f;
-        
+
         public static float GetBatteryMinVoltage(RectifierAndBattery.CellCountEnum cellCount)
         {
             return cellCount switch
@@ -65,7 +65,7 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
                 Voltages = new float[cellCount];
                 Densities = new float[cellCount];
             }
-            
+
             public RectifierAndBattery.CellCountEnum CellCount =>
                 (RectifierAndBattery.CellCountEnum)Enum.Parse(typeof(RectifierAndBattery.CellCountEnum), "_" + Voltages.Length);
 
@@ -73,17 +73,17 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
 
             public float[] Densities { get; set; }
 
-            [DisplayName("آب مقطر اضافه شد")]
+            [Display(Name = "آب مقطر اضافه شد")]
             public bool DistilledWaterAdded { get; set; }
 
-            [DisplayName("درجه دما")]
+            [Display(Name = "درجه دما")]
             [HealthParameter(MinOkRange = 0, MaxOkRange = 27)]
             public float Temperature { get; set; }
 
-            [DisplayName("جریان خروجی سری")]
+            [Display(Name = "جریان خروجی سری")]
             public float OutputCurrent { get; set; }
 
-            [DisplayName("تعداد باتری مستعمل")]
+            [Display(Name = "تعداد باتری مستعمل")]
             [HealthParameter(MaxOkRange = 0)]
             public int OldBatteryCount { get; set; }
 
@@ -106,7 +106,7 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
                     //TODO: Add also OutputCurrent parameter
                     if (OldBatteryCount == 0)
                         sum++;
-                    
+
                     foreach (float v in Voltages)
                     {
                         if (v >= MinVoltage && v < NormalVoltage)
@@ -134,11 +134,11 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
 
         public BatteryPM(RectifierAndBattery Source) : base(Source) { }
 
-        [DisplayName("درصد سلامتی")]
+        [Display(Name = "درصد سلامتی")]
         [JsonIgnore]
         public override double HealthPercentage => Series.Count > 0 ? Series.Sum(bs => bs.HealthPercentage) / Series.Count : 0;
 
-        [DisplayName("تعداد سلولهای دارای ولتاژ مشکل دار")]
+        [Display(Name = "تعداد سلولهای دارای ولتاژ مشکل دار")]
         [JsonIgnore]
         public int HavingVoltageProblemCellsCount
         {
@@ -152,23 +152,23 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
             }
         }
 
-        [DisplayName("تعداد سلولهای دارای غلظت مشکل دار")]
+        [Display(Name = "تعداد سلولهای دارای غلظت مشکل دار")]
         [JsonIgnore]
         public int HavingDensityProblemCellsCount => Series.Sum(bs => bs.Densities.Count(d => d > 0 && (d > MAX_DENSITY || d < MIN_DENSITY)));
 
-        [DisplayName("میانگین دما")]
+        [Display(Name = "میانگین دما")]
         [JsonIgnore]
         public float TemperatureAverage => Series.Average(bs => bs.Temperature);
 
-        [DisplayName("تعداد باتری مستعمل")]
+        [Display(Name = "تعداد باتری مستعمل")]
         [JsonIgnore]
         public int OldBatteriesCount => Series.Sum(s => s.OldBatteryCount);
 
-        [DisplayName("انحراف معیار جریان خروجی سری ها")]
+        [Display(Name = "انحراف معیار جریان خروجی سری ها")]
         [JsonIgnore]
         public float SeriesOutputCurrentDeviation => UtilsX.CalculateStandardDeviation(Series.Select(s => s.OutputCurrent).ToArray());
 
-        //[DisplayName("انحراف معیار جمع ولتاژ سری ها")]
+        //[Display(Name="انحراف معیار جمع ولتاژ سری ها")]
         //public float SeriesVoltageSumDeviation => UtilsX.CalculateStandardDeviation(Series.Select(s => s.Voltages))
     }
 
