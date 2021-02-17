@@ -4,4 +4,27 @@
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-}
+};
+
+window.persianDatePicker = function (selector) {
+    $(selector).pDatepicker({
+        initialValueType: 'persian',
+        initialValue: false,
+        format: 'YYYY/MM/DD',
+        autoClose: true,
+        observer: true,
+        calendar: {
+            persian: {
+                locale: 'fa'
+            }
+        },
+        toolbox: {
+            calendarSwitch: {
+                enabled: false
+            },
+            submitButton: {
+                enabled: false
+            }
+        }
+    });
+};
