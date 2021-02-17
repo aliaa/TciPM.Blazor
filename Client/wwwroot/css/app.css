@@ -146,3 +146,8 @@ a {
 .bad-value {
     background-color: hsl(0, 74%, 89%);
 }
+
+.form-disabled input, .form-disabled textarea, .form-disabled select, .form-disabled label.form-check-label {
+    pointer-events: none;
+    opacity: .7;
+}

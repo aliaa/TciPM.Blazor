@@ -3,6 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text.Json.Serialization;
 using TciPM.Blazor.Shared.Utils;
 
 namespace TciPM.Blazor.Shared.Models.Equipments.PM
@@ -103,6 +104,7 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
         //}
 
         [Display(Name = "درصد جریان مصرفی مرکز به ظرفیت یکسوساز")]
+        [JsonIgnore]
         public float? PowerConsumptionPercent
         {
             get
@@ -116,6 +118,7 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
         }
 
         [Display(Name = "درصد جریان نهایی دشارژ به ظرفیت باتری")]
+        [JsonIgnore]
         public float FinalDechargePercent
         {
             get

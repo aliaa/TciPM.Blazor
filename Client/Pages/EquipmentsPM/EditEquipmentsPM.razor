@@ -1,16 +1,17 @@
 ﻿@page "/equipmentsPm/new/{CenterId}"
 @page "/equipmentsPm/edit/{Id}"
+@page "/equipmentsPm/view/{ViewId}"
 
 @inject HttpClientX http
 @inject IToastService toast
 @inject NavigationManager nav
 
-<div class="container">
+<div class="container @(ViewId != null ? "form-disabled" : "")">
     @if (previousPms != null)
     {
         <div class="card">
             <div class="card-header">
-                <h5 class="m-0">PM های قبلی این مرکز</h5>
+                <h5 class="m-0">آخرین PM های این مرکز</h5>
             </div>
             <div class="card-body">
                 <ObjectTable Data="previousPms" LinkColumns="PreviousPmsLinkColumns" />
@@ -37,7 +38,7 @@
                 }
                 @foreach (var bpm in pm.BatteriesPM)
                 {
-                    <BatteryPmEdit Pm="bpm" />
+                    <BatteryPmEdit Pm="bpm" RectifierHasShutDown="pm.RectifiersPM.First(rpm => rpm.SourceId == bpm.SourceId).RectifierShutdownInPm" />
                 }
                 @foreach (var upm in pm.UpsPM)
                 {
@@ -56,12 +57,15 @@
                     </div>
                 </Card>
             }
-            <div class="mt-5">
-                <ValidationSummary />
-            </div>
-            <div class="my-4">
-                <input type="submit" value="ذخیره" class="btn btn-primary" />
-            </div>
+            @if (ViewId == null)
+            {
+                <div class="mt-5">
+                    <ValidationSummary />
+                </div>
+                <div class="my-4">
+                    <input type="submit" value="ذخیره" class="btn btn-primary" />
+                </div>
+            }
         </EditForm>
     }
 </div>
@@ -74,17 +78,20 @@
     [Parameter]
     public string Id { get; set; }
 
+    [Parameter]
+    public string ViewId { get; set; }
+
     CommCenterVM center;
     EquipmentsPM pm;
     List<EquipmentsPmListItemVM> previousPms;
 
     protected override async Task OnInitializedAsync()
     {
+        if (ViewId != null)
+            Id = ViewId;
         if (Id != null)
         {
             pm = await http.GetFromJsonAsync<EquipmentsPM>($"EquipmentsPm/Item/{Id}");
-            @*center = await http.GetFromJsonAsync<CommCenterVM>($"CommCenter/Item/{pm.CenterId}");*@
-            throw new NotImplementedException();
         }
         else
         {

@@ -2,6 +2,7 @@
 using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 using TciPM.Blazor.Shared.Utils;
 
 namespace TciPM.Blazor.Shared.Models.Equipments.PM
@@ -88,6 +89,7 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
         public float OutAmperT { get; set; } = -1;
 
         [Display(Name = "درصد توان مصرفی")]
+        [JsonIgnore]
         public double? PowerConsumptionPercent
         {
             get
@@ -101,6 +103,7 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
 
         //[HealthParameter(MinOkRange = 0, MaxOkRange = 80)]
         [DisplayName("حداکثر جریان کشش از دیزل")]
+        [JsonIgnore]
         public float MaxAmper => Math.Max(Math.Max(OutAmperR, OutAmperS), OutAmperT);
 
         [DisplayName("نام کارت کنترل")]
@@ -203,14 +206,5 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
         //}
     
 
-        private const int V = 380;
-        private static readonly float RADICAL3 = (float)Math.Sqrt(3);
-
-        [DisplayName("درصد توان مصرفی دیزل به قدرت مجاز")]
-        public float GetPowerConsumptionPercent(Diesel diesel)
-        {
-            float usagePower = Math.Max(Math.Max(OutAmperR, OutAmperS), OutAmperT) * V * RADICAL3;
-            return 100 * usagePower / (diesel.PermissivePower * 1000);
-        }
     }
 }

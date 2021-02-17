@@ -28,7 +28,23 @@ namespace TciPM.Blazor.Server.Controllers
 
         public EquipmentsPmController(ProvinceDBs dbs) : base(dbs) { }
 
-        public ActionResult<EquipmentsPM> Item(string id) => db.FindById<EquipmentsPM>(id);
+        public ActionResult<EquipmentsPM> Item(string id)
+        {
+            var pm = db.FindById<EquipmentsPM>(id);
+            foreach (var dpm in pm.DieselsPM)
+                if (dpm.Source == null)
+                    dpm.Source = db.FindById<Diesel>(dpm.SourceId);
+            foreach (var rpm in pm.RectifiersPM)
+                if (rpm.Source == null)
+                    rpm.Source = db.FindById<RectifierAndBattery>(rpm.SourceId);
+            foreach (var bpm in pm.BatteriesPM)
+                if (bpm.Source == null)
+                    bpm.Source = db.FindById<RectifierAndBattery>(bpm.SourceId);
+            foreach (var upm in pm.UpsPM)
+                if (upm.Source == null)
+                    upm.Source = db.FindById<Ups>(upm.SourceId);
+            return pm;
+        }
 
         public ActionResult<List<CenterNameVM>> CentersToPm()
         {
