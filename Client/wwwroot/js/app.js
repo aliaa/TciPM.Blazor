@@ -28,3 +28,7 @@ window.persianDatePicker = function (selector) {
         }
     });
 };
+
+window.masonry = function (selector) {
+    $(selector).masonry({ 'percentPosition': true, 'originLeft': false });
+};

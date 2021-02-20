@@ -1,6 +1,7 @@
 ﻿@page "/equipmentsPm/new"
 
 @inject HttpClientX http
+@inject IJSRuntime js
 
 <div class="container">
     <h5>لطفا مرکزی را برای ثبت PM انتخاب کنید</h5>
@@ -10,7 +11,7 @@
     }
     else
     {
-        <div class="row mt-4" data-masonry='{"percentPosition": true }'>
+        <div class="row mt-4" id="centers">
             @foreach (var city in centers.GroupBy(c => c.CityName))
             {
                 <div class="col-lg-3 col-md-4 col-sm-6">
@@ -63,5 +64,13 @@
         var elapsed = Math.Min(center.PMPeriodDays, center.ElapsedDaysOfLastPm);
         var percent = (int)Math.Round(100.0 * (center.PMPeriodDays - elapsed) / center.PMPeriodDays);
         return ColorUtils.GetColorOfPercent(percent);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if(!firstRender)
+        {
+            await js.InvokeVoidAsync("masonry", "#centers");
+        }
     }
 }
