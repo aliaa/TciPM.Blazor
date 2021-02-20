@@ -16,9 +16,20 @@
     [Parameter]
     public double Step { get; set; } = 1;
 
+    [Parameter]
+    public double? MinNormalValue { get; set; }
+
+
+    [Parameter]
+    public double? MaxNormalValue { get; set; }
+
     private T Value { get; set; }
     private PropertyInfo PropertyInfo { get; set; }
     private HealthParameterAttribute HealthAttribute { get; set; }
+
+    private const string GOOD_CLASS = "form-control normal-value";
+    private const string BAD_CLASS = "form-control bad-value";
+
     private string Class
     {
         get
@@ -27,9 +38,15 @@
             {
                 var health = HealthAttribute.GetHealth(PropertyInfo, Value);
                 if (health == 1)
-                    return "form-control normal-value";
-                else
-                    return "form-control bad-value";
+                    return GOOD_CLASS;
+                return BAD_CLASS;
+            }
+            if (MinNormalValue != null && MaxNormalValue != null)
+            {
+                double val = double.Parse(Value.ToString());
+                if (val >= MinNormalValue && val <= MaxNormalValue)
+                    return GOOD_CLASS;
+                return BAD_CLASS;
             }
             return "form-control";
         }

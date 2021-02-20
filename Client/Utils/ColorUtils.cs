@@ -13,7 +13,9 @@ namespace TciPM.Blazor.Client.Utils
             if (percent < 0)
                 percent = 0;
             int hue = (int)Math.Round(percent.Value * 1.2);
-            return $"hsl({hue}, {saturation}%, {luminance}%)";
+            return GetHslColor(hue, saturation, luminance);
         }
+
+        public static string GetHslColor(int hue, int saturation, int luminance) => $"hsl({hue}, {saturation}%, {luminance}%)";
     }
 }

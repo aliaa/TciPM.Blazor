@@ -38,29 +38,96 @@
                         }
                     </div>
                 </div>
-                @{ 
+                @{
                     var seriePm = Pm.Series[i];
                 }
                 <div class="card mt-4" style="background-color:#fff4">
                     <div class="card-header">جزئیات PM</div>
-                    <div class="card-body row">
-                        <div class="@FORM_ITEM_CLASS mt-4">
-                            <label class="form-check-label">
-                                <InputCheckbox @bind-Value="seriePm.DistilledWaterAdded" class="form-check-input" />
-                                @DisplayUtils.DisplayName(() => seriePm.DistilledWaterAdded)
-                            </label>
-                        </div>
-                        <div class="@FORM_ITEM_CLASS">
-                            <Label For="() => seriePm.Temperature" />
-                            <GoodBadInputNumber Source="seriePm" For="() => seriePm.Temperature" Step="0.1" />
-                        </div>
-                        @if(RectifierHasShutDown)
-                        {
-                            <div class="@FORM_ITEM_CLASS">
-                                <Label For="() => seriePm.OutputCurrent" />
-                                <GoodBadInputNumber Source="seriePm" For="() => seriePm.OutputCurrent" Step="0.1" />
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="@FORM_ITEM_CLASS mt-4">
+                                <label class="form-check-label">
+                                    <InputCheckbox @bind-Value="seriePm.DistilledWaterAdded" class="form-check-input" />
+                                    @DisplayUtils.DisplayName(() => seriePm.DistilledWaterAdded)
+                                </label>
                             </div>
+                            <div class="@FORM_ITEM_CLASS">
+                                <Label For="() => seriePm.Temperature" />
+                                <GoodBadInputNumber Source="seriePm" For="() => seriePm.Temperature" Step="0.1" />
+                            </div>
+                            @if (RectifierHasShutDown)
+                            {
+                                <div class="@FORM_ITEM_CLASS">
+                                    <Label For="() => seriePm.OutputCurrent" />
+                                    <GoodBadInputNumber Source="seriePm" For="() => seriePm.OutputCurrent" Step="0.1" />
+                                </div>
+                            }
+                        </div>
+                        @if (serie.Type == RectifierAndBattery.BatteryTypeEnum.Acid && RectifierHasShutDown)
+                        {
+                            <h6 class="mt-4">توجه: در قسمت غلظت سلول ها، غلظت قبل از دشارژ را وارد نمائید!</h6>
                         }
+                        <div class="row mt-3 mx-1">
+                            @foreach(var cell in seriePm.Voltages.Select((v, ci) => new { Voltage = v, Density = seriePm.Densities[ci], Index = ci }))
+                            {
+                                <div class="col-xl-3 col-lg-4 col-md-6">
+                                    <div class="my-2 py-2 mx-1 rounded row align-items-center gx-3" style="background-color: #fff8">
+                                        <div class="col-2">
+                                            <h6 class="text-center">@(cell.Index+1)</h6>
+                                        </div>
+                                        <div class="col">
+                                            <label class="my-1">ولتاژ</label>
+                                            <input type="number" value="@cell.Voltage" class="form-control" 
+                                                   style="background-color: @GetVoltageCellColor(seriePm, cell.Voltage);" step="0.01"
+                                                   @onchange="@(e => seriePm.Voltages[cell.Index] = float.Parse(e.Value.ToString()))" />
+                                        </div>
+                                        @if (serie.Type == RectifierAndBattery.BatteryTypeEnum.Acid)
+                                        {
+                                            <div class="col">
+                                                <label class="my-1">غلظت</label>
+                                                <input type="number" value="@cell.Density" class="form-control" 
+                                                       style="background-color: @GetDensityCellColor(cell.Density)" step="0.01" 
+                                                       @onchange="@(e => seriePm.Densities[cell.Index] = float.Parse(e.Value.ToString()))" />
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <div class="row mt-4">
+                            <div class="@FORM_ITEM_CLASS mt-3">
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <InputCheckbox @bind-Value="Pm.ExtraCable" class="form-check-input" />
+                                        @DisplayUtils.DisplayName(() => Pm.ExtraCable)
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <InputCheckbox @bind-Value="Pm.OtherUnitsEquipments" class="form-check-input" />
+                                        @DisplayUtils.DisplayName(() => Pm.OtherUnitsEquipments)
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-lg-4 col-md-6 mt-3 form-group">
+                                <div class="form-check text-danger">
+                                    <label class="form-check-label">
+                                        <InputCheckbox @bind-Value="Pm.NeedsEmergencyOperations" class="form-check-input" />
+                                        @DisplayUtils.DisplayName(() => Pm.NeedsEmergencyOperations)
+                                    </label>
+                                </div>
+                                <div class="form-check text-success">
+                                    <label class="form-check-label">
+                                        <InputCheckbox @bind-Value="Pm.ConnectedToAlarmsSystem" class="form-check-input" />
+                                        @DisplayUtils.DisplayName(() => Pm.ConnectedToAlarmsSystem)
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 form-group">
+                                <Label For="() => Pm.Description" />
+                                <InputTextArea @bind-Value="Pm.Description" class="form-control" />
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -71,4 +138,25 @@
 
 @code {
     private const string FORM_ITEM_CLASS = "col-xl-2 col-lg-3 col-md-4 col-sm-6 form-group";
+
+    private static string GetVoltageCellColor(BatteryPM.BatterySeriesPM serie, float value)
+    {
+        Console.WriteLine(value + " ? " + serie.MinVoltage + " : " + serie.NormalVoltage + " : " + serie.MaxVoltage );
+        int percent = 100;
+        if (value < serie.MinVoltage || value > serie.MaxVoltage)
+            percent = 0;
+        else if (value < serie.NormalVoltage)
+            percent = 40;
+        return ColorUtils.GetColorOfPercent(percent);
+    }
+
+    private static string GetDensityCellColor(float value)
+    {
+        int percent = 100;
+        if (value < BatteryPM.MIN_DENSITY || value > BatteryPM.MAX_DENSITY)
+            percent = 0;
+        else if (value < BatteryPM.NORMAL_DENSITY)
+            percent = 40;
+        return ColorUtils.GetColorOfPercent(percent);
+    }
 }

@@ -16,8 +16,6 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
 
         public enum RectifierNotShuttingDownReason
         {
-            [Display(Name = "")]
-            None,
             [Display(Name = "عدم رسیدن موعد دشارژ")]
             DechargeTimeNotReached,
             [Display(Name = "غیر قابل اعتماد بودن باتری ها")]
@@ -30,7 +28,6 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
         public bool RectifierShutdownInPm { get; set; } = true;
 
         [BsonRepresentation(MongoDB.Bson.BsonType.String)]
-        [ValidArray(InvalidValues = new string[] { nameof(RectifierNotShuttingDownReason.None) }, ErrorMessage = "دلیل عدم خاموش کردن یکسوساز انتخاب نشده است!")]
         [Display(Name ="دلیل عدم خاموش کردن")]
         public RectifierNotShuttingDownReason ShutDownReason { get; set; }
 
