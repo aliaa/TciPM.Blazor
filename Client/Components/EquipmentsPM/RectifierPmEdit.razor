@@ -62,7 +62,7 @@
             {
                 <div class="col-xxl-3 col-xl-4 col-lg-5 col-md-6 form-group">
                     <Label For="() => Pm.PowerConsumptionPercent" />
-                    <label class="form-control" style="background-color: hsl(@GetHueOfPercent(Pm.PowerConsumptionPercent.Value) , 74%, 89%)">
+                    <label class="form-control" style="background-color: @ColorUtils.GetColorOfPercent((int)Math.Round(Pm.PowerConsumptionPercent.Value));">
                         @Pm.PowerConsumptionPercent.Value.ToString("N2")%
                     </label>
                 </div>
@@ -90,7 +90,7 @@
             {
                 <div class="col-xxl-3 col-xl-4 col-lg-5 col-md-6 form-group">
                     <Label For="() => Pm.FinalDechargePercent" />
-                    <label class="form-control" style="background-color: hsl(@GetHueOfPercent(Pm.FinalDechargePercent) , 74%, 89%)">
+                    <label class="form-control" style="background-color: @ColorUtils.GetColorOfPercent((int)Math.Round(Pm.FinalDechargePercent))">
                         @Pm.FinalDechargePercent.ToString("N2")%
                     </label>
                 </div>
@@ -240,13 +240,6 @@
     {
         get => Pm.BatteriesDechargeTime.Seconds;
         set => Pm.BatteriesDechargeTime = new TimeSpan(DechargeHours, DechargeMinutes, value);
-    }
-
-    private int GetHueOfPercent(double percent)
-    {
-        if (percent > 100)
-            return 0;
-        return (int)Math.Round((100 - percent) * 1.2);
     }
 
     private string GoodBadClass(GoodBad value)

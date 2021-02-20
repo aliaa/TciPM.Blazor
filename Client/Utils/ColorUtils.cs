@@ -1,12 +1,19 @@
-﻿namespace TciPM.Blazor.Client.Utils
+﻿using System;
+
+namespace TciPM.Blazor.Client.Utils
 {
     public class ColorUtils
     {
-        public static string GetColorOfPercent(int? p)
+        public static string GetColorOfPercent(int? percent, int saturation = 74, int luminance = 85)
         {
-            if (p == null)
+            if (percent == null)
                 return "initial";
-            return new HSLColor(p.Value / 100f * 80f, 240f, 180f).ToHexString();
+            if (percent > 100)
+                percent = 100;
+            if (percent < 0)
+                percent = 0;
+            int hue = (int)Math.Round(percent.Value * 1.2);
+            return $"hsl({hue}, {saturation}%, {luminance}%)";
         }
     }
 }

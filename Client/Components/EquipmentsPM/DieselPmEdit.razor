@@ -124,7 +124,7 @@
                     {
                         <div class="col-sm form-group">
                             <Label For="() => Pm.PowerConsumptionPercent" />
-                            <label class="form-control" style="background-color: hsl(@GetHueOfPercent(Pm.PowerConsumptionPercent.Value) , 74%, 89%);">
+                            <label class="form-control" style="background-color: @ColorUtils.GetColorOfPercent((int)Math.Round(Pm.PowerConsumptionPercent.Value))">
                                 @Pm.PowerConsumptionPercent.Value.ToString("N2")%
                             </label>
                         </div>
@@ -324,12 +324,5 @@
             DieselPM.OilWaterStatusEnum.Normal => "form-select normal-value",
             _ => "form-select bad-value"
         };
-    }
-
-    private int GetHueOfPercent(double percent)
-    {
-        if (percent > 100)
-            return 0;
-        return (int)Math.Round(percent * 1.2);
     }
 }

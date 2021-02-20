@@ -84,12 +84,14 @@
         centers = await http.GetFromJsonAsync<CommCenterWithReports[]>("CommCenter/ListWithReports?cityId=" + e.Value);
 
         var colors = new List<string>(centers.Length);
+        var greenColor = ColorUtils.GetColorOfPercent(100);
+        var redColor = ColorUtils.GetColorOfPercent(0);
         foreach (var c in centers)
         {
             if (c.ElapsedDaysOfLastPm >= c.PMPeriodDays)
-                colors.Add("#f77c88");
+                colors.Add(redColor);
             else
-                colors.Add("#7cf7a5");
+                colors.Add(greenColor);
         }
 
     pmDaysColor = new Dictionary<string, List<string>>

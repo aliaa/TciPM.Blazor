@@ -32,10 +32,10 @@
                                     @foreach (var center in city)
                                     {
                                         <tr>
-                                            <td style="background-color:hsl(@(center.ElapsedDaysOfLastPm <= center.PMPeriodDays ? 120 : 0) , 74%, 89%)">
+                                            <td style="background-color:@ColorUtils.GetColorOfPercent(center.ElapsedDaysOfLastPm <= center.PMPeriodDays ? 100 : 0)">
                                                 <a href="/equipmentsPm/new/@center.Id">@center.Name</a>
                                             </td>
-                                            <td style="background-color:hsl(@GetHueOfElapsedDays(center) , 74%, 89%);">
+                                            <td style="background-color:@GetColorOfCenter(center);">
                                                 @center.ElapsedDaysOfLastPm
                                             </td>
                                         </tr>
@@ -58,9 +58,10 @@
         centers = await http.GetFromJsonAsync<List<CenterNameVM>>("EquipmentsPm/CentersToPm");
     }
 
-    private int GetHueOfElapsedDays(CenterNameVM center)
+    private string GetColorOfCenter(CenterNameVM center)
     {
         var elapsed = Math.Min(center.PMPeriodDays, center.ElapsedDaysOfLastPm);
-        return (int)Math.Round(120.0 * (center.PMPeriodDays - elapsed) / center.PMPeriodDays);
+        var percent = (int)Math.Round(100.0 * (center.PMPeriodDays - elapsed) / center.PMPeriodDays);
+        return ColorUtils.GetColorOfPercent(percent);
     }
 }
