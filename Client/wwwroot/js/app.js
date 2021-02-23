@@ -7,6 +7,11 @@
 };
 
 window.persianDatePicker = function (selector) {
+    var lastFocusedElem = null;
+    $(selector).focus(function () {
+        lastFocusedElem = this;
+    });
+
     $(selector).pDatepicker({
         initialValueType: 'persian',
         initialValue: false,
@@ -19,17 +24,14 @@ window.persianDatePicker = function (selector) {
             }
         },
         toolbox: {
-            calendarSwitch: {
-                enabled: false
-            },
-            submitButton: {
-                enabled: false
-            }
+            enabled: false
         },
         onSelect: function (date) {
-            $(selector).each(function (i, val) { val.dispatchEvent(new Event('change')) });
+            if (lastFocusedElem)
+                lastFocusedElem.dispatchEvent(new Event('change'));
         }
     });
+    
 };
 
 window.masonry = function (selector) {
