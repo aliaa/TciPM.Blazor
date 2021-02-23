@@ -17,7 +17,7 @@ namespace TciPM.Blazor.Server.Configuration
         {
             string filePath = Path.Combine(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location), StringNormalizer.JSON_FILE_NAME);
             var stringNormalizer = new StringNormalizer(filePath);
-            services.AddSingleton(stringNormalizer);
+            services.AddSingleton<IStringNormalizer>(stringNormalizer);
 
             var connString = config.GetValue<string>("MongoConnString");
             var customConnections = config.GetSection("CustomConnections").Get<List<CustomMongoConnection>>();

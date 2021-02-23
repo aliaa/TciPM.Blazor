@@ -57,6 +57,7 @@ namespace TciPM.Blazor.Server.Configuration
                 options.AddPolicy("SuperAdmin", policy => policy.RequireClaim("IsSuperAdmin"));
             });
 
+            // Captcha settings
             services.AddDistributedMemoryCache();
             services.AddSession(options =>
             {
@@ -64,10 +65,7 @@ namespace TciPM.Blazor.Server.Configuration
             });
             ImageFactory.BackgroundColor = Color.FromArgb(251, 243, 228);
 
-            var mvcBuilder = services.AddControllersWithViews(config =>
-            {
-                config.ModelBinderProviders.Insert(0, new ObjectIdModelBinderProvider());
-            });
+            var mvcBuilder = services.AddControllersWithViews();
                 
             mvcBuilder.AddJsonOptions(options =>
             {

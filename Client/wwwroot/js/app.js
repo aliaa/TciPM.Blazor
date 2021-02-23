@@ -25,6 +25,9 @@ window.persianDatePicker = function (selector) {
             submitButton: {
                 enabled: false
             }
+        },
+        onSelect: function (date) {
+            $(selector).each(function (i, val) { val.dispatchEvent(new Event('change')) });
         }
     });
 };

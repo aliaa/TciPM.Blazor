@@ -26,8 +26,12 @@ namespace TciPM.Blazor.Server.Controllers
     public class EquipmentsPmController : BaseController
     {
         private readonly static Dictionary<int, PmSearchVM> registeredSearches = new Dictionary<int, PmSearchVM>();
+        private readonly IStringNormalizer stringNormalizer;
 
-        public EquipmentsPmController(ProvinceDBs dbs) : base(dbs) { }
+        public EquipmentsPmController(ProvinceDBs dbs, IStringNormalizer stringNormalizer) : base(dbs) 
+        {
+            this.stringNormalizer = stringNormalizer;
+        }
 
         public ActionResult<EquipmentsPmVM> Item(string id)
         {
@@ -102,6 +106,7 @@ namespace TciPM.Blazor.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<List<EquipmentsPmListItemVM>>> List(PmSearchVM search)
         {
+            stringNormalizer.Preprocess(search);
             var query = GetPmList(search);
             if (query == null)
                 return new List<EquipmentsPmListItemVM>();
@@ -135,9 +140,9 @@ namespace TciPM.Blazor.Server.Controllers
         {
             var filters = new List<FilterDefinition<EquipmentsPM>>();
             var fb = Builders<EquipmentsPM>.Filter;
-            if (search.City != null || search.Center != null)
+            if (!string.IsNullOrEmpty(search.City) || !string.IsNullOrEmpty(search.Center))
             {
-                if (search.Center != null)
+                if (!string.IsNullOrEmpty(search.Center))
                     filters.Add(fb.Eq(pm => pm.CenterId, search.Center));
                 else
                 {
@@ -162,7 +167,7 @@ namespace TciPM.Blazor.Server.Controllers
                 var toDate = PersianDateUtils.PersianDateTimeToGeorgian(search.ToDate);
                 filters.Add(fb.Lte(pm => pm.SubmitDate, toDate));
             }
-            if (search.SubmittedUser != null)
+            if (!string.IsNullOrEmpty(search.SubmittedUser))
             {
                 filters.Add(fb.Eq(pm => pm.ReportingUser, search.SubmittedUser));
             }
