@@ -37,3 +37,10 @@ window.persianDatePicker = function (selector) {
 window.masonry = function (selector) {
     $(selector).masonry({ 'percentPosition': true, 'originLeft': false });
 };
+
+window.initpopover = function () {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    });
+};

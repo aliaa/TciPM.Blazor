@@ -4,10 +4,10 @@
     }
     @foreach (var serie in Pm.Source.Batteries)
     {
-        <div class="card @(i > 0 ? "mt-4" : "")" style="background-color:#fff4">
+        <div class="card translayer @(i > 0 ? "mt-4" : "")">
             <div class="card-header">سری @(i+1)</div>
             <div class="card-body">
-                <div class="card" style="background-color:#fff4">
+                <div class="card translayer">
                     <div class="card-header">مشخصات کلی</div>
                     <div class="card-body row">
                         <div class="col-md-2 col-sm-4">
@@ -41,7 +41,7 @@
                 @{
                     var seriePm = Pm.Series[i];
                 }
-                <div class="card mt-4" style="background-color:#fff4">
+                <div class="card mt-4 translayer">
                     <div class="card-header">جزئیات PM</div>
                     <div class="card-body">
                         <div class="row">
@@ -141,7 +141,6 @@
 
     private static string GetVoltageCellColor(BatteryPM.BatterySeriesPM serie, float value)
     {
-        Console.WriteLine(value + " ? " + serie.MinVoltage + " : " + serie.NormalVoltage + " : " + serie.MaxVoltage );
         int percent = 100;
         if (value < serie.MinVoltage || value > serie.MaxVoltage)
             percent = 0;

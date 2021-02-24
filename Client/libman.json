@@ -8,6 +8,14 @@
       "files": [
         "jquery.slim.min.js"
       ]
+    },
+    {
+      "library": "popper.js@2.8.3",
+      "destination": "wwwroot/js/",
+      "files": [
+        "umd/popper.min.js",
+        "umd/popper.min.js.map"
+      ]
     }
   ]
 }

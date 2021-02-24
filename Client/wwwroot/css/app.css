@@ -151,3 +151,7 @@ a {
     pointer-events: none;
     opacity: .7;
 }
+
+.translayer {
+    background-color: #fff4;
+}

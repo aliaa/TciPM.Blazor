@@ -43,6 +43,12 @@ namespace TciPM.Blazor.Shared.Models
         [ValidateComplexType]
         public List<UpsPM> UpsPM { get; set; } = new List<UpsPM>();
 
+        [ValidateComplexType]
+        public List<CompressorPM> CompressorsPM { get; set; } = new List<CompressorPM>();
+
+        [ValidateComplexType]
+        public List<GasCablePM> GasCablesPM { get; set; } = new List<GasCablePM>();
+
         [Display(Name = "امتیاز کلی مرکز")]
         [Range(minimum: 1, maximum: 5, ErrorMessage = "امتیاز کلی بایستی بین 1 تا 5 باشد!")]
         public int TotalRate { get; set; } = 3;

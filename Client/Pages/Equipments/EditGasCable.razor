@@ -3,7 +3,6 @@
 
 @inject HttpClientX http
 
-
 <EditEquipment @ref="editEquipment" Eq="GasCable" CenterId="@CenterId" Id="@Id" TypeDisplayName="کابل هواخور" AfterInitialized="OnAfterInit">
     <div class="row mt-4">
         @if (compressors != null)
@@ -50,12 +49,20 @@
     @if (model.Branch != null)
     {
         <div class="mt-4 card">
-            <div class="card-header">محل انشعاب</div>
+            <div class="card-header">مفصل انشعاب</div>
             <div class="card-body row">
                 <div class="col-md-3">
                     <div class="form-group">
                         <label class="form-label">طول کابل از مبدا تا انشعاب (متر)</label>
                         <InputNumber class="form-control" @bind-Value="model.Branch.Length" />
+                    </div>
+                </div>
+                <div class="col-md-3 mt-4">
+                    <div class="form-check">
+                        <label class="form-check-label">
+                            <InputCheckbox @bind-Value="model.BranchHasValve" class="form-check-input" />
+                            @DisplayUtils.DisplayName(() => model.BranchHasValve)
+                        </label>
                     </div>
                 </div>
                 <div class="col-md-6">

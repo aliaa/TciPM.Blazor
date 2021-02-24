@@ -63,21 +63,30 @@
             <ObjectGraphDataAnnotationsValidator />
             @if (pm != null)
             {
-                @foreach (var dpm in pm.DieselsPM)
+                foreach (var dpm in pm.DieselsPM)
                 {
                     <DieselPmEdit Pm="dpm" />
                 }
-                @foreach (var rpm in pm.RectifiersPM)
+                foreach (var rpm in pm.RectifiersPM)
                 {
                     <RectifierPmEdit Pm="rpm" />
                 }
-                @foreach (var bpm in pm.BatteriesPM)
+                foreach (var bpm in pm.BatteriesPM)
                 {
                     <BatteryPmEdit Pm="bpm" RectifierHasShutDown="pm.RectifiersPM.First(rpm => rpm.SourceId == bpm.SourceId).RectifierShutdownInPm" />
                 }
-                @foreach (var upm in pm.UpsPM)
+                foreach (var upm in pm.UpsPM)
                 {
                     <UpsPmEdit Pm="upm" />
+                }
+                foreach (var cpm in pm.CompressorsPM)
+                {
+                    <CompressorPmEdit Pm="cpm" />
+                }
+                foreach (var gcpm in pm.GasCablesPM)
+                {
+                    var compressorName = pm.CompressorsPM.FirstOrDefault(c => c.SourceId == gcpm.Source.ConnectedCompressor)?.Source.Name;
+                    <GasCablePmEdit Pm="gcpm" ConnectedCompressorName="@compressorName" />
                 }
                 <Card Header="اطلاعات عمومی" BackgroundHue="180">
                     <div class="row">

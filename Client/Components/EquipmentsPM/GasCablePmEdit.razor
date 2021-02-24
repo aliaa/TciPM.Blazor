@@ -1,0 +1,61 @@
+﻿@inject IJSRuntime js
+
+<Card Header="@($"کابل هواخور  {Pm.Source.Name} متصل به کمپرسور {ConnectedCompressorName}")" BackgroundHue="20">
+    <div class="row">
+        <div class="@FORM_ITEM_CLASS">
+            <Label For="() => Pm.StartPressure" />
+            <InputNumber @bind-Value="Pm.StartPressure" class="form-control" />
+        </div>
+        @if (Pm.Source.Branch != null)
+        {
+            <div class="@FORM_ITEM_CLASS">
+                <label class="form-label" style="text-decoration: underline dotted;" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" 
+                       title="طول کابل: <strong>@Pm.Source.Branch.Length</strong> متر <br> آدرس: <strong>@Pm.Source.Branch.Address </strong>">
+                    @DisplayUtils.DisplayName(() => Pm.BranchPressure)
+                </label>
+                @if (Pm.Source.BranchHasValve)
+                {
+                    <InputNumber @bind-Value="Pm.BranchPressure" class="form-control" />
+                }
+                else
+                {
+                    <label class="form-control">مفصل، والف ندارد</label>
+                }
+            </div>
+        }
+        @foreach (var item in Pm.DestinationsPressure.Select((val, i) => new { Pressure = val, Index = i }))
+                {
+                    var dest = Pm.Source.Destinations[item.Index];
+                    <div class="@FORM_ITEM_CLASS">
+                <label class="form-label" style="text-decoration: underline dotted;" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true" 
+                       title="طول کابل: <strong>@dest.Length </strong> متر <br> آدرس: <strong>@dest.Address </strong>">
+                    فشار مقصد @(item.Index+1)
+                </label>
+                <input type="number" value="@item.Pressure" class="form-control"
+                       @onchange="@(e => Pm.DestinationsPressure[item.Index] = int.Parse(e.Value.ToString()))"/>
+            </div>
+        }
+    </div>
+</Card>
+
+@code {
+    private const string FORM_ITEM_CLASS = "col-xl-2 col-lg-3 col-md-4 col-sm-6 form-group";
+
+    [Parameter]
+    public GasCablePM Pm { get; set; }
+
+    [Parameter]
+    public string ConnectedCompressorName { get; set; }
+
+    protected override void OnInitialized()
+    {
+        foreach (var item in Pm.Source.Destinations)
+            Pm.DestinationsPressure.Add(0);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+            await js.InvokeVoidAsync("initpopover");
+    }
+}

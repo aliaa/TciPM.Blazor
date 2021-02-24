@@ -1,0 +1,63 @@
+﻿<Card Header="@("کمپرسور گاز کنترل " + Pm.Source.Name)" BackgroundHue="300">
+    <div class="card translayer">
+        <div class="card-header">مشخصات کلی</div>
+        <div class="card-body row">
+            <div class="col-md-2 col-sm-6">
+                <Label For="() => Pm.Source.Brand" />
+                <h6>@Pm.Source.Brand</h6>
+            </div>
+            <div class="col-md-2 col-sm-6">
+                <Label For="() => Pm.Source.Model" />
+                <h6>@Pm.Source.Model</h6>
+            </div>
+            <div class="col-md-2 col-sm-6">
+                <Label For="() => Pm.Source.ProductionDate" />
+                <h6>@Pm.Source.ProductionDate.ToShortDateString()</h6>
+            </div>
+            <div class="col-md-2 col-sm-6">
+                <Label For="() => Pm.Source.InstallationDate" />
+                <h6>@Pm.Source.InstallationDate.ToShortDateString()</h6>
+            </div>
+        </div>
+    </div>
+    <div class="card mt-4 translayer">
+        <div class="card-header">جزئیات PM</div>
+        <div class="card-body row">
+            <div class="@FORM_ITEM_CLASS">
+                <Label For="() => Pm.Counter" />
+                <InputNumber @bind-Value="Pm.Counter" class="form-control" />
+            </div>
+            <div class="@FORM_ITEM_CLASS">
+                <div class="form-check text-danger">
+                    <label class="form-check-label">
+                        <InputCheckbox @bind-Value="Pm.HasMoistureAlarm" class="form-check-input" />
+                        @DisplayUtils.DisplayName(() => Pm.HasMoistureAlarm)
+                    </label>
+                    <label class="form-check-label">
+                        <InputCheckbox @bind-Value="Pm.HasTimeOutAlarm" class="form-check-input" />
+                        @DisplayUtils.DisplayName(() => Pm.HasTimeOutAlarm)
+                    </label>
+                    <label class="form-check-label">
+                        <InputCheckbox @bind-Value="Pm.HasHighPressureAlarm" class="form-check-input" />
+                        @DisplayUtils.DisplayName(() => Pm.HasHighPressureAlarm)
+                    </label>
+                    <label class="form-check-label">
+                        <InputCheckbox @bind-Value="Pm.HasLowPressureAlarm" class="form-check-input" />
+                        @DisplayUtils.DisplayName(() => Pm.HasLowPressureAlarm)
+                    </label>
+                </div>
+            </div>
+            <div class="col-lg-6 form-group">
+                <Label For="() => Pm.Description" />
+                <InputTextArea @bind-Value="Pm.Description" class="form-control" />
+            </div>
+        </div>
+    </div>
+</Card>
+
+@code {
+    private const string FORM_ITEM_CLASS = "col-xl-2 col-lg-3 col-md-4 col-sm-6 form-group";
+
+    [Parameter]
+    public CompressorPM Pm { get; set; }
+}

@@ -38,6 +38,9 @@ namespace TciPM.Blazor.Shared.Models.Equipments
         [Display(Name = "انشعاب")]
         public GasCableDestination Branch { get; set; }
 
+        [Display(Name = "مفصل انشعاب دارای والف می باشد")]
+        public bool BranchHasValve { get; set; } = true;
+
         public List<GasCableDestination> Destinations { get; set; } = new List<GasCableDestination> { new GasCableDestination() };
     }
 }

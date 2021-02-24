@@ -99,7 +99,16 @@ namespace TciPM.Blazor.Server.Controllers
                 foreach (var eq in center.RectifierAndBatteries)
                     pm.BatteriesPM.Add(new BatteryPM(eq));
             }
-            //TODO other pms
+            if (user.AllowedEquipmentTypes.Contains(EquipmentType.Compressor))
+            {
+                foreach (var eq in center.Compressors)
+                    pm.CompressorsPM.Add(new CompressorPM(eq));
+            }
+            if(user.AllowedEquipmentTypes.Contains(EquipmentType.GasCable))
+            {
+                foreach (var eq in center.GasCables)
+                    pm.GasCablesPM.Add(new GasCablePM(eq));
+            }
             return pm;
         }
 
