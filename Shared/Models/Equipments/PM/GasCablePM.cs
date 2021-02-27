@@ -10,6 +10,8 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
         public GasCablePM(GasCable Source) : base(Source) { }
 
         [Display(Name = "فشار ابتدا")]
+        [Required(ErrorMessage = "فشار ابتدا اجباری است!")]
+        [Range(minimum: 1, maximum: int.MaxValue, ErrorMessage = "فشار ابتدا اجباری است!")]
         public int StartPressure { get; set; }
 
         [Display(Name = "فشار مفصل")]
