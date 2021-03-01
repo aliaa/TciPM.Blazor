@@ -14,6 +14,7 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
         public DieselPM(Diesel Source) : base(Source) { }
 
         [DisplayName("ساعت کارکرد فعلی")]
+        [Range(minimum: 0, maximum: int.MaxValue, ErrorMessage = "ساعت کارکرد فعلی اجباری است!")]
         public int CurrentUsageTime { get; set; } = -1;
 
         [HealthParameter(DateDaysOkRange = 365)]
@@ -40,14 +41,17 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
 
         [HealthParameter(MinOkRange = 13, MaxOkRange = 28.5)]
         [DisplayName("ولتاژ دینام")]
+        [Range(minimum: 0, maximum: int.MaxValue, ErrorMessage = "ولتاژ دینام اجباری است!")]
         public float GeneratorVoltage { get; set; } = -1;
 
         [HealthParameter(MinOkRange = 13, MaxOkRange = 28)]
         [DisplayName("ولتاژ تریکل شارژر")]
+        [Range(minimum: 0, maximum: int.MaxValue, ErrorMessage = "ولتاژ تریکل شارژر اجباری است!")]
         public float TrickleChargingVoltage { get; set; } = -1;
 
         [HealthParameter(MinOkRange = 11.5, MaxOkRange = 13)]
         [DisplayName("ولتاژ باتری استارت 1")]
+        [Range(minimum: 0, maximum: int.MaxValue, ErrorMessage = "ولتاژ باتری استارت 1 اجباری است!")]
         public float StartingBattery1Voltage { get; set; } = -1;
 
         [HealthParameter(MinOkRange = 11.5, MaxOkRange = 13)]
@@ -70,22 +74,27 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
 
         [HealthParameter(MinOkRange = 45, MaxOkRange = 95)]
         [DisplayName("دما پس از نیم ساعت کار")]
+        [Range(minimum: 0, maximum: int.MaxValue, ErrorMessage = "دما پس از نیم ساعت کار اجباری است!")]
         public int TemperatureAfterHalfHourWork { get; set; } = -1;
 
         [HealthParameter(MinOkRange = 2, MaxOkRange = 10)]
         [DisplayName("فشار روغن در حال کار")]
+        [Range(minimum: 0, maximum: int.MaxValue, ErrorMessage = "فشار روغن در حال کار اجباری است!")]
         public float OilPressureWhileWorking { get; set; } = -1;
 
         //[HealthParameter(MinOkRange = 0, MaxOkRange = 80)]
         [DisplayName("جریان خروجی [R]")]
+        [Range(minimum: 0, maximum: int.MaxValue, ErrorMessage = "جریان خروجی [R] اجباری است!")]
         public float OutAmperR { get; set; } = -1;
 
         //[HealthParameter(MinOkRange = 0, MaxOkRange = 80)]
         [DisplayName("جریان خروجی [S]")]
+        [Range(minimum: 0, maximum: int.MaxValue, ErrorMessage = "جریان خروجی [S] اجباری است!")]
         public float OutAmperS { get; set; } = -1;
 
         //[HealthParameter(MinOkRange = 0, MaxOkRange = 80)]
         [DisplayName("جریان خروجی [T]")]
+        [Range(minimum: 0, maximum: int.MaxValue, ErrorMessage = "جریان خروجی [T] اجباری است!")]
         public float OutAmperT { get; set; } = -1;
 
         [Display(Name = "درصد توان مصرفی")]
@@ -149,26 +158,32 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
 
         [HealthParameter(MinOkRange = 187, MaxOkRange = 242)]
         [DisplayName("ولتاژ برق شهر [R-N]")]
+        [Range(minimum: 0, maximum: int.MaxValue, ErrorMessage = "ولتاژ برق شهر [R-N] اجباری است!")]
         public float CityVoltageRN { get; set; } = -1;
 
         [HealthParameter(MinOkRange = 187, MaxOkRange = 242)]
         [DisplayName("ولتاژ برق شهر [S-N]")]
+        [Range(minimum: 0, maximum: int.MaxValue, ErrorMessage = "ولتاژ برق شهر [S-N] اجباری است!")]
         public float CityVoltageSN { get; set; } = -1;
 
         [HealthParameter(MinOkRange = 180, MaxOkRange = 240)]
         [DisplayName("ولتاژ برق شهر [T-N]")]
+        [Range(minimum: 0, maximum: int.MaxValue, ErrorMessage = "ولتاژ برق شهر [T-N] اجباری است!")]
         public float CityVoltageTN { get; set; } = -1;
 
         [HealthParameter(MinOkRange = 187, MaxOkRange = 242)]
         [DisplayName("ولتاژ خروجی دیزل [R-N]")]
+        [Range(minimum: 0, maximum: int.MaxValue, ErrorMessage = "ولتاژ خروجی دیزل [R-N] اجباری است!")]
         public float DieselVoltageRN { get; set; } = -1;
 
         [HealthParameter(MinOkRange = 187, MaxOkRange = 242)]
         [DisplayName("ولتاژ خروجی دیزل [S-N]")]
+        [Range(minimum: 0, maximum: int.MaxValue, ErrorMessage = "ولتاژ خروجی دیزل [S-N] اجباری است!")]
         public float DieselVoltageSN { get; set; } = -1;
 
         [HealthParameter(MinOkRange = 187, MaxOkRange = 242)]
         [DisplayName("ولتاژ خروجی دیزل [T-N]")]
+        [Range(minimum: 0, maximum: int.MaxValue, ErrorMessage = "ولتاژ خروجی دیزل [T-N] اجباری است!")]
         public float DieselVoltageTN { get; set; } = -1;
 
         [HealthParameter(EnumOkItems = new string[] { nameof(GoodBad.Good) })]
@@ -192,10 +207,12 @@ namespace TciPM.Blazor.Shared.Models.Equipments.PM
 
         [HealthParameter(MinOkRange = 0, MaxOkRange = 3)]
         [DisplayName("ولتاژ بین ارت و نول دیزل")]
+        [Range(minimum: 0, maximum: int.MaxValue, ErrorMessage = "ولتاژ بین ارت و نول دیزل اجباری است!")]
         public float VoltageBetweenEarthAndNoleOfDiesel { get; set; } = -1;
 
         [HealthParameter(MinOkRange = 0, MaxOkRange = 3)]
         [DisplayName("ولتاژ بین ارت و نول برق شهری")]
+        [Range(minimum: 0, maximum: int.MaxValue, ErrorMessage = "ولتاژ بین ارت و نول برق شهری اجباری است!")]
         public float VoltageBetweenEarthAndNoleOfCity { get; set; } = -1;
 
         //public Diesel GetSourceObj(IReadOnlyDbContext db)

@@ -256,6 +256,5 @@
     {
         Pm.RectifierShutdownInPm = value;
         await eventAggregator.PublishAsync(new RectifierPmShutdownInPmChanged { SourceId = Pm.SourceId, ShutDownInPm = value });
-        Console.WriteLine("Event published: " + value);
     }
 }

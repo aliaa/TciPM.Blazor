@@ -17,6 +17,7 @@ using TciPM.Blazor.Shared.Models.Equipments.PM;
 using TciPM.Blazor.Shared.Models.Equipments;
 using System.Threading.Tasks;
 using Omu.ValueInjecter;
+using System;
 
 namespace TciPM.Blazor.Server.Controllers
 {
@@ -413,6 +414,19 @@ namespace TciPM.Blazor.Server.Controllers
             return db.Find<AuthUserX>(_ => true)
                 .Project(u => new AuthUserX { Id = u.Id, FirstName = u.FirstName, LastName = u.LastName })
                 .ToEnumerable().ToDictionary(u => u.Id, u => u.DisplayName);
+        }
+
+        [HttpPost]
+        [Authorize(nameof(Permission.WriteEquipmentPM))]
+        public IActionResult Submit(EquipmentsPM pm)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
+            pm.ReportingUser = UserId;
+            pm.IP = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            pm.SubmitDate = DateTime.Now;
+            db.Save(pm);
+            return Ok();
         }
     }
 }

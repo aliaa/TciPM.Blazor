@@ -18,7 +18,6 @@ namespace TciPM.Blazor.Shared.Utils
         public override bool IsValid(object value)
         {
             string strVal = value.ToString();
-            Console.WriteLine("strVal: " + strVal);
             if (InvalidValues != null && InvalidValues.Length > 0)
             {
                 foreach (var item in InvalidValues)

@@ -24,7 +24,7 @@
     }
     else
     {
-        if(ViewId != null)
+        if (ViewId != null)
         {
             <div class="card mt-5">
                 <div class="card-header">
@@ -148,7 +148,16 @@
 
     private async Task Submit(EditContext context)
     {
-        await http.PostAsJsonAsync("EquipmentsPm/Submit", pm);
+        try
+        {
+            await http.PostAsJsonAsync("EquipmentsPm/Submit", pm);
+            toast.ShowSuccess("اطلاعات با موفقیت ذخیره شد!");
+            nav.NavigateTo("/equipmentsPm/list");
+        }
+        catch(Exception ex)
+        {
+            toast.ShowError(ex.Message);
+        }
     }
 
     private static ObjectTable<EquipmentsPmListItemVM>.LinkColumn[] PreviousPmsLinkColumns = new ObjectTable<EquipmentsPmListItemVM>.LinkColumn[]
